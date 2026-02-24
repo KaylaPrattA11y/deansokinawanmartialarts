@@ -1,0 +1,107 @@
+---
+import Button from "./Button.astro"
+---
+
+<section aria-labelledby="hero-heading" class="hero">
+  <div class="hero-content">
+    <img src={import.meta.env.BASE_URL + "/logo.webp"} alt="Dojo seal" class="dojo-seal" />
+    <div class="hero-kana">沖縄武道 · Okinawa Budō</div>
+    <h1 class="hero-heading" id="hero-heading">Dean's <div>Okinawan</div> Martial Arts</h1>
+    <div class="short-divider" />
+    <p class="hero-sub">Shorin-Ryu Matsumura Seito · Hollywood, Maryland</p>
+    <div class="hero-tenets">
+      <span>Character</span>
+      <span>Sincerity</span>
+      <span>Effort</span>
+      <span>Etiquette</span>
+      <span>Self-Control</span>
+    </div>
+    <div role="group" class="hero-buttons">
+      <Button href="#trial" variant="primary">Begin Your Training</Button>
+      <Button href="#classes" variant="secondary">View Schedule</Button>
+    </div>
+  </div>
+</section>
+
+<style>
+	@layer components {
+    .hero {
+      text-align: center;
+      min-height: 100vh;
+      display: grid;
+      gap: 1em;
+      place-items: center;
+      align-content: start;
+      position: relative;
+      background: radial-gradient(ellipse at 25% 60%, rgba(139, 21, 21, 0.18) 0%, transparent 55%), radial-gradient(ellipse at 75% 30%, rgba(139, 21, 21, 0.08) 0%, transparent 45%), var(--ink);
+      overflow: hidden;
+    }
+    .hero-content {
+      padding: 3rem 1rem;
+    }
+    .hero-heading {
+      font-family: var(--ff-heading);
+      font-size: clamp(2.5rem, 7vw, 6rem);
+      font-weight: 900;
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--paper);
+      margin: 0;
+    }
+    .hero-heading > div {
+      display: block;
+      color: var(--deep-red);
+      font-size: clamp(1.6rem, 4.5vw, 4rem);
+      letter-spacing: 0.15em;
+    }
+    .hero::before {
+      content: '武';
+      position: absolute;
+      right: -3rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--ff-jp);
+      font-size: 42vw;
+      color: rgba(255, 255, 255, 0.015);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+    .hero-kana {
+      font-family: var(--ff-jp);
+      font-size: 0.85rem;
+      letter-spacing: 0.5em;
+      color: var(--silver);
+      margin-bottom: 1.5rem;
+    }
+    .hero-sub {
+      font-family: var(--ff-heading);
+      font-size: clamp(0.9rem, 1.4vw, 0.82rem);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--cream);
+      margin-bottom: 3rem;
+    }
+    .hero-tenets {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3.5rem;
+    }
+    .hero-tenets span {
+      font-family: 'var(--ff-body)';
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--cream);
+      letter-spacing: 0.05em;
+    }
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+	}
+</style>

@@ -1,0 +1,79 @@
+---
+import Button from "./Button.astro"
+---
+
+<section class="trial-banner" id="trial">
+  <div class="trial-numeral">7 DAYS</div>
+  <div class="trial-label">No Obligation</div>
+  <h2 class="trial-title">7 Days Free Trial</h2>
+  <p>
+    Come train with us. Experience the tradition firsthand.
+  </p>
+  <Button variant="primary" href="#contact">Claim Your Trial</Button>
+</section>
+
+<style>
+  @layer components {
+    .trial-banner {
+      background: var(--deep-red);
+      padding: 5rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .trial-banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(0, 0, 0, 0.06) 40px,
+        rgba(0, 0, 0, 0.06) 41px
+      );
+    }
+    .trial-banner::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.02), 0 0 0 60px rgba(255, 255, 255, 0.01);
+      pointer-events: none;
+    }
+    .trial-numeral {
+      font-family: var(--ff-heading);
+      font-size: clamp(5rem, 15vw, 10rem);
+      font-weight: 900;
+      line-height: 1;
+      color: rgba(240, 235, 224, 0.08);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 0 !important;
+    }
+    .trial-label {
+      font-family: var(--ff-heading);
+      font-size: 0.9rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: rgba(240, 235, 224, 0.6);
+      margin-bottom: 0.75rem;
+    }
+    .trial-title {
+      font-family: var(--ff-heading);
+      font-size: clamp(1.8rem, 4.5vw, 3.5rem);
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 2rem;
+    }
+  }
+</style>

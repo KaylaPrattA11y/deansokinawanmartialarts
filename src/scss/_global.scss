@@ -1,0 +1,64 @@
+:root {
+  --ink: #0f0c0a;
+  --deep-red: #8b1515;
+  --bright-red: #b01e1e;
+  --glow-red: #fb6767;
+  --silver: #c2bdb5;
+  --silver-dark: #8a8279;
+  --paper: #f0ebe0;
+  --cream: #e4ddd0;
+  --stone: #2e2622;
+  --ash: #6b5f57;
+  --gold: #c4a84a;
+
+  --ff-heading: 'Cinzel Variable', serif;
+  --ff-body: 'IM Fell English', serif;
+  --ff-jp: 'Noto Serif JP Variable', serif;
+  --text: var(--paper);
+  --background: var(--ink);
+
+  --header-height: 79px;
+}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    container: body / inline-size;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--ff-body);
+    overflow-x: hidden;
+  }
+  [id] {
+    scroll-margin-top: var(--header-height);
+  }
+}
+@layer components {
+  .short-divider {
+    width: 100px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--silver), transparent);
+    margin: 2rem auto;
+  }
+  .dojo-seal {
+    border-radius: 50%;
+    inline-size: 100%;
+    max-inline-size: 150px;
+    &.is-sm {
+      max-inline-size: 50px;
+    }
+  }
+}
+@layer utilities {
+  .hide-for-sm {
+    @container (width < 600px) {
+      display: none;
+    }
+  }
+  .hide-for-md {
+    @container (width < 1200px) {
+      display: none;
+    }
+  }
+}

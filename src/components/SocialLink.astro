@@ -1,0 +1,38 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface SocialLinkProps {
+  name: string;
+  url: string;
+  icon: string;
+}
+
+const { name, url, icon } = Astro.props as SocialLinkProps;
+---
+
+<div>
+  <Icon name={icon} /> <a href={url} target="_blank" rel="noopener noreferrer">{name}</a>
+</div>
+
+<style>
+@layer components {
+  a:link {
+    font-family: var(--ff-heading);
+    font-size: 1rem;
+    color: var(--paper);
+    text-decoration-color: var(--bright-red);
+    text-decoration-thickness: 2px;
+  }
+  a:visited {
+    color: var(--silver);
+  }
+  a:link:hover {
+    text-decoration: none;
+  }
+  div {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+  }
+}
+</style>

@@ -2,10 +2,10 @@ backend:
   name: github
   repo: kaylapratta11y/deans-okinawan
   branch: main
-  site_domain: https://kaylapratta11y.github.io/deans-okinawan/
+  site_domain: https://kaylapratta11y.github.io/deans-okinawan
 
 media_folder: "public/images"
-public_folder: "/images"
+public_folder: "/deans-okinawan/images"
 
 collections:
   - name: "blog"

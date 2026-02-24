@@ -1,0 +1,96 @@
+---
+import SocialLink from './SocialLink.astro';
+---
+
+<section class="contact" id="contact">
+  <div class="info-inner fade-in visible">
+    <div class="info-block">
+      <div class="info-block-title">Location</div>
+      <address>
+        23725 Three Notch Road<br />
+        Hollywood, Maryland 20636
+      </address>
+      <div class="iframe-wrapper">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3130.2741358575695!2d-76.54627262354384!3d38.31948218059545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89b76611b2f388b3%3A0x4db9fe7421e464a9!2sDeans%20Okinawan%20Martial%20Arts!5e0!3m2!1sen!2sus!4v1771960121663!5m2!1sen!2sus" width="300" height="225" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    <div class="info-block">
+      <div class="info-block-title">Contact</div>
+      <p>
+        <a href="tel:+13013735031">(301) 373-5031</a> — Home Office
+      </p>
+      <p>
+        <a href="tel:+13019042742">(301) 904-2742</a> — Cell
+      </p>
+      <SocialLink name="Facebook" url="https://www.facebook.com/DeansOkinawanMartialArts" icon="facebook" />
+    </div>
+    <div class="info-block">
+      <div class="info-block-title">Hours</div>
+      <p>
+        <strong>Youth Classes</strong
+        ><br />
+        Monday &amp; Wednesday<br />
+        6:00 – 7:00 PM<br /><br />
+        <strong>Adult Classes</strong
+        ><br />
+        Tuesday &amp; Thursday<br />
+        6:00 – 8:00 PM
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  @layer components {
+    a:link {
+      font-family: var(--ff-heading);
+      font-size: 1rem;
+      color: var(--paper);
+      text-decoration-color: var(--bright-red);
+      text-decoration-thickness: 2px;
+    }
+    a:link:hover {
+      text-decoration: none;
+    }
+    .contact {
+      container: contact / inline-size;
+      background: var(--ink);
+      padding: 5rem 3rem;
+    }
+    .info-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      gap: 1rem 2rem;
+      @container contact (width >= 600px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      @container contact (width >= 900px) {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem 4rem;
+      }
+    }
+    .info-block-title {
+      font-family: var(--ff-heading);
+      font-size: 1rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(194, 189, 181, 0.15);
+    }
+    .info-block p,
+    .info-block address {
+      font-style: normal;
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--silver);
+    }
+    .iframe-wrapper {
+      max-inline-size: 300px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

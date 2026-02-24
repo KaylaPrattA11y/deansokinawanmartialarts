@@ -1,0 +1,135 @@
+<section class="classes" id="classes">
+  <div class="classes-inner">
+    <div class="fade-in visible">
+      <div class="section-label">Training</div>
+      <h2 class="section-title">Classes &amp; Schedule</h2>
+    </div>
+    <div class="classes-grid fade-in visible">
+      <div class="class-card" data-kanji="子">
+        <div class="class-age">Ages 4 – 15</div>
+        <h3 class="class-name">Youth Karate</h3>
+        <p class="class-desc">
+          Foundational karate, kata, and kobudo instruction. Children develop
+          discipline, confidence, and respect alongside physical skill.
+        </p>
+        <div class="class-schedule">Mon &amp; Wed · 6:00 – 7:00 PM</div>
+      </div>
+      <div class="class-card" data-kanji="武">
+        <div class="class-age">Ages 16 &amp; Up</div>
+        <h3 class="class-name">Adult Karate</h3>
+        <p class="class-desc">
+          Comprehensive Shorin-Ryu training including empty-hand kata, bunkai,
+          and traditional Okinawan self-defense applications.
+        </p>
+        <div class="class-schedule">Tue &amp; Thu · 6:00 – 8:00 PM</div>
+      </div>
+      <div class="class-card" data-kanji="道">
+        <div class="class-age">Certified Instruction</div>
+        <h3 class="class-name">CPR Training</h3>
+        <p class="class-desc">
+          American Heart Association certified CPR and First Aid training. Open
+          to dojo members and the wider community.
+        </p>
+        <div class="class-schedule">Contact for scheduling</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @layer components {
+    .classes {
+      container: classes / inline-size;
+      background: var(--stone);
+      padding: 7rem 3rem;
+    }
+    .classes-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-family: var(--ff-heading);
+      font-size: 0.62rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-title {
+      font-family: var(--ff-heading);
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--paper);
+      margin-bottom: 2rem;
+    }
+    .classes-grid {
+      display: grid;
+      gap: 1.5px;
+      margin-top: 4rem;
+      background: rgba(194, 189, 181, 0.1);
+      @container classes (width >= 600px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .class-card {
+      background: var(--ink);
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .class-card::before {
+      content: attr(data-kanji);
+      font-family: var(--ff-jp);
+      font-size: 8rem;
+      color: rgba(139, 21, 21, 0.06);
+      position: absolute;
+      top: -1rem;
+      right: -1rem;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .class-age {
+      font-family: var(--ff-heading);
+      font-size: 0.9rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 1rem;
+    }
+    .class-name {
+      font-family: var(--ff-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+    .class-desc {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+    .class-schedule {
+      font-family: var(--ff-heading);
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      color: var(--glow-red);
+      text-transform: uppercase;
+    }
+    .class-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--deep-red);
+    }
+  }
+</style>

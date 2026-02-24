@@ -4,16 +4,79 @@
 
 <header aria-label="Site header">
 	<div>
-		<img src={import.meta.env.BASE_URL + 'logo.avif'} alt="Dean's Martial Arts and Self Defense Logo" />
+		<div class="site-logo">
+			<img src={import.meta.env.BASE_URL + '/logo.webp'} alt="Dojo seal" class="dojo-seal is-sm" />
+			<a href={import.meta.env.BASE_URL + '/'}>
+				Dean's Okinawan <br aria-hidden="true" /> Martial Arts
+			</a>
+		</div>
+		<nav aria-label="Site navigation">
+			<a class="hide-for-sm hide-for-md" href={import.meta.env.BASE_URL + '#dojo'}>The Dojo</a>
+			<a class="hide-for-sm"href={import.meta.env.BASE_URL + '#classes'}>Classes</a>
+			<a class="hide-for-sm" href={import.meta.env.BASE_URL + '#trial'}>Free Trial</a>
+			<a class="hide-for-sm hide-for-md" href={import.meta.env.BASE_URL + '/instructors'}>Instructors</a>
+			<a class="hide-for-sm hide-for-md" href={import.meta.env.BASE_URL + '/news'}>News</a>
+			<a href={import.meta.env.BASE_URL + '#contact'}>Contact</a>
+		</nav>
 	</div>
-	<nav aria-label="Site navigation">
-		<a href={import.meta.env.BASE_URL}>The Dojo</a>
-		<a href={import.meta.env.BASE_URL + 'about'}>Classes</a>
-		<a href={import.meta.env.BASE_URL + 'contact'}>Free Trial</a>
-		<a href={import.meta.env.BASE_URL + 'contact'}>Contact</a>
-	</nav>
 </header>
 
 <style>
-	
+	@layer components {
+		header {
+			container: header / inline-size;
+			background: linear-gradient(to bottom, rgba(15, 12, 10, 0.98), rgba(15, 12, 10, 0.75));
+			border-bottom: 1px solid rgba(194, 189, 181, 0.15);
+			position: fixed;
+			inline-size: 100%;
+			max-block-size: var(--header-height);
+			top: 0;
+			z-index: 9;
+		}
+		header > div {
+			display: grid;
+			gap: 2rem;
+			grid-template-columns: auto 1fr;
+			justify-items: flex-end;
+			align-items: center;
+			padding: 0.5rem 1rem;
+			@container header (width >=600px) {
+				padding: 0.9rem 3rem;
+			}
+		}
+		img {
+			border-radius: 50%;
+			inline-size: 100%;
+			max-inline-size: 50px;
+		}
+		.site-logo {
+			position: relative;
+			display: flex;
+			gap: 1rem;
+			align-items: center;
+		}
+		nav {
+			display: flex;
+			gap: 2rem;
+		}
+		a {
+			font-family: var(--ff-heading);
+			display: block;
+			text-decoration: none;
+			font-size: 0.85rem;
+			letter-spacing: 0.2em;
+			color: var(--silver);
+			text-transform: uppercase;
+		}
+		nav a:hover {
+			text-decoration: underline;
+		}
+		.site-logo a::after {
+			inline-size: 100%;
+			block-size: 100%;
+			content: '';
+			position: absolute;
+			inset: 0;
+		}
+	}
 </style>
