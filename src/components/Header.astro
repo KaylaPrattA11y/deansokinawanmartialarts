@@ -1,5 +1,5 @@
 ---
-
+import { Icon } from 'astro-icon/components'
 ---
 
 <header aria-label="Site header">
@@ -11,12 +11,13 @@
 			</a>
 		</div>
 		<nav aria-label="Site navigation">
-			<a class="hide-for-sm hide-for-md" href={import.meta.env.BASE_URL + '#dojo'}>The Dojo</a>
+			<a class="hide-for-sm" href={import.meta.env.BASE_URL + '#dojo'}>The Dojo</a>
 			<a class="hide-for-sm"href={import.meta.env.BASE_URL + '#classes'}>Classes</a>
 			<a class="hide-for-sm" href={import.meta.env.BASE_URL + '#trial'}>Free Trial</a>
 			<a class="hide-for-sm hide-for-md" href={import.meta.env.BASE_URL + 'instructors'}>Instructors</a>
 			<a class="hide-for-sm hide-for-md" href={import.meta.env.BASE_URL + 'news'}>News</a>
-			<a href={import.meta.env.BASE_URL + '#contact'}>Contact</a>
+			<a class="hide-for-sm" href={import.meta.env.BASE_URL + '#contact'}>Contact</a>
+			<a class="show-for-sm" aria-label="Contact" href={import.meta.env.BASE_URL + '#contact'}><Icon name="phone" size="24px" /></a>
 		</nav>
 	</div>
 </header>
@@ -51,9 +52,10 @@
 		}
 		.site-logo {
 			position: relative;
-			display: flex;
+			display: grid;
 			gap: 1rem;
 			align-items: center;
+			grid-template-columns: 50px auto;
 		}
 		nav {
 			display: flex;

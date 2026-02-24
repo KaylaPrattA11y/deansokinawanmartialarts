@@ -44,13 +44,19 @@
   .dojo-seal {
     border-radius: 50%;
     inline-size: 100%;
-    max-inline-size: 150px;
+    max-inline-size: 125px;
     &.is-sm {
       max-inline-size: 50px;
     }
   }
 }
 @layer utilities {
+  .show-for-sm {
+    display: none;
+    @container (width < 600px) {
+      display: block;
+    }
+  }
   .hide-for-sm {
     @container (width < 600px) {
       display: none;

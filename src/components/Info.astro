@@ -2,7 +2,7 @@
 import SocialLink from './SocialLink.astro';
 ---
 
-<section class="contact" id="contact">
+<section class="contact">
   <div class="info-inner fade-in visible">
     <div class="info-block">
       <div class="info-block-title">Location</div>
@@ -11,10 +11,17 @@ import SocialLink from './SocialLink.astro';
         Hollywood, Maryland 20636
       </address>
       <div class="iframe-wrapper">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3130.2741358575695!2d-76.54627262354384!3d38.31948218059545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89b76611b2f388b3%3A0x4db9fe7421e464a9!2sDeans%20Okinawan%20Martial%20Arts!5e0!3m2!1sen!2sus!4v1771960121663!5m2!1sen!2sus" width="300" height="225" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3130.2741358575695!2d-76.54627262354384!3d38.31948218059545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89b76611b2f388b3%3A0x4db9fe7421e464a9!2sDeans%20Okinawan%20Martial%20Arts!5e0!3m2!1sen!2sus!4v1771960121663!5m2!1sen!2sus" 
+          width="100%" 
+          height="225" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
-    <div class="info-block">
+    <div class="info-block" id="contact">
       <div class="info-block-title">Contact</div>
       <p>
         <a href="tel:+13013735031">(301) 373-5031</a> — Home Office
@@ -88,9 +95,20 @@ import SocialLink from './SocialLink.astro';
       color: var(--silver);
     }
     .iframe-wrapper {
-      max-inline-size: 300px;
-      overflow: hidden;
-      aspect-ratio: 4 / 3;
+      margin-block-start: 1rem;
+      @container (width >= 600px) {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 4 / 3;
+        max-inline-size: 300px;
+      }
+      @container (width < 600px) {
+        margin-left: -3rem;
+      }
+    }
+    iframe {
+      width: calc(100% + 6rem);
+      height: 225px;
     }
   }
 </style>
