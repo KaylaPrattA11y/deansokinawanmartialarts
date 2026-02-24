@@ -81,12 +81,17 @@
       position: relative;
       overflow: hidden;
       transition: background 0.3s;
+      @container (width < 600px) {
+        padding: 2rem 1.5rem;
+        margin-inline-start: -3rem;
+        inline-size: calc(100% + 3rem);
+      }
     }
     .class-card::before {
       content: attr(data-kanji);
       font-family: var(--ff-jp);
       font-size: 8rem;
-      color: rgba(139, 21, 21, 0.06);
+      color: rgba(139, 21, 21, 0.1);
       position: absolute;
       top: -1rem;
       right: -1rem;
