@@ -24,6 +24,7 @@ const { title, description } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
+		<script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 		<SEO
       title={title}
       description={description}
@@ -57,6 +58,22 @@ const { title, description } = Astro.props;
 		<Footer />
 	</body>
 </html>
+
+<script>
+	interface NetlifyWindow extends Window {
+		netlifyIdentity: {
+			on: (event: string, callback: (user: unknown) => void) => void;
+			open: () => void;
+		};
+	}
+	if ((window as unknown as NetlifyWindow).netlifyIdentity) {
+		(window as unknown as NetlifyWindow).netlifyIdentity.on("init", user => {
+			if (!user) {
+				(window as unknown as NetlifyWindow).netlifyIdentity.open();
+			}
+		});
+	}
+</script>
 
 <style>
 	@layer base {

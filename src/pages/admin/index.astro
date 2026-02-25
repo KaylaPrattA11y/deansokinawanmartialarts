@@ -11,5 +11,22 @@
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </head>
-  <body />
+  <body>
+    <div data-netlify-identity-button></div>
+    <script>
+      interface NetlifyWindow extends Window {
+        netlifyIdentity: {
+          on: (event: string, callback: (user: unknown) => void) => void;
+          open: () => void;
+        };
+      }
+      if ((window as unknown as NetlifyWindow).netlifyIdentity) {
+        (window as unknown as NetlifyWindow).netlifyIdentity.on("init", user => {
+          if (!user) {
+            (window as unknown as NetlifyWindow).netlifyIdentity.open();
+          }
+        });
+      }
+    </script>
+  </body>
 </html>
