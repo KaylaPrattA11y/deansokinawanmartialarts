@@ -6,9 +6,10 @@ import Dojo from '../components/Dojo.astro';
 import Classes from '../components/Classes.astro';
 import Trial from '../components/Trial.astro';
 import Info from '../components/Info.astro';
+import { SITE_SEO } from '../config/site';
 ---
 
-<Layout>
+<Layout title={SITE_SEO.name.long} description={SITE_SEO.description}>
 	<Hero />
   <Ribbon />
   <Dojo />

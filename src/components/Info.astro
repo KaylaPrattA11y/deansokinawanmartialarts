@@ -1,5 +1,6 @@
 ---
 import SocialLink from './SocialLink.astro';
+import { BASE_URL, ROUTES } from "../config/site";
 ---
 
 <section class="contact">
@@ -12,6 +13,7 @@ import SocialLink from './SocialLink.astro';
       </address>
       <div class="iframe-wrapper">
         <iframe 
+          title="Dean's Okinawan Martial Arts & Self Defense on Google Maps"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3130.2741358575695!2d-76.54627262354384!3d38.31948218059545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89b76611b2f388b3%3A0x4db9fe7421e464a9!2sDeans%20Okinawan%20Martial%20Arts!5e0!3m2!1sen!2sus!4v1771960121663!5m2!1sen!2sus" 
           width="100%" 
           height="225" 
@@ -44,17 +46,31 @@ import SocialLink from './SocialLink.astro';
         6:00 – 8:00 PM
       </p>
     </div>
+    <div class="info-block show-for-md">
+      <div class="info-block-title">About us</div>
+      <p>
+        <a href={BASE_URL + ROUTES.history}>Our History</a>
+      </p>
+      <p>
+        <a href={BASE_URL + ROUTES.instructors}>Meet the Instructors</a>
+      </p>
+      <p>
+        <a href={BASE_URL + ROUTES.news}>News & Updates</a>
+      </p>
+    </div>
   </div>
 </section>
 
 <style>
   @layer components {
-    a:link {
+    a:link, a:visited {
       font-family: var(--ff-heading);
       font-size: 1rem;
       color: var(--paper);
-      text-decoration-color: var(--bright-red);
       text-decoration-thickness: 2px;
+    }
+    a:link {
+      text-decoration-color: var(--bright-red);
     }
     a:link:hover {
       text-decoration: none;
@@ -107,7 +123,7 @@ import SocialLink from './SocialLink.astro';
       }
     }
     iframe {
-      width: calc(100% + 6rem);
+      width: calc(100% + 3rem);
       height: 225px;
     }
   }

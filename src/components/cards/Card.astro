@@ -1,0 +1,42 @@
+---
+const { kanji } = Astro.props;
+---
+
+<li data-kanji={kanji}>
+  <slot />
+</li>
+
+<style>
+  @layer components {
+    li {
+      background: var(--ink);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+      @container (width < 600px) {
+        margin-inline-start: calc(var(--padding-x, 0) * -1);
+        inline-size: calc(100% + calc(var(--padding-x, 0) * 2));
+      }
+    }
+    li::before {
+      content: attr(data-kanji);
+      font-family: var(--ff-jp);
+      font-size: 8rem;
+      color: rgba(139, 21, 21, 0.1);
+      position: absolute;
+      top: -1rem;
+      right: -1rem;
+      line-height: 1;
+      pointer-events: none;
+    }
+    li::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--deep-red);
+    }
+  }
+</style>

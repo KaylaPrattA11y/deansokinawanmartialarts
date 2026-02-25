@@ -1,0 +1,45 @@
+---
+import Button from "../Button.astro";
+import { Icon } from 'astro-icon/components';
+
+const { page } = Astro.props;
+---
+
+<nav class="pagination" aria-label="News pagination">
+  {page.url.prev ? (
+    <Button 
+      href={page.url.prev} 
+      variant="secondary" 
+      aria-disabled={!page.url.prev}
+      aria-label="Previous page"
+      size="sm"
+    >
+      <Icon name="arrow-left" size="24px" />
+      <span class="hide-for-sm">Previous</span>
+    </Button>
+  ) : <span aria-hidden="true"></span>}
+  <span class="page-count">Page {page.currentPage} of {page.lastPage}</span>
+  {page.url.next ? (
+    <Button 
+      href={page.url.next} 
+      variant="secondary" 
+      aria-disabled={!page.url.next}
+      aria-label="Next page"
+      size="sm"
+    >
+      <span class="hide-for-sm">Next</span>
+      <Icon name="arrow-right" size="24px" />
+    </Button>
+  ) : <span aria-hidden="true"></span>}
+</nav>
+
+<style>
+  @layer components {
+    nav {
+      display: grid;
+      text-align: center;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+    }
+  }
+</style>

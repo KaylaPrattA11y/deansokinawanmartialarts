@@ -1,0 +1,82 @@
+---
+import { BASE_URL, ROUTES } from "../../config/site";
+import ArticleMeta from "./ArticleMeta.astro";
+import { getCollection } from "astro:content";
+import Button from "../Button.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<article>
+  <div class="wrapper">
+    <ArticleMeta {post} />
+    {post.data.image && (
+      <img src={post.data.image} alt={post.data.title} class="featured-image" />
+    )}
+    <div class="content">
+      <Content />
+    </div>
+    <footer>
+      <Button variant="secondary" href={BASE_URL + ROUTES.news}>Back to news</Button>
+    </footer>
+  </div>
+</article>
+
+<style>
+  @layer components {
+    .featured-image {
+      inline-size: 100%;
+      border-radius: 8px;
+    }
+    .wrapper {
+      max-inline-size: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    .content :global(h1,h2,h3,h4,h6,h6) {
+      font-family: var(--ff-heading);
+    }
+    .content :global(h1,h2,h3,h4,h6,h6,p, ul, ol) {
+      margin-block: 1em;
+    }
+    .content :global(p, ul, ol, strong, em, b, i) {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--silver);
+      max-inline-size: 80ch;
+    }
+    .content :global(li::marker) {
+      color: var(--bright-red);
+    }
+    .content :global(img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    a:link,
+    a:visited,
+    .content :global(a:link, a:visited) {
+      color: var(--paper);
+      text-decoration-color: var(--bright-red);
+      text-decoration-thickness: 2px;
+    }
+    a:link:hover,
+    .content :global(a:link):hover {
+      text-decoration: none;
+    }
+    footer {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  }
+</style>

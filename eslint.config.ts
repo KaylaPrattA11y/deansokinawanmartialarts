@@ -38,6 +38,9 @@ export default defineConfig([
   {
     files: ["src/**/*.astro"],
     plugins: { "jsx-a11y": pluginJsxA11y },
-    rules: { ...pluginJsxA11y.configs.strict.rules },
+    rules: {
+      ...pluginJsxA11y.configs.strict.rules,
+      "jsx-a11y/aria-activedescendant-has-tabindex": "off",
+    },
   },
 ]);

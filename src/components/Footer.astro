@@ -1,11 +1,11 @@
 ---
-import { Icon } from 'astro-icon/components'
-import SocialLink from './SocialLink.astro'
+import SocialLink from './SocialLink.astro';
+import { BASE_URL } from "../config/site";
 ---
 
 <footer>
   <div class="footer-logo">
-    <img src={import.meta.env.BASE_URL + '/logo.webp'} alt="Dojo seal" class="dojo-seal is-sm" />
+    <img src={BASE_URL + 'logo.png'} alt="Dojo seal" class="dojo-seal is-sm" />
     <div>
       Dean's Okinawan <br aria-hidden="true" /> Martial Arts
     </div>

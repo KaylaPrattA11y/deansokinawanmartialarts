@@ -1,0 +1,70 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import Layout from "../../layouts/Layout.astro";
+import ArticleStub from "../../components/articles/ArticleStub.astro";
+import Cards from "../../components/cards/Cards.astro";
+import Card from "../../components/cards/Card.astro";
+import { NEWS_PAGE_SIZE, SITE_SEO } from "../../config/site";
+import Pagination from "../../components/articles/Pagination.astro";
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const posts = await getCollection("blog");
+  const sortedPosts = posts.sort(
+    (a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+  );
+
+  return paginate(sortedPosts, { pageSize: NEWS_PAGE_SIZE });
+};
+
+const { page } = Astro.props as {
+  page: {
+    data: CollectionEntry<"blog">[];
+    currentPage: number;
+    lastPage: number;
+    url: {
+      prev?: string | null;
+      next?: string | null;
+    };
+  };
+};
+const posts = page.data;
+---
+
+<Layout title={`News & Updates | ${SITE_SEO.name.long}`} description="Latest news and updates from our dojo.">
+  <div class="news-page">
+    <div class="news-page-inner">
+      <h1>News & Updates</h1>
+      <Cards>
+        {posts.map((post) => (
+        <Card>
+          <ArticleStub post={post} />
+        </Card>
+        ))}
+      </Cards>
+      <Pagination page={page} />
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .news-page {
+    background: var(--stone);
+  }
+  .news-page-inner {
+    --padding-x: 2rem;
+    container: news-page / inline-size;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem var(--padding-x);
+  }
+  h1 {
+    font-family: var(--ff-heading);
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--paper);
+    margin-bottom: 2rem;
+  }
+</style>

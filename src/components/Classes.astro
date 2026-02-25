@@ -1,51 +1,70 @@
+---
+import Cards from "./cards/Cards.astro";
+import Card from "./cards/Card.astro";
+
+---
+
 <section class="classes" id="classes">
   <div class="classes-inner">
     <div class="fade-in visible">
       <div class="section-label">Training</div>
       <h2 class="section-title">Classes &amp; Schedule</h2>
     </div>
-    <div class="classes-grid fade-in visible">
-      <div class="class-card" data-kanji="子">
-        <div class="class-age">Ages 4 – 15</div>
-        <h3 class="class-name">Youth Karate</h3>
-        <p class="class-desc">
-          Foundational karate, kata, and kobudo instruction. Children develop
-          discipline, confidence, and respect alongside physical skill.
-        </p>
-        <div class="class-schedule">Mon &amp; Wed · 6:00 – 7:00 PM</div>
-      </div>
-      <div class="class-card" data-kanji="武">
-        <div class="class-age">Ages 16 &amp; Up</div>
-        <h3 class="class-name">Adult Karate</h3>
-        <p class="class-desc">
-          Comprehensive Shorin-Ryu training including empty-hand kata, bunkai,
-          and traditional Okinawan self-defense applications.
-        </p>
-        <div class="class-schedule">Tue &amp; Thu · 6:00 – 8:00 PM</div>
-      </div>
-      <div class="class-card" data-kanji="道">
-        <div class="class-age">Certified Instruction</div>
-        <h3 class="class-name">CPR Training</h3>
-        <p class="class-desc">
-          American Heart Association certified CPR and First Aid training. Open
-          to dojo members and the wider community.
-        </p>
-        <div class="class-schedule">Contact for scheduling</div>
-      </div>
-    </div>
+    <Cards>
+      <Card kanji="子">
+        <div class="class-entry">
+          <div class="class-age">Ages 4 – 15</div>
+          <h3 class="class-name">Youth Karate</h3>
+          <p class="class-desc">
+            Foundational karate, kata, and kobudo instruction. Children develop
+            discipline, confidence, and respect alongside physical skill.
+          </p>
+          <div class="class-schedule">Mon &amp; Wed · 6:00 – 7:00 PM</div>
+        </div>
+      </Card>
+      <Card kanji="武">
+        <div class="class-entry">
+          <div class="class-age">Ages 16 &amp; Up</div>
+          <h3 class="class-name">Adult Karate</h3>
+          <p class="class-desc">
+            Comprehensive Shorin-Ryu training including empty-hand kata, bunkai,
+            and traditional Okinawan self-defense applications.
+          </p>
+          <div class="class-schedule">Tue &amp; Thu · 6:00 – 8:00 PM</div>
+        </div>
+      </Card>
+      <Card kanji="道">
+        <div class="class-entry">
+          <div class="class-age">Certified Instruction</div>
+          <h3 class="class-name">CPR Training</h3>
+          <p class="class-desc">
+            American Heart Association certified CPR and First Aid training. Open
+            to dojo members and the wider community.
+          </p>
+          <div class="class-schedule">Contact for scheduling</div>
+        </div>
+      </Card>
+    </Cards>
   </div>
 </section>
 
 <style>
   @layer components {
     .classes {
-      container: classes / inline-size;
+      --padding-x: 3rem;
       background: var(--stone);
-      padding: 7rem 3rem;
+      padding: 7rem var(--padding-x);
     }
     .classes-inner {
+      container: classes / inline-size;
       max-width: 1200px;
       margin: 0 auto;
+    }
+    .class-entry {
+      padding: var(--padding-x) 2.5rem;
+      @container (width < 600px) {
+        padding: 2rem 1.5rem;
+      }
     }
     .section-label {
       font-family: var(--ff-heading);
@@ -65,38 +84,6 @@
       line-height: 1.1;
       color: var(--paper);
       margin-bottom: 2rem;
-    }
-    .classes-grid {
-      display: grid;
-      gap: 1.5px;
-      margin-top: 4rem;
-      background: rgba(194, 189, 181, 0.1);
-      @container classes (width >= 600px) {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-    .class-card {
-      background: var(--ink);
-      padding: 3rem 2.5rem;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.3s;
-      @container (width < 600px) {
-        padding: 2rem 1.5rem;
-        margin-inline-start: -3rem;
-        inline-size: calc(100% + 3rem);
-      }
-    }
-    .class-card::before {
-      content: attr(data-kanji);
-      font-family: var(--ff-jp);
-      font-size: 8rem;
-      color: rgba(139, 21, 21, 0.1);
-      position: absolute;
-      top: -1rem;
-      right: -1rem;
-      line-height: 1;
-      pointer-events: none;
     }
     .class-age {
       font-family: var(--ff-heading);
@@ -126,15 +113,6 @@
       letter-spacing: 0.2em;
       color: var(--glow-red);
       text-transform: uppercase;
-    }
-    .class-card::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 3px;
-      height: 100%;
-      background: var(--deep-red);
     }
   }
 </style>

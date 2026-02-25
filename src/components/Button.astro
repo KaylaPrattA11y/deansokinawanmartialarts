@@ -2,26 +2,38 @@
 interface ButtonProps {
   href: string;
   variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md';
 }
-const { href, variant = 'primary' } = Astro.props as ButtonProps;
+const { href, variant = 'primary', size = 'md' } = Astro.props as ButtonProps;
 ---
 
-<a href={href} class={`btn-${variant}`}><slot /></a>
+<a href={href} class={`btn-${variant} is-${size}`}><slot /></a>
 
 <style>
 @layer components {
   a {
     display: inline-block;
     font-family: var(--ff-heading);
-    font-size: 0.72rem;
+    font-weight: 700;
+    font-size: 0.8rem;
     letter-spacing: 0.35em;
     text-transform: uppercase;
     text-decoration: none;
-    padding: 0.95rem 2.8rem;
     cursor: pointer;
     transition: all 0.3s;
     position: relative;
     text-align: center;
+  }
+  a.is-md {
+    padding: 0.95rem 2.8rem;
+  }
+  a.is-sm {
+    padding: 0.5rem 1.5rem;
+  }
+  a:has(svg) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
   .btn-primary {
     color: var(--paper);

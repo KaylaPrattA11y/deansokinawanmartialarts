@@ -1,5 +1,6 @@
 ---
-import Button from "./Button.astro"
+import Button from "./Button.astro";
+import { BASE_URL, ROUTES } from "../config/site";
 ---
 
 <section class="dojo" aria-labelledby="dojo-heading" id="dojo">
@@ -16,12 +17,15 @@ import Button from "./Button.astro"
         <p>
           Our dojo is a place of serious study, mutual respect, and lifelong development. We are open to all who are willing to commit to the work.
         </p>
-        <Button variant="secondary" href={import.meta.env.BASE_URL + "instructors"}>Meet the Instructors</Button>
+        <div class="button-group" role="group">
+          <Button variant="primary" href={BASE_URL + ROUTES.history}>Our History</Button>
+          <Button variant="secondary" href={BASE_URL + ROUTES.instructors}>Meet the Instructors</Button>
+        </div>
       </div>
     </div>
     <div class="about-accent">
       <div class="about-logo-display">
-        <img src={import.meta.env.BASE_URL + "/logo.webp"} alt="Dojo seal" class="dojo-seal" />
+        <img src={BASE_URL + "patch.jpg"} alt="Shorinryu Matsumura Seito Hohan Soken White Crane patch" />
         <span class="about-logo-caption"
           >Hollywood, Maryland · Est. Matsumura Lineage</span
         >
@@ -33,6 +37,9 @@ import Button from "./Button.astro"
 
 <style>
   @layer components {
+    img {
+      inline-size: 70%;
+    }
     .dojo {
       container: dojo / inline-size;
       padding: 7rem 3rem;
@@ -43,11 +50,10 @@ import Button from "./Button.astro"
       display: grid;
       align-items: center;
       @container dojo (width >= 600px) {
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 1fr 1fr;
         gap: 3rem;
       }
       @container dojo (width >= 1200px) {
-        grid-template-columns: 1fr 1fr;
         gap: 6rem;
       }
     }
@@ -63,8 +69,10 @@ import Button from "./Button.astro"
       font-size: 1.02rem;
       line-height: 1.9;
       color: var(--silver);
-      max-width: 60ch;
       margin-block-end: 2rem;
+    }
+    .section-body p {
+      max-width: 60ch;
     }
     .about-accent {
       position: relative;
@@ -93,6 +101,10 @@ import Button from "./Button.astro"
       bottom: -1.5rem;
       border: 1px solid rgba(194, 189, 181, 0.15);
       pointer-events: none;
+    }
+    .button-group {
+      display: grid;
+      gap: 1rem 2rem;
     }
   }
 </style>

@@ -1,11 +1,11 @@
 backend:
-  name: github
-  repo: kaylapratta11y/deans-okinawan
+  name: git-gateway
   branch: main
-  site_domain: https://kaylapratta11y.github.io/deans-okinawan
+
+local_backend: true
 
 media_folder: "public/images"
-public_folder: "/deans-okinawan/images"
+public_folder: "/images"
 
 collections:
   - name: "blog"

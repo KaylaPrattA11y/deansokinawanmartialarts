@@ -1,0 +1,18 @@
+<ul>
+  <slot />
+</ul>
+
+<style>
+  @layer components {
+    ul {
+      list-style: none;
+      padding-inline-start: 0;
+      display: grid;
+      gap: 1.5px;
+      margin-top: 4rem;
+      @container (width >= 900px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  }
+</style>

@@ -1,23 +1,24 @@
 ---
-import { Icon } from 'astro-icon/components'
+import { Icon } from 'astro-icon/components';
+import { BASE_URL, ROUTES } from "../config/site";
 ---
 
 <header aria-label="Site header">
 	<div>
 		<div class="site-logo">
-			<img src={import.meta.env.BASE_URL + '/logo.webp'} alt="Dojo seal" class="dojo-seal is-sm" />
-			<a href={import.meta.env.BASE_URL + '/'}>
+			<img src={BASE_URL + 'logo.png'} alt="Dojo seal" class="dojo-seal is-sm" />
+			<a href={BASE_URL}>
 				Dean's Okinawan <br aria-hidden="true" /> Martial Arts
 			</a>
 		</div>
 		<nav aria-label="Site navigation">
-			<a class="hide-for-sm" href={import.meta.env.BASE_URL + '#dojo'}>The Dojo</a>
-			<a class="hide-for-sm"href={import.meta.env.BASE_URL + '#classes'}>Classes</a>
-			<a class="hide-for-sm" href={import.meta.env.BASE_URL + '#trial'}>Free Trial</a>
-			<a class="hide-for-sm hide-for-md" href={import.meta.env.BASE_URL + 'instructors'}>Instructors</a>
-			<a class="hide-for-sm hide-for-md" href={import.meta.env.BASE_URL + 'news'}>News</a>
-			<a class="hide-for-sm" href={import.meta.env.BASE_URL + '#contact'}>Contact</a>
-			<a class="show-for-sm" aria-label="Contact" href={import.meta.env.BASE_URL + '#contact'}><Icon name="phone" size="24px" /></a>
+			<a class="hide-for-sm" href={BASE_URL + '#dojo'}>The Dojo</a>
+			<a class="hide-for-sm"href={BASE_URL + '#classes'}>Classes</a>
+			<a class="hide-for-sm" href={BASE_URL + '#trial'}>Free Trial</a>
+			<a class="hide-for-sm hide-for-md" href={BASE_URL + ROUTES.history}>Our History</a>
+			<a class="hide-for-sm hide-for-md" href={BASE_URL + ROUTES.news}>News</a>
+			<a class="hide-for-sm" href={BASE_URL + '#contact'}>Contact</a>
+			<a class="show-for-sm" aria-label="Contact" href={BASE_URL + '#contact'}><Icon name="phone" size="24px" /></a>
 		</nav>
 	</div>
 </header>
@@ -30,25 +31,21 @@ import { Icon } from 'astro-icon/components'
 			border-bottom: 1px solid rgba(194, 189, 181, 0.15);
 			position: fixed;
 			inline-size: 100%;
-			max-block-size: var(--header-height);
 			top: 0;
 			z-index: 9;
 		}
 		header > div {
+			min-block-size: var(--header-height);
 			display: grid;
 			gap: 2rem;
 			grid-template-columns: auto 1fr;
 			justify-items: flex-end;
 			align-items: center;
+			box-sizing: border-box;
 			padding: 0.5rem 1rem;
-			@container header (width >=600px) {
+			@container header (width >= 900px) {
 				padding: 0.9rem 3rem;
 			}
-		}
-		img {
-			border-radius: 50%;
-			inline-size: 100%;
-			max-inline-size: 50px;
 		}
 		.site-logo {
 			position: relative;

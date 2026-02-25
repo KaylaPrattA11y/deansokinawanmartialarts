@@ -29,6 +29,9 @@
     color: var(--paper);
     font-family: var(--ff-body);
     overflow-x: hidden;
+    display: grid;
+    grid-template-rows: min-content 1fr min-content;
+    align-items: flex-end;
   }
   [id] {
     scroll-margin-top: var(--header-height);
@@ -42,7 +45,6 @@
     margin: 2rem auto;
   }
   .dojo-seal {
-    border-radius: 50%;
     inline-size: 100%;
     max-inline-size: 125px;
     &.is-sm {
@@ -57,12 +59,29 @@
       display: block;
     }
   }
+  .show-for-md {
+    display: none;
+    @container (width < 900px) {
+      display: block;
+    }
+  }
+  .show-for-lg {
+    display: none;
+    @container (width < 900px) {
+      display: block;
+    }
+  }
   .hide-for-sm {
     @container (width < 600px) {
       display: none;
     }
   }
   .hide-for-md {
+    @container (width < 900px) {
+      display: none;
+    }
+  }
+  .hide-for-lg {
     @container (width < 1200px) {
       display: none;
     }
