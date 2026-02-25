@@ -1,5 +1,5 @@
 ---
-title: Another one with a sweet stock photo
+title: Another one with a sweet stock photo 1234
 description: Title ^^
 pubDate: 2026-02-25T10:23:00.000-05:00
 image: /images/pexels-atccommphoto-306765.jpg
