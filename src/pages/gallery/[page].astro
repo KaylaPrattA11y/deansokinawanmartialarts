@@ -1,0 +1,68 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import { GALLERY_PAGE_SIZE, SITE_SEO } from "../../config/site";
+import Pagination from "../../components/articles/Pagination.astro";
+import PhotoGallery from "../../components/PhotoGallery.astro";
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const photoGallery = await getCollection("gallery");
+  const sortedImages = photoGallery.sort(
+    (a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+  );
+
+  return paginate(sortedImages, { pageSize: GALLERY_PAGE_SIZE });
+};
+
+const { page } = Astro.props as {
+  page: {
+    data: CollectionEntry<"gallery">[];
+    currentPage: number;
+    lastPage: number;
+    url: {
+      prev?: string | null;
+      next?: string | null;
+    };
+  };
+};
+const posts = page.data;
+const pageDesc = `Explore our photo gallery showcasing the spirit and dedication of our students and instructors in Okinawan martial arts.`;
+---
+
+<Layout title={`Photo Gallery | ${SITE_SEO.name.long}`} description={pageDesc}>
+  <div class="news-page">
+    <div class="news-page-inner">
+      <h1>Photo Gallery</h1>
+      <p>{pageDesc}</p>
+      <PhotoGallery images={posts.map(post => ({
+        image: post.data.image,
+        title: post.data.title,
+        caption: post.data.caption
+      }))} />
+      <Pagination page={page} />
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .news-page {
+    background: var(--background-glow);
+    height: 100%;
+  }
+  .news-page-inner {
+    --padding-x: 2rem;
+    container: news-page / inline-size;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem var(--padding-x);
+  }
+  h1 {
+    font-family: var(--ff-heading);
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--paper);
+    margin-bottom: 2rem;
+  }
+</style>

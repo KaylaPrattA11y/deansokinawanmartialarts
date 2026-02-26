@@ -1,4 +1,4 @@
-<ul>
+<ul class="cards">
   <slot />
 </ul>
 
@@ -8,8 +8,7 @@
       list-style: none;
       padding-inline-start: 0;
       display: grid;
-      gap: 1.5px;
-      margin-top: 4rem;
+      margin: 0;
       @container (width >= 900px) {
         grid-template-columns: repeat(3, 1fr);
       }

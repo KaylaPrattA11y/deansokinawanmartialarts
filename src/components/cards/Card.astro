@@ -1,22 +1,33 @@
 ---
-const { kanji } = Astro.props;
+const { kanji, variant = "dark" } = Astro.props;
 ---
 
-<li data-kanji={kanji}>
+<li data-kanji={kanji} class={`is-${variant}`}>
   <slot />
 </li>
 
 <style>
   @layer components {
     li {
-      background: var(--ink);
+      --border-color: var(--deep-red);
+      --bg-color: var(--ink);
+      background: var(--bg-color);
       position: relative;
       overflow: hidden;
       transition: background 0.3s;
+      display: grid;
+      align-items: stretch;
       @container (width < 600px) {
         margin-inline-start: calc(var(--padding-x, 0) * -1);
         inline-size: calc(100% + calc(var(--padding-x, 0) * 2));
       }
+    }
+    li.is-accent {
+      --border-color: rgba(255, 255, 255, 0.1);
+      --bg-color: var(--deep-red);
+    }
+    li.is-medium {
+      --bg-color: var(--stone);
     }
     li::before {
       content: attr(data-kanji);
@@ -35,7 +46,7 @@ const { kanji } = Astro.props;
       inset: auto auto 0 0;
       width: 100%;
       height: 3px;
-      background: var(--deep-red);
+      background: var(--border-color);
       @container (width >= 900px) {
         inset: 0 auto auto 0;
         width: 3px;

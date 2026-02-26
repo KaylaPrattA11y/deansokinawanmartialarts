@@ -1,0 +1,104 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Cards from "../components/cards/Cards.astro";
+import Card from "../components/cards/Card.astro";
+import { BASE_URL, ROUTES } from "../config/site";
+import { Icon } from "astro-icon/components";
+
+const { posts } = Astro.props as {
+  posts: CollectionEntry<"blog">[];
+};
+---
+{posts.length > 1 && (
+  <section aria-label="News & Updates">
+    <Cards variant="medium">
+      {posts.map((post) => (
+      <Card variant="medium">
+        <article>
+          <time datetime={post.data.pubDate.toISOString()}>
+            {
+              new Date(post.data.pubDate).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }
+          </time>
+          <h3>{post.data.title}</h3>
+          <a href={BASE_URL + ROUTES.news + post.slug + "/"} aria-label={`Read more about ${post.data.title}`}></a>
+        </article>
+      </Card>
+      ))}
+      <Card variant="medium">
+        <a href={BASE_URL + ROUTES.news} class="view-all">
+          View All News & Updates <Icon name="arrow-right" />
+        </a>
+      </Card>
+    </Cards>
+  </section>
+)}
+
+<style>
+  @layer components {
+    h2 {
+      text-align: center;
+      margin-block: 0 0.25em;
+      font-family: var(--ff-heading);
+      font-size: clamp(1.5rem, 7vw, 2rem);
+      font-weight: 900;
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--paper);
+    }
+    h3 {
+      font-family: var(--ff-heading);
+      font-weight: 700;
+      color: var(--paper);
+      margin: 0;
+      line-height: 1.2;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+    }
+    section {
+      position: relative;
+      border-block-start: 1px solid rgba(255, 255, 255, 0.1);
+      border-block-end: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    time {
+      font-family: var(--ff-heading);
+      font-size: 0.9rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 1rem;
+    }
+    article {
+      position: relative;
+      padding: 1rem;
+    }
+    article a::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+    .view-all {
+      color: var(--silver);
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      font-family: var(--ff-heading);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      padding: 0.95rem;
+    }
+  }
+</style>

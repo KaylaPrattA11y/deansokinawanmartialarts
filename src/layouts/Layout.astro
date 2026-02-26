@@ -75,14 +75,10 @@ const { title, description } = Astro.props;
     const user = window.netlifyIdentity?.currentUser();
     const adminLink = document.getElementById('admin-link');
 		
-		console.log('updateUI called, user:', user, 'adminLink:', adminLink);
-		
 		if (adminLink) {
 			if (user) {
-				console.log('User logged in, showing admin button');
 				adminLink.classList.remove('d-none');
 			} else {
-				console.log('No user, hiding admin button');
 				adminLink.classList.add('d-none');
 			}
 		}
@@ -90,28 +86,21 @@ const { title, description } = Astro.props;
   
   // Wait for netlifyIdentity to be ready
   function initNetlifyIdentity() {
-    console.log('Checking for netlifyIdentity...', window.netlifyIdentity);
     if (window.netlifyIdentity) {
-      console.log('netlifyIdentity found, setting up listeners');
-      window.netlifyIdentity.on('init', (user) => {
-        console.log('netlifyIdentity init event, user:', user);
+      window.netlifyIdentity.on('init', () => {
         updateUI();
       });
-      window.netlifyIdentity.on('login', (user) => {
-        console.log('netlifyIdentity login event, user:', user);
+      window.netlifyIdentity.on('login', () => {
         updateUI();
       });
       window.netlifyIdentity.on('logout', () => {
-        console.log('netlifyIdentity logout event');
         updateUI();
       });
       
       // Check immediately in case init already fired
-      console.log('Checking current user state immediately...');
       updateUI();
     } else {
       // Retry if not loaded yet
-      console.log('netlifyIdentity not ready, retrying...');
       setTimeout(initNetlifyIdentity, 100);
     }
   }

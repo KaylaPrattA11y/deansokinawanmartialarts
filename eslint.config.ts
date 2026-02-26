@@ -35,12 +35,4 @@ export default defineConfig([
   },
   // Astro files - use Astro-specific linting
   ...pluginAstro.configs.recommended,
-  {
-    files: ["src/**/*.astro"],
-    plugins: { "jsx-a11y": pluginJsxA11y },
-    rules: {
-      ...pluginJsxA11y.configs.strict.rules,
-      "jsx-a11y/aria-activedescendant-has-tabindex": "off",
-    },
-  },
 ]);

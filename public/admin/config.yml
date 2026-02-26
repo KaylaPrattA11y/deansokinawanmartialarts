@@ -7,9 +7,21 @@ local_backend: true
 media_folder: "src/assets/images"
 public_folder: "/images"
 
+# https://decapcms.org/docs/widgets/
 collections:
+  - name: "gallery"
+    label: "Photo Gallery Image"
+    folder: "src/content/gallery"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: "title"
+    fields:
+      - {label: "Image", name: "image", widget: "image"}
+      - {label: "Publish Date", name: "pubDate", widget: "datetime", hint: "This is the date that will be used to sort your images in the gallery. It does not have to be the date the photo was taken."}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Caption", name: "caption", widget: "string", required: false}
   - name: "blog"
-    label: "Blog Posts"
+    label: "News & Updates"
     folder: "src/content/blog"
     create: true
     slug: "{{slug}}"
@@ -35,4 +47,5 @@ collections:
             hint: "Add additional images to your article. These will appear below the main content. Recommended dimensions: 640x480px"
             fields:
               - {label: "Image", name: "image", widget: "image"}
+              - {label: "Title", name: "title", widget: "string", required: false}
               - {label: "Caption", name: "caption", widget: "string", required: false}

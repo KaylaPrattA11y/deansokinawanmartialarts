@@ -8,6 +8,8 @@ export const SITE_SEO = {
 
 export const NEWS_PAGE_SIZE = 6;
 
+export const GALLERY_PAGE_SIZE = 28;
+
 export const BASE_URL = import.meta.env.BASE_URL;
 
 export const IS_DEV = import.meta.env.DEV;
@@ -23,5 +25,6 @@ export const ROUTES = {
   news: 'news/',
   instructors: 'instructors/',
   history: 'history/',
-  admin: 'admin/'
+  admin: 'admin/',
+  gallery: 'gallery/',
 };

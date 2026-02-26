@@ -29,7 +29,7 @@ import Button from "./Button.astro";
 	@layer components {
     .hero {
       text-align: center;
-      min-height: 100vh;
+      min-height: calc(100vh - var(--header-height));
       display: grid;
       gap: 1em;
       place-items: center;
