@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+import patch from "../assets/patch.jpg";
 import Button from "./Button.astro";
 import { BASE_URL, ROUTES } from "../config/site";
 ---
@@ -25,7 +27,7 @@ import { BASE_URL, ROUTES } from "../config/site";
     </div>
     <div class="about-accent">
       <div class="about-logo-display">
-        <img src={BASE_URL + "patch.jpg"} alt="Shorinryu Matsumura Seito Hohan Soken White Crane patch" />
+        <Image src={patch} alt="Shorinryu Matsumura Seito Hohan Soken White Crane patch" />
         <span class="about-logo-caption"
           >Hollywood, Maryland · Est. Matsumura Lineage</span
         >

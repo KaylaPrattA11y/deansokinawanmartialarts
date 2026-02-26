@@ -17,13 +17,13 @@ const { post, isStub = false } = Astro.props as { post: Post, isStub?: boolean }
   {isStub ? (
     <>
       <h2>{post.data.title}</h2>
-      <p class="desc">{post.data.description}</p>
+      {post.data.description && <p class="desc">{post.data.description}</p>}
     </>
   ) : (
     <>
       <h1>{post.data.title}</h1>
       {post.data.author && <span class="author">By {post.data.author}</span>}
-      <p class="lead">{post.data.description}</p>
+      {post.data.description && <p class="lead">{post.data.description}</p>}
     </>
   )}
   {
@@ -71,9 +71,6 @@ const { post, isStub = false } = Astro.props as { post: Post, isStub?: boolean }
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 5;
       overflow: hidden;
-      @container (width >= 900px) {
-        -webkit-line-clamp: 10;
-      }
     }
     .lead {
       font-size: 1.35rem;

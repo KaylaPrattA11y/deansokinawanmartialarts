@@ -9,6 +9,7 @@ export interface Post {
   };
   slug: string;
   id: string;
+  gallery?: { image: string; caption?: string }[];
 
   // render(): Render[".md"];
   // body: string;

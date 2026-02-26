@@ -1,11 +1,12 @@
 ---
+import { Image } from "astro:assets";
+import logo from "../assets/logo.png";
 import Button from "./Button.astro";
-import { BASE_URL } from "../config/site";
 ---
 
 <section aria-labelledby="hero-heading" class="hero">
   <div class="hero-content">
-    <img src={BASE_URL + "logo.png"} alt="Dojo seal" class="dojo-seal" />
+    <Image src={logo} alt="Dojo seal" width={125} height={125} fetchpriority="high" />
     <div class="hero-kana">沖縄武道 · Okinawa Budō</div>
     <h1 class="hero-heading" id="hero-heading">Dean's <div>Okinawan</div> Martial Arts</h1>
     <div class="short-divider" />

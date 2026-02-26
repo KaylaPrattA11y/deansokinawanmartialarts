@@ -4,7 +4,7 @@ backend:
 
 local_backend: true
 
-media_folder: "public/images"
+media_folder: "src/assets/images"
 public_folder: "/images"
 
 collections:
@@ -15,9 +15,24 @@ collections:
     slug: "{{slug}}"
     fields:
       - {label: "Title", name: "title", widget: "string"}
-      - {label: "Description", name: "description", widget: "text"}
       - {label: "Publish Date", name: "pubDate", widget: "datetime"}
+      - {label: "Description", name: "description", widget: "text", required: false}
       - {label: "Author", name: "author", widget: "string", required: false}
-      - {label: "Featured Image", name: "image", widget: "image", required: false}
+      - {label: "Featured Image", name: "image", widget: "image", required: false, hint: "This is a large image that appears at the beginning of your article. Recommended dimensions: 1200x630px"}
       - {label: "Tags", name: "tags", widget: "list", required: false}
       - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Image Gallery"
+        name: "imageGallery"
+        widget: "object"
+        required: false
+        fields:
+          - {label: "Title", name: "title", widget: "string", required: false}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - label: "Images"
+            name: "gallery"
+            widget: "list"
+            required: false
+            hint: "Add additional images to your article. These will appear below the main content. Recommended dimensions: 640x480px"
+            fields:
+              - {label: "Image", name: "image", widget: "image"}
+              - {label: "Caption", name: "caption", widget: "string", required: false}

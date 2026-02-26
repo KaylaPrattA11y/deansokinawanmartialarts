@@ -1,8 +1,11 @@
 ---
+import { Image } from "astro:assets";
 import { BASE_URL, ROUTES } from "../../config/site";
 import ArticleMeta from "./ArticleMeta.astro";
 import { getCollection } from "astro:content";
 import Button from "../Button.astro";
+
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*');
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -14,27 +17,117 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+
+let optimizedImage;
+if (post.data.image) {
+  const imagePath = post.data.image.replace('/images/', '/src/assets/images/');
+  if (images[imagePath]) {
+    optimizedImage = (await images[imagePath]()).default;
+  }
+}
+
+// Load gallery images asynchronously
+let galleryImages = [] as { src: ImageMetadata; alt: string }[];
+if (post.data.imageGallery?.gallery) {
+  const images_result = await Promise.all(
+    post.data.imageGallery.gallery.map(async (img) => {
+      const fullPath = img.image.replace('/images/', '/src/assets/images/');
+      const imgMeta = images[fullPath];
+      
+      if (imgMeta) {
+        return {
+          src: (await imgMeta()).default,
+          alt: img.caption || "",
+        };
+      }
+      return null;
+    })
+  );
+  galleryImages = images_result.filter((img): img is { src: ImageMetadata; alt: string } => img !== null);
+}
 ---
 
 <article>
   <div class="wrapper">
     <ArticleMeta {post} />
-    {post.data.image && (
-      <img src={post.data.image} alt={post.data.title} class="featured-image" />
+    {optimizedImage && (
+      <Image 
+        src={optimizedImage} 
+        alt={post.data.title} 
+        class="featured-image" 
+        widths={[600, 900, 1200]}
+        sizes="(max-width: 600px) 100vw, 600px"
+      />
     )}
     <div class="content">
       <Content />
     </div>
+    {post.data.imageGallery && (
+      <section aria-label="Image Gallery">
+        {post.data.imageGallery.title && <h2>{post.data.imageGallery.title}</h2>}
+        {post.data.imageGallery.description && <p>{post.data.imageGallery.description}</p>}
+        {galleryImages.length > 0 && (
+        <div class="image-gallery">
+          {galleryImages.map(img => (
+            <figure>
+              <Image 
+                src={img.src} 
+                alt={img.alt} 
+                class="gallery-image" 
+                widths={[400, 800]}
+                sizes="(max-width: 400px) 100vw, 400px"
+              />
+              {img.alt && <figcaption>{img.alt}</figcaption>}
+              {/* <button type="button" onclick={() => window.open(img.src.src, "_blank")}>View full image</button> */}
+              {/* For simplicity, we're using the optimized image URL for the full image. In a real implementation, you might want to store the original image URL separately. */}
+              {/* @TODO: Implement a lightbox or modal to view the full image */}
+            </figure>
+          ))}
+        </div>
+      )}
+      </section>
+    )}
+    
     <footer>
-      <Button variant="secondary" href={BASE_URL + ROUTES.news}>Back to news</Button>
+      <Button variant="secondary" href={BASE_URL + ROUTES.news}>Back to News</Button>
     </footer>
   </div>
 </article>
 
 <style>
   @layer components {
+    section {
+      margin-block-start: 2rem;
+      outline: 1px solid rgba(194,189,181,0.15);
+      outline-offset: 4px;
+      padding: 1rem;
+    }
+    section h2 {
+      margin-block: 0 1em;
+    }
+    figure {
+      margin: 0;
+      aspect-ratio: 1 / 1;
+    }
+    figcaption {
+      font-size: 0.9rem;
+      color: var(--silver);
+    }
+    .image-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-rows: flow;
+    }
+    .gallery-image {
+      inline-size: 100%;
+      block-size: 100%;
+      object-fit: cover;
+      border: 2px solid var(--stone);
+      border-radius: 4px;
+    }
     .featured-image {
       inline-size: 100%;
+      block-size: auto;
       border-radius: 8px;
     }
     .wrapper {

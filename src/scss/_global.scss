@@ -18,6 +18,7 @@
   --background: var(--ink);
 
   --header-height: 79px;
+  --background-glow: radial-gradient(ellipse at 25% 60%, rgba(139, 21, 21, 0.18) 0%, transparent 55%), radial-gradient(ellipse at 75% 30%, rgba(139, 21, 21, 0.08) 0%, transparent 45%), var(--ink);
 }
 @layer base {
   html {
@@ -25,13 +26,12 @@
   }
   body {
     container: body / inline-size;
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--background-glow);
+    color: var(--text);
     font-family: var(--ff-body);
     overflow-x: hidden;
     display: grid;
     grid-template-rows: min-content 1fr min-content;
-    align-items: flex-end;
   }
   [id] {
     scroll-margin-top: var(--header-height);
@@ -43,13 +43,6 @@
     height: 1px;
     background: linear-gradient(to right, transparent, var(--silver), transparent);
     margin: 2rem auto;
-  }
-  .dojo-seal {
-    inline-size: 100%;
-    max-inline-size: 125px;
-    &.is-sm {
-      max-inline-size: 50px;
-    }
   }
 }
 @layer utilities {
@@ -85,5 +78,8 @@
     @container (width < 1200px) {
       display: none;
     }
+  }
+  .d-none {
+    display: none;
   }
 }

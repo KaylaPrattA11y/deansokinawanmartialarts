@@ -10,6 +10,8 @@ export const NEWS_PAGE_SIZE = 6;
 
 export const BASE_URL = import.meta.env.BASE_URL;
 
+export const IS_DEV = import.meta.env.DEV;
+
 export const BREAKPOINTS = {
   sm: 600,
   md: 900,
@@ -20,5 +22,6 @@ export const ROUTES = {
   home: '',
   news: 'news/',
   instructors: 'instructors/',
-  history: 'history/'
+  history: 'history/',
+  admin: 'admin/'
 };

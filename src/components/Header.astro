@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+import logo from "../assets/logo.png";
 import { Icon } from 'astro-icon/components';
 import { BASE_URL, ROUTES } from "../config/site";
 ---
@@ -6,7 +8,7 @@ import { BASE_URL, ROUTES } from "../config/site";
 <header aria-label="Site header">
 	<div>
 		<div class="site-logo">
-			<img src={BASE_URL + 'logo.png'} alt="Dojo seal" class="dojo-seal is-sm" />
+			<Image src={logo} alt="Dojo seal" width={50} height={50} fetchpriority="high" />
 			<a href={BASE_URL}>
 				Dean's Okinawan <br aria-hidden="true" /> Martial Arts
 			</a>

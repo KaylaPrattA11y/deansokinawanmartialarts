@@ -15,6 +15,9 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 ---
 
-<Layout title={`${post.data.title} | ${SITE_SEO.name.long}`} description={post.data.description}>
+<Layout 
+  title={`${post.data.title} | ${SITE_SEO.name.long}`} 
+  description={post.data.description ? post.data.description : SITE_SEO.description}
+>
   <Article {post} />
 </Layout>

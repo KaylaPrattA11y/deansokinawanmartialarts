@@ -1,4 +1,6 @@
 ---
+import { Icon } from 'astro-icon/components';
+import Button from '../components/Button.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SEO } from "astro-seo";
@@ -6,7 +8,7 @@ import '@fontsource-variable/cinzel';
 import '@fontsource/im-fell-english';
 import '@fontsource-variable/noto-serif-jp';
 import '../scss/site.scss';
-import { BASE_URL } from '../config/site';
+import { BASE_URL, ROUTES, IS_DEV } from '../config/site';
 
 interface Props {
   title: string;
@@ -56,23 +58,70 @@ const { title, description } = Astro.props;
 			<slot />
 		</main>
 		<Footer />
+		{IS_DEV ? (
+			<div class="admin-link">
+				<Button href={BASE_URL + ROUTES.admin} size="sm"><Icon name="edit" size="18px" /> Admin</Button>
+			</div>
+		) : (
+			<div id="admin-link" class="admin-link d-none">
+				<Button href={BASE_URL + ROUTES.admin} size="sm"><Icon name="edit" size="18px" /> Admin</Button>
+			</div>
+		)}
 	</body>
 </html>
 
-<script>
-	interface NetlifyWindow extends Window {
-		netlifyIdentity: {
-			on: (event: string, callback: (user: unknown) => void) => void;
-			open: () => void;
-		};
-	}
-	if ((window as unknown as NetlifyWindow).netlifyIdentity) {
-		(window as unknown as NetlifyWindow).netlifyIdentity.on("init", user => {
-			if (!user) {
-				(window as unknown as NetlifyWindow).netlifyIdentity.open();
+<script is:inline>
+	function updateUI() {
+    const user = window.netlifyIdentity?.currentUser();
+    const adminLink = document.getElementById('admin-link');
+		
+		console.log('updateUI called, user:', user, 'adminLink:', adminLink);
+		
+		if (adminLink) {
+			if (user) {
+				console.log('User logged in, showing admin button');
+				adminLink.classList.remove('d-none');
+			} else {
+				console.log('No user, hiding admin button');
+				adminLink.classList.add('d-none');
 			}
-		});
-	}
+		}
+  }
+  
+  // Wait for netlifyIdentity to be ready
+  function initNetlifyIdentity() {
+    console.log('Checking for netlifyIdentity...', window.netlifyIdentity);
+    if (window.netlifyIdentity) {
+      console.log('netlifyIdentity found, setting up listeners');
+      window.netlifyIdentity.on('init', (user) => {
+        console.log('netlifyIdentity init event, user:', user);
+        updateUI();
+      });
+      window.netlifyIdentity.on('login', (user) => {
+        console.log('netlifyIdentity login event, user:', user);
+        updateUI();
+      });
+      window.netlifyIdentity.on('logout', () => {
+        console.log('netlifyIdentity logout event');
+        updateUI();
+      });
+      
+      // Check immediately in case init already fired
+      console.log('Checking current user state immediately...');
+      updateUI();
+    } else {
+      // Retry if not loaded yet
+      console.log('netlifyIdentity not ready, retrying...');
+      setTimeout(initNetlifyIdentity, 100);
+    }
+  }
+  
+  // Start when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNetlifyIdentity);
+  } else {
+    initNetlifyIdentity();
+  }
 </script>
 
 <style>
@@ -86,6 +135,11 @@ const { title, description } = Astro.props;
 		main {
 			container: main / inline-size;
 			margin-block-start: var(--header-height);
+		}
+		.admin-link {
+			position: fixed;
+			inset: auto 0 0 auto;
+			z-index: 1000;
 		}
 	}
 </style>

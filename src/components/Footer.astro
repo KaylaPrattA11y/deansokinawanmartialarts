@@ -1,11 +1,12 @@
 ---
+import { Image } from "astro:assets";
+import logo from "../assets/logo.png";
 import SocialLink from './SocialLink.astro';
-import { BASE_URL } from "../config/site";
 ---
 
 <footer>
   <div class="footer-logo">
-    <img src={BASE_URL + 'logo.png'} alt="Dojo seal" class="dojo-seal is-sm" />
+    <Image src={logo} alt="Dojo seal" width={50} height={50} />
     <div>
       Dean's Okinawan <br aria-hidden="true" /> Martial Arts
     </div>

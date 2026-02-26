@@ -32,11 +32,15 @@ const { kanji } = Astro.props;
     li::after {
       content: "";
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 3px;
-      height: 100%;
+      inset: auto auto 0 0;
+      width: 100%;
+      height: 3px;
       background: var(--deep-red);
+      @container (width >= 900px) {
+        inset: 0 auto auto 0;
+        width: 3px;
+        height: 100%;
+      }
     }
   }
 </style>
