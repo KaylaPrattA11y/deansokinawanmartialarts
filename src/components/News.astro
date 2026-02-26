@@ -1,104 +1,203 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import Cards from "../components/cards/Cards.astro";
-import Card from "../components/cards/Card.astro";
+import Button from "./Button.astro";
 import { BASE_URL, ROUTES } from "../config/site";
-import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import ArticleMeta from "./articles/ArticleMeta.astro";
 
 const { posts } = Astro.props as {
   posts: CollectionEntry<"blog">[];
 };
+
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*');
+
+let optimizedImage: ImageMetadata | undefined;
+if (posts[0]?.data.image) {
+  const imagePath = posts[0].data.image.replace('/images/', '/src/assets/images/');
+  if (images[imagePath]) {
+    optimizedImage = (await images[imagePath]()).default;
+  }
+}
 ---
 {posts.length > 1 && (
-  <section aria-label="News & Updates">
-    <Cards variant="medium">
-      {posts.map((post) => (
-      <Card variant="medium">
-        <article>
-          <time datetime={post.data.pubDate.toISOString()}>
-            {
-              new Date(post.data.pubDate).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })
-            }
-          </time>
-          <h3>{post.data.title}</h3>
-          <a href={BASE_URL + ROUTES.news + post.slug + "/"} aria-label={`Read more about ${post.data.title}`}></a>
-        </article>
-      </Card>
-      ))}
-      <Card variant="medium">
-        <a href={BASE_URL + ROUTES.news} class="view-all">
-          View All News & Updates <Icon name="arrow-right" />
-        </a>
-      </Card>
-    </Cards>
+  <section aria-labelledby="news-heading">
+    <h2 id="news-heading">News & Updates</h2>
+    <div class="news">
+    {posts.map((post, index) => (
+      <article class={optimizedImage ? 'has-image' : ''}>
+        <div>
+          {index === 0 ? (
+            <>
+              {optimizedImage && (
+                <figure>
+                  <Image width={600} height={400} src={optimizedImage} alt={post.data.title} />
+                </figure>
+              )}
+              <ArticleMeta post={post}>
+                <a href={BASE_URL + ROUTES.news + post.slug + "/"}>Read more <span class="visually-hidden">about ${post.data.title}</span></a>
+              </ArticleMeta>
+            </>
+          ) : (
+          <div>
+            <time datetime={post.data.pubDate.toISOString()}>
+              {
+                new Date(post.data.pubDate).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              }
+            </time>
+            <h3>{post.data.title}</h3>
+            {post.data.description && <p>{post.data.description}</p>}
+            <a href={BASE_URL + ROUTES.news + post.slug + "/"}>Read more <span class="visually-hidden">about ${post.data.title}</span></a>
+          </div>
+          )}
+        </div>
+      </article>
+    ))}
+    </div>
+    <div class="read-all">
+      <Button href={BASE_URL + ROUTES.news} variant="secondary">
+        View All <span class="visually-hidden">News & Updates</span>
+      </Button>
+    </div>
   </section>
 )}
 
 <style>
   @layer components {
-    h2 {
-      text-align: center;
-      margin-block: 0 0.25em;
+    section {
+      max-inline-size: 1200px;
+      padding: 2rem;
+      background-color: #2e26228a;
+      @container (width >= 1200px) {
+        margin: 3rem auto;
+        border-radius: 10px;
+      }
+    }
+    .news {
+      display: grid;
+      gap: 2rem;
+      grid-template-areas: 
+        "featured"
+        "article2"
+        "article3";
+      @container (width >= 600px) and (width < 900px) {
+        gap: 3rem 2rem;
+        grid-template-areas: 
+          "featured featured"
+          "article2 article3";
+      }
+      @container (width >= 900px) {
+        gap: 2rem;
+        grid-template-columns: 1.75fr 1fr;
+        grid-template-areas: 
+          "featured article2"
+          "featured article3";
+      }
+      margin-block-end: 2rem;
+    }
+    .read-all {
+      display: grid;
+      @container (width >= 900px) {
+        justify-content: end;
+      }
+    }
+    .read-all {
+    }
+    time {
       font-family: var(--ff-heading);
-      font-size: clamp(1.5rem, 7vw, 2rem);
-      font-weight: 900;
-      line-height: 0.95;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--paper);
+      color: var(--silver);
+      margin-bottom: 1rem;
     }
     h3 {
       font-family: var(--ff-heading);
+      font-size: clamp(1rem, 3.5vw, 1.25rem);
       font-weight: 700;
+      line-height: 1.1;
       color: var(--paper);
-      margin: 0;
-      line-height: 1.2;
+      margin-block: 1em;
+    }
+    article p {
+      font-size: 1.02rem;
+      line-height: 1.9;
+      color: var(--silver);
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 3;
       overflow: hidden;
     }
-    section {
-      position: relative;
-      border-block-start: 1px solid rgba(255, 255, 255, 0.1);
-      border-block-end: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    time {
-      font-family: var(--ff-heading);
-      font-size: 0.9rem;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: var(--silver);
-      margin-bottom: 1rem;
-    }
     article {
-      position: relative;
-      padding: 1rem;
+      container: article / inline-size;
+      padding-inline-start: 2rem;
+      border-inline-start: 3px solid var(--bright-red);
     }
-    article a::after {
-      content: "";
-      position: absolute;
-      inset: 0;
+    article:first-of-type {
+      grid-area: featured;
     }
-    .view-all {
+    article:nth-of-type(2) {
+      grid-area: article2;
+    }
+    article:nth-of-type(3) {
+      grid-area: article3;
+    }
+    article:first-of-type.has-image > div {
+      display: grid;
+      gap: 1.5rem;
+      @container (width >= 600px) {
+        grid-template-columns: minmax(0, 1fr) 1.25fr;
+      }
+    }
+    article:first-of-type h3 {
+      font-size: clamp(1.25rem, 3.5vw, 1.75rem);
+    }
+    .content {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+      overflow: hidden;
+      border-block-start: 1px solid rgba(194,189,181,0.3);
+      margin-block-end: 1rem;
+    }
+    .content :global(p, ul, ol, h1, h2, h3, h4, h5, h6) {
+      margin-block: 1em;
+      font-family: var(--ff-body);
+      font-size: 1.02rem;
+      font-weight: 400;
+      line-height: 1.9;
       color: var(--silver);
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
+    }
+    article a {
       font-family: var(--ff-heading);
       font-weight: 700;
-      font-size: 0.8rem;
-      letter-spacing: 0.35em;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       text-decoration: none;
-      cursor: pointer;
-      transition: all 0.3s;
-      position: relative;
-      padding: 0.95rem;
+      color: var(--bright-red);
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-family: var(--ff-heading);
+      font-size: clamp(1.25rem, 3.5vw, 2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--paper);
+      margin-block: 0 1em;
+    }
+    figure {
+      margin: 0;
+      /* aspect-ratio: 4 / 3; */
+      overflow: hidden;
+    }
+    img {
+      inline-size: 100%;
+      block-size: 100%;
+      object-fit: cover;
     }
   }
 </style>

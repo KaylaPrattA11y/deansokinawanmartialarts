@@ -8,6 +8,8 @@ export const SITE_SEO = {
 
 export const NEWS_PAGE_SIZE = 6;
 
+export const HOME_NEWS_PAGE_SIZE = 3;
+
 export const GALLERY_PAGE_SIZE = 28;
 
 export const BASE_URL = import.meta.env.BASE_URL;

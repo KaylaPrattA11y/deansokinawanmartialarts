@@ -131,10 +131,25 @@ const validImages = galleryImages.filter(Boolean);
     const dialogImg = dialog.querySelector('img');
     const dialogTitle = dialog.querySelector('.image-title');
     const dialogCaption = dialog.querySelector('.image-caption');
-    
+
     if (dialog.open) {
       dialog.close();
-      setTimeout(() => {
+    } else {
+      dialogImg.classList.replace('v-visible', 'v-hidden');
+      figcaption.classList.replace('v-visible', 'v-hidden');
+      dialog.showModal();
+    }
+    dialog.ontransitionend = () => {
+      if (dialog.open) {
+        const { src, title, caption, slug } = btn.dataset;
+
+        dialogImg.src = src;
+        dialogImg.alt = title || '';
+        dialogImg.dataset.slug = slug;
+        dialogTitle.textContent = title || '';
+        dialogCaption.textContent = caption || '';
+        dialogCaption.hidden = !caption;
+      } else {
         dialogImg.classList.replace('v-visible', 'v-hidden');
         figcaption.classList.replace('v-visible', 'v-hidden');
         dialogImg.src = '';
@@ -143,23 +158,8 @@ const validImages = galleryImages.filter(Boolean);
         dialogTitle.textContent = '';
         dialogCaption.textContent = '';
         dialogCaption.hidden = true;
-      }, 250);
-    } else {
-      const { src, title, caption, slug } = btn.dataset;
-      if (!src) return;
-
-      dialogImg.classList.replace('v-visible', 'v-hidden');
-      figcaption.classList.replace('v-visible', 'v-hidden');
-      setTimeout(() => {
-        dialogImg.src = src;
-        dialogImg.alt = title || '';
-        dialogImg.dataset.slug = slug;
-        dialogTitle.textContent = title || '';
-        dialogCaption.textContent = caption || '';
-        dialogCaption.hidden = !caption;
-      }, 250);
-      dialog.showModal();
-    }
+      }
+    };
     // Show image only after it loads
     dialogImg.onload = () => {
       dialogImg.classList.replace('v-hidden', 'v-visible');
@@ -225,7 +225,7 @@ const validImages = galleryImages.filter(Boolean);
     } finally {
 
     }
-  }
+  };
 
   // Attach click handlers to all lightbox buttons
   document.addEventListener('DOMContentLoaded', () => {
