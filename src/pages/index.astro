@@ -6,7 +6,6 @@ import News from '../components/News.astro';
 import Dojo from '../components/Dojo.astro';
 import Classes from '../components/Classes.astro';
 import Trial from '../components/Trial.astro';
-import Info from '../components/Info.astro';
 import { SITE_SEO } from '../config/site';
 
 const posts = (await getCollection("blog"))
@@ -20,5 +19,4 @@ const posts = (await getCollection("blog"))
   <Dojo />
   <Classes />
   <Trial />
-  <Info />
 </Layout>

@@ -1,25 +1,29 @@
 ---
 import { Image } from "astro:assets";
+import Info from './Info.astro';
 import logo from "../assets/logo.png";
 import SocialLink from './SocialLink.astro';
 ---
 
 <footer>
-  <div class="footer-logo">
-    <Image src={logo} alt="Dojo seal" width={50} height={50} />
-    <div>
-      Dean's Okinawan <br aria-hidden="true" /> Martial Arts
+  <Info />
+  <div class="footer">
+    <div class="footer-logo">
+      <Image src={logo} alt="Dojo seal" width={50} height={50} />
+      <div>
+        Dean's Okinawan <br aria-hidden="true" /> Martial Arts
+      </div>
     </div>
+    <div class="footer-copy">
+      © {new Date().getFullYear()} · Hollywood, Maryland · Shorin-Ryu Matsumura Seito
+    </div>
+    <SocialLink name="Facebook" url="https://www.facebook.com/DeansOkinawanMartialArts" icon="facebook" />
   </div>
-  <div class="footer-copy">
-    © {new Date().getFullYear()} · Hollywood, Maryland · Shorin-Ryu Matsumura Seito
-  </div>
-  <SocialLink name="Facebook" url="https://www.facebook.com/DeansOkinawanMartialArts" icon="facebook" />
 </footer>
 
 <style>
   @layer components {
-    footer {
+    .footer {
       background: var(--stone);
       border-top: 1px solid rgba(255, 255, 255, 0.04);
       padding: 2rem 3rem;

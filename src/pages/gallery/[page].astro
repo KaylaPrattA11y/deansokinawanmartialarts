@@ -38,7 +38,8 @@ const pageDesc = `Explore our photo gallery showcasing the spirit and dedication
       <PhotoGallery images={posts.map(post => ({
         image: post.data.image,
         title: post.data.title,
-        caption: post.data.caption
+        caption: post.data.caption,
+        slug: post.slug
       }))} />
       <Pagination page={page} />
     </div>

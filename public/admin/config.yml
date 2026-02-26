@@ -16,7 +16,7 @@ collections:
     slug: "{{slug}}"
     identifier_field: "title"
     fields:
-      - {label: "Image", name: "image", widget: "image"}
+      - {label: "Image", name: "image", widget: "image", hint: "Upload the image file for the gallery. Recommended dimensions: 1200x630px"}
       - {label: "Publish Date", name: "pubDate", widget: "datetime", hint: "This is the date that will be used to sort your images in the gallery. It does not have to be the date the photo was taken."}
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Caption", name: "caption", widget: "string", required: false}

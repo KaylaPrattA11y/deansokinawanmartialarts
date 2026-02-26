@@ -57,17 +57,22 @@ import { BASE_URL, ROUTES } from "../config/site";
       <p>
         <a href={BASE_URL + ROUTES.news}>News & Updates</a>
       </p>
+      <p>
+        <a href={BASE_URL + ROUTES.gallery}>Photo Gallery</a>
+      </p>
     </div>
   </div>
 </section>
 
 <style>
   @layer components {
+    section {
+      border-block-start: 1px solid rgba(194,189,181,0.15);
+    }
     a:link, a:visited {
       font-family: var(--ff-heading);
       font-size: 1rem;
       color: var(--paper);
-      text-decoration-thickness: 2px;
     }
     a:link {
       text-decoration-color: var(--bright-red);

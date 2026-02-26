@@ -7,14 +7,6 @@ import ArticleMeta from "./ArticleMeta.astro";
 import Button from "../Button.astro";
 import PhotoGallery from "../PhotoGallery.astro";
 
-interface GalleryImageResolved {
-  src: ImageMetadata;
-  alt: string;
-  image: string;
-  title: string;
-  caption: string;
-}
-
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => ({
@@ -35,28 +27,7 @@ if (post.data.image) {
   }
 }
 
-// Load gallery images asynchronously
-let galleryImages: GalleryImageResolved[] = [];
-if (post.data.imageGallery?.gallery) {
-  const images_result = await Promise.all(
-    post.data.imageGallery.gallery.map(async (img) => {
-      const fullPath = img.image.replace('/images/', '/src/assets/images/');
-      const imgMeta = images[fullPath];
-      
-      if (imgMeta) {
-        return {
-          src: (await imgMeta()).default,
-          alt: img.caption || "",
-          image: img.image || "",
-          title: img.title || "",
-          caption: img.caption || "",
-        };
-      }
-      return null;
-    })
-  );
-  galleryImages = images_result.filter((img): img is GalleryImageResolved => img !== null);
-}
+
 ---
 
 <article>
@@ -74,15 +45,11 @@ if (post.data.imageGallery?.gallery) {
     <div class="content">
       <Content />
     </div>
-    {post.data.imageGallery && galleryImages.length > 0 && (
+    {post.data.imageGallery?.gallery && (
       <section aria-label="Image Gallery">
         {post.data.imageGallery.title && <h2>{post.data.imageGallery.title}</h2>}
         {post.data.imageGallery.description && <p>{post.data.imageGallery.description}</p>}
-        <PhotoGallery images={galleryImages.map(img => ({
-          image: img.image,
-          title: img.title,
-          caption: img.caption
-        }))} />
+        <PhotoGallery id="article-gallery" images={post.data.imageGallery.gallery} />
       </section>
     )}
     
@@ -158,7 +125,6 @@ if (post.data.imageGallery?.gallery) {
     .content :global(a:link, a:visited) {
       color: var(--paper);
       text-decoration-color: var(--bright-red);
-      text-decoration-thickness: 2px;
     }
     a:link:hover,
     .content :global(a:link):hover {

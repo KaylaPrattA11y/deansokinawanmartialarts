@@ -1,19 +1,27 @@
 ---
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
+import { Icon } from "astro-icon/components";
+import { BASE_URL, ROUTES } from "../config/site";
 
-export interface ImageData {
+export interface GalleryImage {
   image: string;
   title?: string;
   caption?: string;
+  slug?: string;
 }
 
-const { images } = Astro.props;
+interface PhotoGalleryProps {
+  images: GalleryImage[];
+  title?: string;
+}
+
+const { title, images } = Astro.props as PhotoGalleryProps;
 const imageAssets = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*');
 
 // Load gallery images asynchronously
 const galleryImages = await Promise.all(
-  images.map(async (img: ImageData) => {
+  images.map(async (img: GalleryImage) => {
     if (!img.image) return null;
     
     const imagePath = img.image.replace("/images/", "/src/assets/images/");
@@ -23,7 +31,8 @@ const galleryImages = await Promise.all(
       return {
         src: optimizedImage,
         title: img.title,
-        caption: img.caption
+        caption: img.caption,
+        slug: img.slug
       };
     }
     return null;
@@ -33,58 +42,390 @@ const galleryImages = await Promise.all(
 const validImages = galleryImages.filter(Boolean);
 ---
 
-<div class="photo-gallery">
-  {validImages.map((img) => (
+<section aria-label={title || "Photo Gallery"}>
+  {title && <h2 class="gallery-title">{title}</h2>}
+  <div class="photo-gallery">
+  {validImages.map((img) => {
+    if (!img) return null;
+    return (
+      <figure>
+        <div>
+          <Image
+            src={img.src}
+            alt={img.title || ""}
+            class="gallery-image"
+            width={600}
+            height={600}
+            widths={[600, 900, 1200]}
+            sizes="(max-width: 600px) 100vw, 600px"
+          />
+          {(img.title || img.caption) && (
+          <figcaption>
+            {img.title && <div class="image-title">{img.title}</div>}
+            {img.caption && <div class="image-caption">{img.caption}</div>}
+          </figcaption>
+          )}
+        </div>
+        <button 
+          class="lightbox-trigger"
+          data-photo-gallery="trigger"
+          data-src={img.src.src}
+          data-title={img.title}
+          data-caption={img.caption}
+          data-slug={img.slug}
+          aria-label={`View ${img.title || 'image'}`}
+          type="button"
+        >
+          <Icon name="fullscreen" size="28px" color="var(--paper)" />
+        </button>
+      </figure>
+    )
+  })}
+  </div>
+  <dialog>
     <figure>
-      <div>
-        <Image
-          src={img.src}
-          alt={img.title || ""}
-          class="gallery-image"
-          width={600}
-          height={600}
-          widths={[600, 900, 1200]}
-          sizes="(max-width: 600px) 100vw, 600px"
-        />
-        {(img.title || img.caption) && (
-        <figcaption>
-          {img.title && <div class="image-title">{img.title}</div>}
-          {img.caption && <div class="image-caption">{img.caption}</div>}
-        </figcaption>
+      <div class="image-wrapper">
+        <Icon name="spinner" size="56px" color="var(--ash)" />
+        <img src="" alt="" class="v-hidden" />
+      </div>
+      <figcaption class="v-hidden">
+        <h1 class="image-title"></h1>
+        <p class="image-caption"></p>
+      </figcaption>
+      <div role="group" class="image-controls">
+        <button 
+          class="image-save"
+          data-photo-gallery="save"
+          aria-label="Close"
+          type="button"
+          >
+          <Icon name="save" size="28px" />
+        </button>
+        {typeof navigator.share === 'function' && (
+          <button 
+            class="image-share"
+            data-photo-gallery="share"
+            aria-label="Close"
+            type="button"
+          >
+            <Icon name="share" size="24px" />
+          </button>
         )}
+        <button 
+          class="lightbox-trigger"
+          data-photo-gallery="trigger"
+          aria-label="Close"
+          type="button"
+        >
+          <Icon name="close" size="32px" />
+        </button>
       </div>
     </figure>
-  ))}
-</div>
+  </dialog>
+</section>
+
+<script is:inline define:vars={{ BASE_URL, ROUTES }}>
+  function handleToggleLightbox(btn) {
+    const dialog = document.querySelector('dialog');
+    const figcaption = dialog.querySelector('figcaption');
+    const dialogImg = dialog.querySelector('img');
+    const dialogTitle = dialog.querySelector('.image-title');
+    const dialogCaption = dialog.querySelector('.image-caption');
+    
+    if (dialog.open) {
+      dialog.close();
+      setTimeout(() => {
+        dialogImg.classList.replace('v-visible', 'v-hidden');
+        figcaption.classList.replace('v-visible', 'v-hidden');
+        dialogImg.src = '';
+        dialogImg.alt = '';
+        dialogImg.dataset.slug = '';
+        dialogTitle.textContent = '';
+        dialogCaption.textContent = '';
+        dialogCaption.hidden = true;
+      }, 250);
+    } else {
+      const { src, title, caption, slug } = btn.dataset;
+      if (!src) return;
+
+      dialogImg.classList.replace('v-visible', 'v-hidden');
+      figcaption.classList.replace('v-visible', 'v-hidden');
+      setTimeout(() => {
+        dialogImg.src = src;
+        dialogImg.alt = title || '';
+        dialogImg.dataset.slug = slug;
+        dialogTitle.textContent = title || '';
+        dialogCaption.textContent = caption || '';
+        dialogCaption.hidden = !caption;
+      }, 250);
+      dialog.showModal();
+    }
+    // Show image only after it loads
+    dialogImg.onload = () => {
+      dialogImg.classList.replace('v-hidden', 'v-visible');
+      figcaption.classList.replace('v-hidden', 'v-visible');
+    };
+  }
+
+  async function handleSaveImage(btn) {
+    const dialog = btn.closest('dialog');
+    
+    if (!dialog.open) return;
+    const dialogImg = dialog.querySelector('img');
+    const imageSrc = dialogImg.src;
+    const nameOfDownload = dialogImg.alt || 'downloaded-image';
+
+    try {
+      // Fetch the image data from the source URL
+      const response = await fetch(imageSrc);
+      // Convert the response to a Blob object (Binary Large Object)
+      const blobImage = await response.blob();
+      // Create a temporary URL for the Blob object
+      const href = URL.createObjectURL(blobImage);
+
+      // Create a temporary anchor element
+      const anchorElement = document.createElement('a');
+      anchorElement.href = href;
+      anchorElement.download = nameOfDownload; // Set the desired file name for the download
+
+      // Append the anchor to the body, click it programmatically, and then remove it
+      document.body.appendChild(anchorElement);
+      anchorElement.click();
+      document.body.removeChild(anchorElement);
+
+      // Clean up the temporary object URL to free memory
+      URL.revokeObjectURL(href);
+    } catch (error) {
+      console.error('Error downloading image: ', error);
+    }
+  }
+
+  async function handleShareImage(btn) {
+    const dialog = btn.closest('dialog');
+    
+    if (!dialog.open) return;
+    const imageCaption = dialog.querySelector('figcaption p').textContent;
+    const dialogImg = dialog.querySelector('img');
+    const { slug } = dialogImg.dataset || dialogImg.src;
+    const imageTitle = dialogImg.alt || 'downloaded-image';
+
+    try {
+      // use Share API
+      if (navigator.share) {
+        await navigator.share({
+          title: imageTitle,
+          text: imageCaption || "Check out this photo from Dean's Okinawan Dojo!",
+          url: `${BASE_URL}${ROUTES.gallery}${slug}/`,
+        });
+      } else {
+        console.warn('Share API not supported in this browser');
+      }
+    } catch (error) {
+      console.error('Error sharing image: ', error);
+    } finally {
+
+    }
+  }
+
+  // Attach click handlers to all lightbox buttons
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('button[data-photo-gallery="trigger"]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        handleToggleLightbox(btn);
+      });
+    });
+  });
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('button[data-photo-gallery="save"]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        handleSaveImage(btn);
+      });
+    });
+  });
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('button[data-photo-gallery="share"]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        handleShareImage(btn);
+      });
+    });
+  });
+</script>
 
 <style>
   @layer components {
+    button {
+      cursor: pointer;
+    }
+    dialog {
+      --anim-speed: 250ms;
+      --border-width: 6px;
+      background: none;
+      margin: 0;
+      padding: 0;
+      inline-size: 100vw;
+      inline-size: 100dvw;
+      block-size: 100vh;
+      block-size: 100dvh;
+      max-inline-size: 100%;
+      max-block-size: 100%;
+      box-sizing: border-box;
+      border: 0;
+      overflow: hidden;
+      scale: .9;
+      opacity: 0;
+      transition-duration: var(--anim-speed);
+      transition-property: display, scale, opacity;
+      transition-behavior: allow-discrete;
+    }
+    dialog::backdrop {
+      transition: backdrop-filter var(--anim-speed), background-color var(--anim-speed);
+      background-color: #000000bf;
+      backdrop-filter: blur(5px);
+    }
+    dialog[open] {
+      scale: 1;
+      opacity: 1;
+      @starting-style {
+        opacity: 0;
+        scale: .9;
+      }
+    }
+    dialog .image-wrapper {
+      inline-size: 100%;
+      block-size: 100%;
+      max-block-size: 85vh;
+      max-block-size: 85dvh;
+      position: relative;
+    }
+    dialog .image-wrapper svg {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      translate: -50% -50%;
+      z-index: 0;
+    }
+    dialog img {
+      inline-size: 100%;
+      block-size: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    dialog figure {
+      inline-size: 100%;
+      block-size: 100%;
+      background-color: var(--paper);
+      border: var(--border-width) solid var(--paper);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+    dialog figure img {
+      flex-shrink: 1;
+      min-block-size: 0;
+    }
+    dialog figcaption:has(.image-title:not(:empty), .image-caption:not(:empty)) {
+      background-color: var(--paper);
+      inline-size: 100%;
+      display: grid;
+      text-align: center;
+      justify-items: center;
+      align-content: start;
+      padding: 2rem 1rem;
+      box-sizing: border-box;
+      flex-shrink: 0;
+      overflow-y: auto;
+      color: var(--ink);
+    }
+    dialog figcaption :where(h1, p) {
+      max-inline-size: 60ch;
+    }
+    dialog [role="group"] {
+      display: flex;
+      gap: 0.25rem;
+      position: absolute;
+      z-index: 1;
+      justify-content: flex-end;
+      padding: var(--border-width) var(--border-width) 1rem var(--border-width);
+      box-sizing: border-box;
+      inset: 0 auto auto 0;
+      inline-size: 100%;
+      text-shadow: #000000 0px 1.5px 4px;
+      background: #000000;
+      background: linear-gradient(180deg,rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.35) 30%, rgba(0, 0, 0, 0) 100%);
+    }
+    dialog [role="group"] button {
+      appearance: none;
+      margin: 0;
+      padding: 0;
+      background: none;
+      border: 0;
+      color: var(--paper);
+      block-size: 2rem;
+      inline-size: 2rem;
+    }
+    dialog .image-title {
+      color: var(--ink);
+      font-family: var(--ff-heading);
+      font-weight: 700; 
+      font-size: 1.25rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+    dialog .image-caption {
+      font-size: 1.15rem;
+      line-height: 1.5;
+      color: var(--stone);
+      max-inline-size: 80ch;
+    }
     figure {
       margin: 0;
+    }
+    .photo-gallery figure {
+      position: relative;
       aspect-ratio: 1 / 1;
       overflow: hidden;
     }
-    figure > div {
+    .photo-gallery figure > div {
       position: relative;
       width: 100%;
       height: 100%;
     }
-    figcaption {
+    .photo-gallery figure button {
+      appearance: none;
+      background: none;
+      inline-size: 100%;
+      block-size: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+    .photo-gallery figure button svg {
+      position: absolute;
+      inset: 0 0 auto auto;
+    }
+    .photo-gallery :where(figcaption, button) {
       position: absolute;
       inset: 0;
+    }
+    .photo-gallery figcaption, 
+    .photo-gallery figure button {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .photo-gallery figcaption {
       padding: 0.5rem;
       box-sizing: border-box;
       background-color: rgba(0, 0, 0, 0.75);
       display: grid;
       text-align: center;
       place-content: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
     }
-    figure:hover figcaption {
+    .photo-gallery figure:hover :Where(figcaption, button) {
       opacity: 1;
     }
-    .image-title {
+    .photo-gallery .image-title {
       font-family: var(--ff-heading);
       font-weight: 700;
       color: var(--paper);
@@ -95,7 +436,7 @@ const validImages = galleryImages.filter(Boolean);
       -webkit-line-clamp: 2;
       overflow: hidden;
     }
-    .image-caption {
+    .photo-gallery .image-caption {
       font-size: 0.9rem;
       display: block;
       display: -webkit-box;

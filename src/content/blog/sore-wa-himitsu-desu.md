@@ -11,6 +11,8 @@ imageGallery:
     - image: /images/pexels-artempodrez-6253308.jpg
       caption: He earned that belt.
     - image: /images/pexels-olia-danilevich-6005466.jpg
+      title: What a lassie
+      caption: Doing the thing that's real karate for sure
     - image: /images/pexels-paris-lopez-110224560-9651872.jpg
     - image: /images/pexels-sergey-platonov-114873806-10209893.jpg
 ---
