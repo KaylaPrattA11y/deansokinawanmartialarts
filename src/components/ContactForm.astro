@@ -3,7 +3,7 @@ import { Icon } from 'astro-icon/components';
 ---
 
 <form 
-  name="contact" 
+  name="Contact" 
   data-netlify="true" 
   method="POST" 
   id="contact-form"
@@ -32,11 +32,11 @@ import { Icon } from 'astro-icon/components';
         <label for="interest">Interest</label>
         <select id="interest" name="interest">
           <option value="">Select an option</option>
-          <option value="karate">Karate</option>
-          <option value="self-defense">Self Defense</option>
-          <option value="fitness">Fitness</option>
-          <option value="cpr">CPR Training</option>
-          <option value="other">Other</option>
+          <option value="Karate">Karate</option>
+          <option value="Self defense">Self Defense</option>
+          <option value="Fitness">Fitness</option>
+          <option value="CPR Training">CPR Training</option>
+          <option value="Other">Other</option>
         </select>
       </div>
     </div>
@@ -63,6 +63,8 @@ import { Icon } from 'astro-icon/components';
     
     try {
       const formData = new FormData(form);
+      const formName = form.getAttribute('name') || 'Contact';
+      formData.set('form-name', formName);
       
       // Disable input after data is captured
       submitButton.disabled = true;
