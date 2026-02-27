@@ -1,0 +1,127 @@
+---
+import { Image } from 'astro:assets';
+import hohanSoken from '../../assets/images/hohan-soken.jpg';
+import Layout from '../../layouts/Layout.astro';
+import InteriorPage from "../../components/InteriorPage.astro";
+import { BASE_URL, ROUTES, SITE_SEO } from '../../config/site';
+import Button from '../../components/Button.astro';
+---
+
+<Layout title={`About | ${SITE_SEO.name.long}`} description={SITE_SEO.description}>
+	<InteriorPage 
+    heading="About | Shorin-Ryu Matsumura Seito" 
+    lead="Dean’s Okinawan Martial Arts and Self Defense provides training in both Shorin Ryu Matsumura Seito and Kobudo."
+  >
+    <hr />
+    <div class="tenets">
+      <span>Character</span>
+      <span>Sincerity</span>
+      <span>Effort</span>
+      <span>Etiquette</span>
+      <span>Self-Control</span>
+    </div>
+    <div class="short-divider" aria-hidden="true"></div>
+    <div class="grid">
+      <section class="content" aria-labelledby="section-1-heading">
+        <h2 id="section-1-heading">Dojo Philosophy and Credentials</h2>
+        <p>We are a traditional school that teaches the student the principles and traditions of these ancient arts.</p>
+        <p>Under the direction of <a href={BASE_URL + ROUTES.instructors + '#kyoshi-wayne-dean'}>Kyoshi Wayne Dean</a>, an 8th Dan, it strives to present the material in a way that each student will benefit both physically and mentally while stressing the principles of Character, Sincerity, Effort, Etiquette, and Self-Control.</p>
+        <div class="img-wrapper">
+          <Image 
+            src={hohanSoken}
+            alt="Hohan Soken"
+          />
+        </div>
+        <p>Each class is designed such that the student not only learns the basic techniques of the art, the Kata of the system and the applications the kata is stressing but also they are exposed to the rich history of Okinawa and the origins of these ancient arts.</p>
+        <p>In addition the students are taught a variety of self defense techniques centered on everyday situations that will enable the student to better prepare for unexpected encounters with an advisory.</p>
+      </section>
+      <section class="content" aria-labelledby="section-2-heading">
+        <h2 id="section-2-heading">Family-Oriented Classes</h2>
+        <p>The Dojo offers children’s and adult classes in a friendly family-oriented atmosphere and parents are encouraged to participate and observe how their child is being trained.</p> 
+        <p>Kyoshi Wayne Dean is a 8th Dan and has been studying Shorin Ryu Matsumura Orthodox Karate since 1971. His original and current instructor both were students of Master Hohan Soken while stationed in Okinawa.</p> 
+        <p>He holds a teaching license and Dojo charter license issued by the Okinawa Konanryu Kohokan Karate-Kobudo-Hakutsuru Kyokai Association. Since September 2002 he has operated his own Karate Dojo located in Southern Maryland offering both children and adult classes in Karate, Kobudo, and Self Defense. </p>
+      </section>
+    </div>
+    <div class="cta">
+      <Button variant="primary" href={BASE_URL + ROUTES.instructors}>
+        Meet our Instructors
+      </Button>
+    </div>
+  </InteriorPage>
+</Layout>
+
+<style>
+  @layer components {
+    .tenets {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-block-end: 2rem;
+    }
+    .tenets span {
+      font-family: var(--ff-body);
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--cream);
+      letter-spacing: 0.05em;
+    }
+    p {
+      max-inline-size: 80ch;
+    }
+    .grid {
+      display: grid;
+      gap: 2rem;
+      @container (width >= 900px) {
+        grid-template-columns: 1.5fr 1fr;
+      }
+    }
+    .img-wrapper {
+      margin: 0 auto;
+      text-align: center;
+      box-sizing: border-box;
+      @container (width >= 600px) {
+        float: left;
+        clear: both;
+        margin: 0 1rem 1rem 0;
+        max-inline-size: 200px;
+      }
+    }
+    .cta {
+      margin-block-start: 2rem;
+      display: grid;
+      justify-items: center;
+    }
+    .content :global(p:first-of-type::first-letter) {
+      font-family: var(--ff-heading);
+      font-weight: 900;
+      color: var(--bright-red);
+      font-size: 2.5rem;
+      line-height: 1;
+      letter-spacing: 3px;
+    }
+    .content :global(h1,h2,h3,h4,h6,h6) {
+      font-family: var(--ff-heading);
+    }
+    .content :global(h1,h2,h3,h4,h6,h6,p, ul, ol) {
+      margin-block: 1em;
+    }
+    .content :global(p, ul, ol, strong, em, b, i) {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--silver);
+    }
+    .content :global(li::marker) {
+      color: var(--bright-red);
+    }
+    .content :global(img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .content :global(a:link, a:visited) {
+      color: var(--paper);
+      text-decoration-color: var(--bright-red);
+    }
+  }
+</style>

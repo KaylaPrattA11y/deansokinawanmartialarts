@@ -1,0 +1,141 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import '../../scss/_article.scss?inline';
+
+interface InstructorProps {
+  name: string;
+  title?: string;
+  img?: ImageMetadata;
+  imgAspectRatio?: string;
+  featured?: boolean;
+  id?: string;
+}
+
+const { name, title, img, imgAspectRatio, featured = false, id } = Astro.props as InstructorProps;
+---
+
+<li id={id} class={featured ? 'featured' : ''}>
+  {img && (
+  <div class="img-wrapper" style={`--aspect-ratio: ${imgAspectRatio || 4 / 3}`}>
+    <Image 
+      src={img}
+      alt={name} 
+      widths={[600, 900, 1200]}
+      sizes="(max-width: 600px) 100vw, 600px"
+    />
+  </div>
+  )}
+  <div>
+    {title && <p>{title}</p>}
+    <h2>{name}</h2>
+    <div class="content">
+      <slot></slot>
+    </div>
+  </div>
+  {featured && <div class="short-divider" aria-hidden="true"></div>}
+</li>
+
+<style>
+  @layer components {
+    p {
+      font-family: var(--ff-heading);
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-family: var(--ff-heading);
+      font-size: clamp(1rem, 3.5vw, 1.25rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--paper);
+      margin-block: 1em;
+    }
+    .featured {
+      @container (width >=900px) {
+        grid-column: span 2;
+      }
+    }
+    .featured p {
+      font-family: var(--ff-heading);
+      font-size: 1rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 1rem;
+    }
+    .featured h2 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-family: var(--ff-heading);
+      font-weight: 700;
+      color: var(--paper);
+      margin-block: 0.5em;
+      line-height: 1.2;
+    }
+    .img-wrapper {
+      float: left;
+      clear: both;
+      margin: 0 1rem 1rem 0;
+      max-inline-size: 125px;
+      box-sizing: border-box;
+      @container (width >= 600px) {
+        max-inline-size: 235px;
+      }
+      background: var(--stone);
+      aspect-ratio: var(--aspect-ratio);
+      border: 1px solid rgba(194,189,181,0.15);
+      padding: 0.5rem;
+      inline-size: 100%;
+      overflow: hidden;
+    }
+    .featured .img-wrapper {
+      max-inline-size: 100%;
+      @container (width >= 600px) {
+        max-inline-size: 235px;
+      }
+      @container (width >= 900px) {
+        max-inline-size: 500px;
+      }
+    }
+    .img-wrapper :global(img) {
+      inline-size: 100%;
+      block-size: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .content :global(p:first-of-type::first-letter) {
+      font-family: var(--ff-heading);
+      font-weight: 900;
+      color: var(--bright-red);
+      font-size: 2.5rem;
+      line-height: 1;
+      letter-spacing: 3px;
+    }
+    .content :global(h1,h2,h3,h4,h6,h6) {
+      font-family: var(--ff-heading);
+    }
+    .content :global(h1,h2,h3,h4,h6,h6,p, ul, ol) {
+      margin-block: 1em;
+    }
+    .content :global(p, ul, ol, strong, em, b, i) {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--silver);
+    }
+    .content :global(li::marker) {
+      color: var(--bright-red);
+    }
+    .content :global(img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .content :global(a:link, a:visited) {
+      color: var(--paper);
+      text-decoration-color: var(--bright-red);
+    }
+  }
+</style>

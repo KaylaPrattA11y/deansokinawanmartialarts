@@ -1,0 +1,82 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import InteriorPage from "../../components/InteriorPage.astro";
+import Instructors from '../../components/instructors/Instructors.astro';
+import Instructor from '../../components/instructors/Instructor.astro';
+import { SITE_SEO } from '../../config/site';
+import type { ImageMetadata } from 'astro';
+
+const instructorImageModules = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/instructors/*.{avif,webp,png,jpg,jpeg}',
+  { eager: true }
+);
+
+const instructorImages = Object.fromEntries(
+  Object.entries(instructorImageModules).map(([path, module]) => [
+    path.split('/').pop()!,
+    module.default,
+  ])
+);
+
+---
+
+<Layout title={`Meet our Instructors | ${SITE_SEO.name.long}`} description={SITE_SEO.description}>
+	<InteriorPage 
+    heading="Meet our Instructors" 
+    lead="Meet our dedicated instructors who bring a wealth of knowledge and experience to our dojo. Each instructor is committed to helping students of all ages and skill levels achieve their martial arts goals."
+  >
+    <hr />
+    <Instructors>
+      <Instructor 
+        id="kyoshi-fred-sypher"
+        featured={true}
+        name="Fred Sypher"
+        title="Kyoshi"
+        img={instructorImages['kyoshi-fred-sypher.avif']}
+        imgAspectRatio="4 / 3"
+      >
+        <p>I was drafted in 1965 and joined the US Air Force. Stationed at Fort Myer, Virginia in 1966 I discovered a karate studio teaching Okinawan Kenpo. The instructor was Gary Saluter, a fourth degree black belt who had trained under Nakamura Sensei on Okinawa in the early 1960’s.  Saluter’s dojo was wiped out by a flood in the fall of 1966. I was stationed on Okinawa in October of 1967 and quickly found an Okinawan Sensei teaching Shorinjiryu on Kadena Air Base. That sensei was Kise Fusei, who, at that time, was a student of tenth degree grand master Hohan Soken.</p>
+  
+        <p>In the spring of 1968, sensei Kise announced that he was no longer teaching Shorinjiryu. He would now teach Shorinryu Matsumura Seito which he had been studying under Master Soken.  I spent every available hour studying and practicing this system of Okinawan karate until I was discharged and returned to Mayland in March, 1970 as a third degree black belt. I was asked to become the lead instructor of the Patuxent River Karate Club which was then being managed by Danny Buckner. In 1974 I opened the Isshokan Karate Dojo in Lexington Park, Maryland, the first commercial karate school in St. Mary’s County. I also taught karate at Ryken High School in Leonardtown. This was the first accredited karate class taught at a Maryland high school. In 1972 I was promoted to 4th degree black belt by sensei Kise who was visiting the US. I closed the Isshokan Dojo in 1976, got married and went back to college.  In 1977 Sensei Kise promoted me to 5th degree black belt. From then to today, I have been studying and teaching Shorinryu Matsumura Seito and nothing else. I am still a fifth degree black belt as Sensei Kise began teaching another style of karate.</p>
+        
+        <p>I live in Westminster, Maryland and each month I present seminars at Dean’s Okinawan Martial Arts and Self Defense School located in Hollywood, Maryland. I have been a devoted practitioner of Shorinryu Matsumura Seito Karate for over 50 years, and greatly enjoy sharing what I was taught and have learned over the years. For more information about Sensei Kise and Master Soken, visit James Coffman’s web site at SMOKA-USA.com.</p>
+      </Instructor>
+      <Instructor 
+        id="kyoshi-wayne-dean"
+        name="Wayne Dean"
+        title="Kyoshi"
+        img={instructorImages['kyoshi-wayne-dean.avif']}
+        imgAspectRatio="3 / 4"
+      >
+        <p>Sensei Wayne Dean holds an 8th degree black belt and has been studying Shorin Ryu Matsumura Orthodox Karate since 1971. His instructor, Sensei Fred Sypher, was a student of  Fusei Kise and Master Hohan Soken while stationed in Okinawa. Since September 2002 Sensei Dean has operated his own Karate Dojo located in Hollywood Maryland offering both children and adult classes in Karate, Kobudo, and Self Defense.</p>
+      </Instructor>
+      <Instructor 
+        id="senpai-kirk-dean"
+        name="Kirk Dean"
+        title="Senpai"
+        img={instructorImages['kirk-dean.avif']}
+        imgAspectRatio="3 / 4"
+      >
+        <p>Kirk Dean began his training in 1993 with Sensei Dean and Mark Gillingham when they taught with the Park and Recreation Center.  He has also studied Shorin –Ryu Matsumura Seito with Sensei Dan Buckner and Sensei Fred Sypher. He is the senior instructor under Sensei Dean.</p>
+      </Instructor>
+      <Instructor 
+        id="senpai-phillip-dean"
+        name="Phillip Dean"
+        title="Senpai"
+        img={instructorImages['phillip-dean.avif']}
+        imgAspectRatio="3 / 4"
+      >
+        <p>Philip Dean has been studying Shorin- Ryu Matsumura Seito karate with Sensei Wayne Dean since 2002.  He has also studied with Sensei Fred Sypher when Sensei Sypher is a quest instructor at  the Dojo. Philip also helps Sensei Dean with teaching classes for the Children and Adult’s.</p>
+      </Instructor>
+      <Instructor 
+        id="senpai-chris-schumacher"
+        name="Chris Schumacher"
+        title="Senpai"
+        img={instructorImages['chris-schumacher.avif']}
+        imgAspectRatio="3 / 4"
+      >
+        <p>Chris Schumacher started studying Shorin Ryu Karate with Sensei Wayne Dean in 2004 after a deployment to Okinawa.  He was recently promoted to NiDan (2nd degree Black belt) in January 2019. He has also studied the Marine Corps Martial Arts Program (MCMAP), Aikido and Krav Maga. Mr. Schumacher is also a 21 year veteran of the US Navy, serving with the US Marine Corps as a Hospital Corpsman. </p>
+      </Instructor>
+    </Instructors>
+  </InteriorPage>
+</Layout>

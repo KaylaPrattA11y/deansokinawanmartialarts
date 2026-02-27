@@ -26,7 +26,7 @@ export const ROUTES = {
   home: '',
   news: 'news/',
   instructors: 'instructors/',
-  history: 'history/',
+  about: 'about/',
   admin: 'admin/',
   gallery: 'gallery/',
 };

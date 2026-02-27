@@ -3,6 +3,16 @@ import { Image } from "astro:assets";
 import logo from "../assets/logo.png";
 import { Icon } from 'astro-icon/components';
 import { BASE_URL, ROUTES } from "../config/site";
+
+const currentPath = Astro.url.pathname;
+const navItems = [
+  { label: 'About', href: BASE_URL + ROUTES.about, class: 'hide-for-sm hide-for-md' },
+	{ label: 'Classes', href: BASE_URL + '#classes', class: 'hide-for-sm hide-for-md' },
+	{ label: 'Free Trial', href: BASE_URL + '#trial', class: 'hide-for-sm hide-for-md' },
+  { label: 'Gallery', href: BASE_URL + ROUTES.gallery, class: 'hide-for-sm' },
+  { label: 'News', href: BASE_URL + ROUTES.news, class: 'hide-for-sm' },
+	{ label: 'Contact', href: BASE_URL + '#contact', class: 'hide-for-sm' },
+];
 ---
 
 <header aria-label="Site header">
@@ -14,12 +24,15 @@ import { BASE_URL, ROUTES } from "../config/site";
 			</a>
 		</div>
 		<nav aria-label="Site navigation">
-			<a class="hide-for-sm hide-for-md" href={BASE_URL + ROUTES.history}>Our History</a>
-			<a class="hide-for-sm hide-for-md"href={BASE_URL + '#classes'}>Classes</a>
-			<a class="hide-for-sm hide-for-md" href={BASE_URL + '#trial'}>Free Trial</a>
-			<a class="hide-for-sm" href={BASE_URL + ROUTES.gallery}>Photo Gallery</a>
-			<a class="hide-for-sm" href={BASE_URL + ROUTES.news}>News</a>
-			<a class="hide-for-sm" href={BASE_URL + '#contact-form'}>Contact</a>
+			{navItems.map(item => (
+			<a 
+				href={item.href}
+				aria-current={currentPath.startsWith(item.href) ? 'page' : undefined}
+				class={item.class}
+			>
+				{item.label}
+			</a>
+			))}
 			<a class="show-for-sm" aria-label="Contact" href={BASE_URL + '#contact'}><Icon name="phone" size="24px" /></a>
 		</nav>
 	</div>
@@ -68,6 +81,11 @@ import { BASE_URL, ROUTES } from "../config/site";
 			letter-spacing: 0.2em;
 			color: var(--silver);
 			text-transform: uppercase;
+		}
+		a[aria-current='page'] {
+			text-decoration: underline;
+			text-decoration-color: var(--bright-red);
+			text-decoration-thickness: 2px;
 		}
 		nav a:hover {
 			text-decoration: underline;

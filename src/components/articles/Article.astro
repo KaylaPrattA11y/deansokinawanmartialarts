@@ -100,6 +100,14 @@ if (post.data.image) {
       margin: 0 auto;
       padding: 2rem;
     }
+    .content :global(p:first-of-type::first-letter) {
+      font-family: var(--ff-heading);
+      font-weight: 900;
+      color: var(--bright-red);
+      font-size: 2.5rem;
+      line-height: 1;
+      letter-spacing: 3px;
+    }
     .content :global(h1,h2,h3,h4,h6,h6) {
       font-family: var(--ff-heading);
     }
@@ -110,7 +118,6 @@ if (post.data.image) {
       font-size: 1.1rem;
       line-height: 1.5;
       color: var(--silver);
-      max-inline-size: 80ch;
     }
     .content :global(li::marker) {
       color: var(--bright-red);
