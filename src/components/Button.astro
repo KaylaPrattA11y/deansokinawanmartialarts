@@ -3,11 +3,12 @@ interface ButtonProps {
   href: string;
   variant?: 'primary' | 'secondary';
   size?: 'sm' | 'md';
+  id?: string;
 }
-const { href, variant = 'primary', size = 'md' } = Astro.props as ButtonProps;
+const { href, variant = 'primary', size = 'md', id } = Astro.props as ButtonProps;
 ---
 
-<a href={href} class={`btn-${variant} is-${size}`}><slot /></a>
+<a href={href} id={id} class={`btn-${variant} is-${size}`}><slot /></a>
 
 <style>
 @layer components {

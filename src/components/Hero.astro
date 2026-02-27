@@ -35,7 +35,6 @@ import Button from "./Button.astro";
       place-items: center;
       align-content: start;
       position: relative;
-      background: radial-gradient(ellipse at 25% 60%, rgba(139, 21, 21, 0.18) 0%, transparent 55%), radial-gradient(ellipse at 75% 30%, rgba(139, 21, 21, 0.08) 0%, transparent 45%), var(--ink);
       overflow: hidden;
     }
     .hero-content {
@@ -56,19 +55,6 @@ import Button from "./Button.astro";
       color: var(--deep-red);
       font-size: clamp(1.6rem, 4.5vw, 4rem);
       letter-spacing: 0.15em;
-    }
-    .hero::before {
-      content: '武';
-      position: absolute;
-      right: -3rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-family: var(--ff-jp);
-      font-size: 42vw;
-      color: rgba(255, 255, 255, 0.015);
-      line-height: 1;
-      pointer-events: none;
-      user-select: none;
     }
     .hero-kana {
       font-family: var(--ff-jp);

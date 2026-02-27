@@ -9,8 +9,18 @@ import Button from "./Button.astro"
   <p>
     Come train with us. Experience the tradition firsthand.
   </p>
-  <Button variant="primary" href="#contact">Claim Your Trial</Button>
+  <Button variant="primary" href="#contact-form" id="selectFreeTrial">Claim Your Trial</Button>
 </section>
+
+<script is:inline>
+  document.getElementById('selectFreeTrial')?.addEventListener('click', () => {
+    const messageTextarea = document.getElementById('message');
+
+    if (messageTextarea) {
+      messageTextarea.value = 'I am interested in the 7-Day Free Trial.';
+    }
+  });
+</script>
 
 <style>
   @layer components {

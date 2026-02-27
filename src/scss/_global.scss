@@ -27,9 +27,27 @@
   }
   body {
     background: var(--background-glow);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     color: var(--text);
     font-family: var(--ff-body);
     overflow-x: hidden;
+  }
+  body::before {
+    content: '武';
+    position: fixed;
+    z-index: 0;
+    right: -3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--ff-jp);
+    font-size: 42vw;
+    color: rgba(255, 255, 255, 0.01);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
   }
   [id] {
     scroll-margin-top: var(--header-height);
