@@ -2,9 +2,10 @@ backend:
   name: git-gateway
   branch: main
 
-local_backend: true
+# For local development - uncomment this
+# local_backend: true
 
-media_folder: "src/assets/images"
+media_folder: "public/images"
 public_folder: "/images"
 
 # https://decapcms.org/docs/widgets/

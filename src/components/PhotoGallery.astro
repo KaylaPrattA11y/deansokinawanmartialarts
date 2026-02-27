@@ -32,10 +32,18 @@ const galleryImages = await Promise.all(
         src: optimizedImage,
         title: img.title,
         caption: img.caption,
-        slug: img.slug
+        slug: img.slug,
+        isOptimized: true
       };
     }
-    return null;
+    // Fallback to public folder path for CMS-uploaded images
+    return {
+      src: img.image,
+      title: img.title,
+      caption: img.caption,
+      slug: img.slug,
+      isOptimized: false
+    };
   })
 );
 
@@ -47,18 +55,28 @@ const validImages = galleryImages.filter(Boolean);
   <div class="photo-gallery">
   {validImages.map((img) => {
     if (!img) return null;
+    const imgSrc = typeof img.src === 'string' ? img.src : img.src.src;
     return (
       <figure>
         <div>
-          <Image
-            src={img.src}
-            alt={img.title || ""}
-            class="gallery-image"
-            width={600}
-            height={600}
-            widths={[600, 900, 1200]}
-            sizes="(max-width: 600px) 100vw, 600px"
-          />
+          {img.isOptimized ? (
+            <Image
+              src={img.src as ImageMetadata}
+              alt={img.title || ""}
+              class="gallery-image"
+              width={600}
+              height={600}
+              widths={[600, 900, 1200]}
+              sizes="(max-width: 600px) 100vw, 600px"
+            />
+          ) : (
+            <img
+              src={imgSrc}
+              alt={img.title || ""}
+              class="gallery-image"
+              loading="lazy"
+            />
+          )}
           {(img.title || img.caption) && (
           <figcaption>
             {img.title && <div class="image-title">{img.title}</div>}
@@ -69,7 +87,7 @@ const validImages = galleryImages.filter(Boolean);
         <button 
           class="lightbox-trigger"
           data-photo-gallery="trigger"
-          data-src={img.src.src}
+          data-src={imgSrc}
           data-title={img.title}
           data-caption={img.caption}
           data-slug={img.slug}
@@ -134,10 +152,12 @@ const validImages = galleryImages.filter(Boolean);
 
     if (dialog.open) {
       dialog.close();
+      document.body.classList.remove('overflow-hidden');
     } else {
       dialogImg.classList.replace('v-visible', 'v-hidden');
       figcaption.classList.replace('v-visible', 'v-hidden');
       dialog.showModal();
+      document.body.classList.add('overflow-hidden');
     }
     dialog.ontransitionend = () => {
       if (dialog.open) {
@@ -262,14 +282,14 @@ const validImages = galleryImages.filter(Boolean);
       background: none;
       margin: 0;
       padding: 0;
-      inline-size: 100vw;
-      inline-size: 100dvw;
-      block-size: 100vh;
-      block-size: 100dvh;
-      max-inline-size: 100%;
-      max-block-size: 100%;
+      min-inline-size: 100vw;
+      min-inline-size: 100dvw;
+      min-block-size: 100vh;
+      min-block-size: 100dvh;
+      inline-size: 100%;
+      block-size: 100%;
       box-sizing: border-box;
-      border: 0;
+      border: var(--border-width) solid var(--paper);
       overflow: hidden;
       scale: .9;
       opacity: 0;
@@ -315,10 +335,10 @@ const validImages = galleryImages.filter(Boolean);
       inline-size: 100%;
       block-size: 100%;
       background-color: var(--paper);
-      border: var(--border-width) solid var(--paper);
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
+      overflow: auto;
     }
     dialog figure img {
       flex-shrink: 1;
@@ -346,7 +366,7 @@ const validImages = galleryImages.filter(Boolean);
       position: absolute;
       z-index: 1;
       justify-content: flex-end;
-      padding: var(--border-width) var(--border-width) 1rem var(--border-width);
+      padding: var(--border-width) 1rem 1rem;
       box-sizing: border-box;
       inset: 0 auto auto 0;
       inline-size: 100%;

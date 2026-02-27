@@ -10,9 +10,49 @@
     <title>Content Manager</title>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script is:inline>
+      console.log('=== Admin page script running ===');
+      
+      // Wait for CMS to be ready
+      let attempts = 0;
+      const registerStyles = setInterval(() => {
+        attempts++;
+        console.log(`Attempt ${attempts}: Checking for CMS...`);
+        
+        if (window.CMS) {
+          console.log('CMS found!', window.CMS);
+          
+          if (window.CMS.registerPreviewStyle) {
+            window.CMS.registerPreviewStyle(`
+              img {
+                max-width: 100% !important;
+                height: auto !important;
+                display: block !important;
+                margin: 1rem 0 !important;
+              }
+              body {
+                padding: 1rem !important;
+                max-width: 900px !important;
+                margin: 0 auto !important;
+              }
+            `, { raw: true });
+            console.log('✓ Preview styles registered!');
+          } else {
+            console.log('CMS.registerPreviewStyle not available');
+            console.log('Available:', Object.keys(window.CMS));
+          }
+          
+          clearInterval(registerStyles);
+        }
+        
+        if (attempts > 20) {
+          console.error('CMS never loaded after 20 attempts');
+          clearInterval(registerStyles);
+        }
+      }, 200);
+    </script>
   </head>
   <body>
-    <div data-netlify-identity-button></div>
     <script>
       interface NetlifyWindow extends Window {
         netlifyIdentity: {

@@ -1,3 +1,4 @@
 ---
-return Astro.redirect("/gallery/1/", 301);
+import { BASE_URL, ROUTES } from "../../config/site";
+return Astro.redirect(`${BASE_URL}${ROUTES.gallery}1/`, 301);
 ---

@@ -25,13 +25,10 @@
     scroll-behavior: smooth;
   }
   body {
-    container: body / inline-size;
     background: var(--background-glow);
     color: var(--text);
     font-family: var(--ff-body);
     overflow-x: hidden;
-    display: grid;
-    grid-template-rows: min-content 1fr min-content;
   }
   [id] {
     scroll-margin-top: var(--header-height);
@@ -98,5 +95,14 @@
     overflow: hidden;
     padding: 0;
     border: 0;
+  }
+  .overflow-hidden {
+    overflow: hidden;
+  }
+  .overflow-x-hidden {
+    overflow-x: hidden;
+  }
+  .overflow-y-hidden {
+    overflow-y: hidden;
   }
 }
