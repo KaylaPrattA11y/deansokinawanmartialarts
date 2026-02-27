@@ -1,0 +1,43 @@
+---
+interface InteriorPageProps {
+  heading?: string;
+  lead?: string;
+}
+
+const { heading, lead } = Astro.props as InteriorPageProps;
+---
+
+<div class="interior-page fade-in">
+  <div class="interior-page-inner">
+    {heading && <h1>{heading}</h1>}
+    {lead && <p>{lead}</p>}
+    <slot />
+  </div>
+</div>
+
+<style>
+  .interior-page {
+    background: var(--background-glow);
+    height: 100%;
+  }
+  .interior-page-inner {
+    --padding-x: 2rem;
+    container: interior-page / inline-size;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem var(--padding-x);
+  }
+  h1 {
+    font-family: var(--ff-heading);
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--paper);
+    margin-bottom: 2rem;
+  }
+  p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--paper);
+  }
+</style>

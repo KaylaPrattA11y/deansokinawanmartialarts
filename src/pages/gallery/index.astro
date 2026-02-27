@@ -1,4 +1,14 @@
 ---
-import { BASE_URL, ROUTES } from "../../config/site";
-return Astro.redirect(`${BASE_URL}${ROUTES.gallery}1/`, 301);
+import Layout from "../../layouts/Layout.astro";
+import { BASE_URL, ROUTES, SITE_SEO } from "../../config/site";
+
+const pageDesc = `Explore our photo gallery showcasing the spirit and dedication of our students and instructors in Okinawan martial arts.`;
+const redirectTarget = `${BASE_URL}${ROUTES.gallery}1/`;
 ---
+
+<Layout title={`Photo Gallery | ${SITE_SEO.name.long}`} description={pageDesc}>
+  <script is:inline define:vars={{ redirectTarget }}>
+    window.location.replace(redirectTarget);
+  </script>
+</Layout>
+

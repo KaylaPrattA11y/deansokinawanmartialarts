@@ -106,4 +106,17 @@
   .overflow-y-hidden {
     overflow-y: hidden;
   }
+  @keyframes fadeIn {
+    from {
+      scale: 1.015;
+      opacity: 0;
+    }
+    to {
+      scale: 1;
+      opacity: 1;
+    }
+  }
+  .fade-in {
+    animation: fadeIn 0.5s cubic-bezier(0.77,0,0.18,1);;
+  }
 }
