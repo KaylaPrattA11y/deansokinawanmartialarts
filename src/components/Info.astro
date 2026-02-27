@@ -1,66 +1,72 @@
 ---
-import SocialLink from './SocialLink.astro';
+import { Icon } from "astro-icon/components";
 import { BASE_URL, ROUTES } from "../config/site";
+import ContactForm from "./ContactForm.astro";
 ---
 
 <section class="contact">
   <div class="info-inner fade-in visible">
-    <div class="info-block">
-      <div class="info-block-title">Location</div>
-      <address>
-        23725 Three Notch Road<br />
-        Hollywood, Maryland 20636
-      </address>
-      <div class="iframe-wrapper">
-        <iframe 
-          title="Dean's Okinawan Martial Arts & Self Defense on Google Maps"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3130.2741358575695!2d-76.54627262354384!3d38.31948218059545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89b76611b2f388b3%3A0x4db9fe7421e464a9!2sDeans%20Okinawan%20Martial%20Arts!5e0!3m2!1sen!2sus!4v1771960121663!5m2!1sen!2sus" 
-          width="100%" 
-          height="225" 
-          style="border:0;" 
-          allowfullscreen="" 
-          loading="lazy" 
-          referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div>
+      <div class="info-block">
+        <div class="info-block-title">Location</div>
+        <address>
+          23725 Three Notch Road<br />
+          Hollywood, Maryland 20636
+        </address>
+        <div class="iframe-wrapper">
+          <iframe 
+            title="Dean's Okinawan Martial Arts & Self Defense on Google Maps"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3130.2741358575695!2d-76.54627262354384!3d38.31948218059545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89b76611b2f388b3%3A0x4db9fe7421e464a9!2sDeans%20Okinawan%20Martial%20Arts!5e0!3m2!1sen!2sus!4v1771960121663!5m2!1sen!2sus" 
+            width="100%" 
+            height="225" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+      <div class="info-block" id="contact">
+        <div class="info-block-title">Contact</div>
+        <p>
+          <a href="tel:+13013735031"><Icon name="phone" /> (301) 373-5031 — Home Office</a>
+        </p>
+        <p>
+          <a href="tel:+13019042742"><Icon name="mobile" /> (301) 904-2742 — Cell</a>
+        </p>
+        <p class="show-for-md">
+          <a href="#contact-form"><Icon name="mail" /> Send a message</a>
+        </p>
+      </div>
+      <div class="info-block">
+        <div class="info-block-title">Hours</div>
+        <p>
+          <strong>Youth Classes</strong
+          ><br />
+          Monday &amp; Wednesday<br />
+          6:00 – 7:00 PM<br /><br />
+          <strong>Adult Classes</strong
+          ><br />
+          Tuesday &amp; Thursday<br />
+          6:00 – 8:00 PM
+        </p>
+      </div>
+      <div class="info-block show-for-md">
+        <div class="info-block-title">About us</div>
+        <p>
+          <a href={BASE_URL + ROUTES.history}>Our History</a>
+        </p>
+        <p>
+          <a href={BASE_URL + ROUTES.instructors}>Meet the Instructors</a>
+        </p>
+        <p>
+          <a href={BASE_URL + ROUTES.news}>News & Updates</a>
+        </p>
+        <p>
+          <a href={BASE_URL + ROUTES.gallery}>Photo Gallery</a>
+        </p>
       </div>
     </div>
-    <div class="info-block" id="contact">
-      <div class="info-block-title">Contact</div>
-      <p>
-        <a href="tel:+13013735031">(301) 373-5031</a> — Home Office
-      </p>
-      <p>
-        <a href="tel:+13019042742">(301) 904-2742</a> — Cell
-      </p>
-      <SocialLink name="Facebook" url="https://www.facebook.com/DeansOkinawanMartialArts" icon="facebook" />
-    </div>
-    <div class="info-block">
-      <div class="info-block-title">Hours</div>
-      <p>
-        <strong>Youth Classes</strong
-        ><br />
-        Monday &amp; Wednesday<br />
-        6:00 – 7:00 PM<br /><br />
-        <strong>Adult Classes</strong
-        ><br />
-        Tuesday &amp; Thursday<br />
-        6:00 – 8:00 PM
-      </p>
-    </div>
-    <div class="info-block show-for-md">
-      <div class="info-block-title">About us</div>
-      <p>
-        <a href={BASE_URL + ROUTES.history}>Our History</a>
-      </p>
-      <p>
-        <a href={BASE_URL + ROUTES.instructors}>Meet the Instructors</a>
-      </p>
-      <p>
-        <a href={BASE_URL + ROUTES.news}>News & Updates</a>
-      </p>
-      <p>
-        <a href={BASE_URL + ROUTES.gallery}>Photo Gallery</a>
-      </p>
-    </div>
+    <ContactForm />
   </div>
 </section>
 
@@ -84,7 +90,7 @@ import { BASE_URL, ROUTES } from "../config/site";
       --padding-x: 1rem;
       container: contact / inline-size;
       background: var(--ink);
-      padding: 2rem var(--padding-x);
+      padding: 2rem var(--padding-x) 0 var(--padding-x);
       @container (width >= 900px) {
         --padding-x: 3rem;
         padding: 5rem var(--padding-x);
@@ -96,11 +102,18 @@ import { BASE_URL, ROUTES } from "../config/site";
       display: grid;
       gap: 1rem 2rem;
       @container contact (width >= 600px) {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr 1fr;
       }
       @container contact (width >= 900px) {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: 1fr 1.5fr;
         gap: 1rem 4rem;
+      }
+    }
+    .info-inner > div {
+      display: grid;
+      gap: 1rem 2rem;
+      @container (width < 900px) {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       }
     }
     .info-block-title {
@@ -119,6 +132,11 @@ import { BASE_URL, ROUTES } from "../config/site";
       font-size: 1rem;
       line-height: 1.9;
       color: var(--silver);
+    }
+    .info-block p > a {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
     }
     .iframe-wrapper {
       margin-block-start: 1rem;

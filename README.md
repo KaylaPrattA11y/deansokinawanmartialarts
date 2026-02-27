@@ -10,4 +10,4 @@ Run the local backend with `npx decap-server`, then access the login page via `h
 ## Netlify
 Deploy to netlify with `npm run build` then `netlify deploy --prod`.
 ## Icon Library
-Get icons from https://icon-sets.iconify.design/
+Get icons from https://icon-sets.iconify.design/. We typically use the Boxicons for this theme.

@@ -1,0 +1,205 @@
+<form 
+  name="contact" 
+  data-netlify="true" 
+  method="POST" 
+  id="contact-form"
+>
+  <input type="hidden" name="form-name" value="contact" />
+  <h2>Contact Us</h2>
+  <div class="success-message d-none">
+    <p>✓ Thank you! Your message has been sent successfully.</p>
+  </div>
+  <fieldset>
+    <legend class="visually-hidden">Contact Form</legend>
+    <div class="form-grid">
+      <div class="field">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="email" required />
+      </div>
+      <div class="field">
+        <label for="phone">Phone (optional)</label>
+        <input type="tel" id="phone" name="phone" autocomplete="tel" />
+      </div>
+      <div class="field">
+        <label for="interest">Interest</label>
+        <select id="interest" name="interest">
+          <option value="">Select an option</option>
+          <option value="karate">Karate</option>
+          <option value="self-defense">Self Defense</option>
+          <option value="fitness">Fitness</option>
+          <option value="cpr">CPR Training</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="message">Message</label>
+      <textarea id="message" name="message" autocomplete="off" rows="5" required></textarea>
+    </div>
+  </fieldset>
+  <hr />
+  <button type="submit">Send Message</button>
+  <p><small>We respect your privacy. Your information will never be shared.</small></p>
+</form>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const fieldset = form?.querySelector('fieldset') as HTMLFieldSetElement;
+  const successMessage = form?.querySelector('.success-message') as HTMLDivElement;
+  const submitButton = form?.querySelector('button[type="submit"]') as HTMLButtonElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    if (!submitButton) return;
+    
+    // Disable submit button
+    submitButton.disabled = true;
+    submitButton.textContent = 'Sending...';
+    fieldset.disabled = true;
+    
+    try {
+      const formData = new FormData(form);
+      
+      const response = await fetch('/', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (response.ok) {
+        // Show success message
+        if (successMessage) {
+          successMessage.classList.remove('d-none')
+        }
+        // Scroll to success message
+        successMessage?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else {
+        alert('Sorry, there was an error sending your message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Sorry, there was an error sending your message. Please try again.');
+    } finally {
+      submitButton.textContent = 'Message Sent';
+    }
+  });
+</script>
+
+<style>
+  :where(fieldset, button):disabled {
+    opacity: 0.5;
+  }
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    display: block;
+  }
+  h2 {
+    font-family: var(--ff-heading);
+    font-size: clamp(1.25rem, 3.5vw, 2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--paper);
+    margin-block: 0 1em;
+  }
+  .success-message {
+    background-color: rgba(75, 181, 67, 0.15);
+    border: 1px solid rgba(75, 181, 67, 0.3);
+    border-radius: 4px;
+    padding: 1rem;
+    color: #a8e6a3;
+    text-align: center;
+  }
+  .success-message p {
+    margin: 0;
+    color: #a8e6a3;
+  }
+  p {
+    text-align: center;
+    color: var(--silver);
+  }
+  .field {
+    display: grid;
+    gap: 0.15rem;
+  }
+  hr {
+    inline-size: 100%;
+    border: 0;
+    border-block-start: 1px solid rgba(194, 189, 181, 0.15);
+  }
+  form {
+    container: form / inline-size;
+    display: grid;
+    gap: 1rem;
+    background-color: #2e26228a;
+    border-inline-start: 3px solid var(--bright-red);
+    padding: 2rem 1rem;
+    box-sizing: border-box;
+    align-content: start;
+    @container (width < 600px) {
+      inline-size: calc(100% + calc(var(--padding-x) * 2));
+      margin-inline-start: calc(var(--padding-x) * -1);
+    }
+    @container (width >= 600px) {
+      margin-block-start: 2rem;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      padding: 2rem;
+    }
+  }
+  .form-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    margin-block-end: 1rem;
+  }
+  label {
+    font-style: normal;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--silver);
+  }
+  input,
+  textarea,
+  select {
+    inline-size: 100%;
+    background-color: var(--stone);
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border: 1px solid rgba(194,189,181,0.15);
+    border-radius: 4px;
+    color: var(--paper);
+    accent-color: var(--bright-red);
+  }
+  button[type="submit"] {
+    display: inline-block;
+    font-family: var(--ff-heading);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    text-align: center;
+    color: var(--paper);
+    background: var(--deep-red);
+    border: 1px solid rgba(194, 189, 181, 0.15);
+    padding: 0.95rem 2.8rem;
+  }
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+  button[type="submit"]::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+  }
+</style>
