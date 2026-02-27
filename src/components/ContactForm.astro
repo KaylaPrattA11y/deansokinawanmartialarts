@@ -1,13 +1,17 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
 <form 
   name="contact" 
   data-netlify="true" 
   method="POST" 
   id="contact-form"
 >
-  <input type="hidden" name="form-name" value="contact" />
+  <input type="hidden" name="form-name" value="Contact" />
   <h2>Contact Us</h2>
   <div class="success-message d-none">
-    <p>✓ Thank you! Your message has been sent successfully.</p>
+    <p><Icon name="check" size="20px" /> Thank you! Your message has been sent successfully.</p>
   </div>
   <fieldset>
     <legend class="visually-hidden">Contact Form</legend>
@@ -57,13 +61,13 @@
     
     if (!submitButton) return;
     
-    // Disable submit button
-    submitButton.disabled = true;
-    submitButton.textContent = 'Sending...';
-    fieldset.disabled = true;
-    
     try {
       const formData = new FormData(form);
+      
+      // Disable input after data is captured
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending...';
+      fieldset.disabled = true;
       
       const response = await fetch('/', {
         method: 'POST',
@@ -118,6 +122,9 @@
   .success-message p {
     margin: 0;
     color: #a8e6a3;
+    display: flex;
+    gap: 0.15rem;
+    align-items: center;
   }
   p {
     text-align: center;
