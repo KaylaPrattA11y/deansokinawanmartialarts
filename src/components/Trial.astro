@@ -16,10 +16,13 @@ import Button from "./Button.astro"
   @layer components {
     .trial-banner {
       background: var(--deep-red);
-      padding: 5rem 3rem;
+      padding: 2rem 1rem;
       text-align: center;
       position: relative;
       overflow: hidden;
+      @container (width >= 900px) {
+        padding: 5rem 3rem;
+      }
     }
     .trial-banner::before {
       content: "";

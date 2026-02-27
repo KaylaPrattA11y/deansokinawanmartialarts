@@ -69,11 +69,12 @@ if (posts[0]?.data.image) {
   @layer components {
     section {
       max-inline-size: 1200px;
-      padding: 2rem;
+      padding: 2rem 1rem;
       background-color: #2e26228a;
       @container (width >= 1200px) {
         margin: 3rem auto;
         border-radius: 10px;
+        padding: 2rem;
       }
     }
     .news {
@@ -133,8 +134,11 @@ if (posts[0]?.data.image) {
     }
     article {
       container: article / inline-size;
-      padding-inline-start: 2rem;
+      padding-inline: 1rem;
       border-inline-start: 3px solid var(--bright-red);
+      @container (width >= 900px) {
+        padding-inline-start: 2rem;
+      }
     }
     article:first-of-type {
       grid-area: featured;

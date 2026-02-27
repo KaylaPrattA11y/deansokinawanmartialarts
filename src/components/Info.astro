@@ -83,7 +83,10 @@ import { BASE_URL, ROUTES } from "../config/site";
     .contact {
       container: contact / inline-size;
       background: var(--ink);
-      padding: 5rem 3rem;
+      padding: 2rem 1rem;
+      @container (width >= 900px) {
+        padding: 5rem 3rem;
+      }
     }
     .info-inner {
       max-width: 1200px;

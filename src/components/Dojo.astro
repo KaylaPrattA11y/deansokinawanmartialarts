@@ -44,9 +44,12 @@ import { BASE_URL, ROUTES } from "../config/site";
     }
     .dojo {
       container: dojo / inline-size;
-      padding: 7rem 3rem;
+      padding: 2rem 1rem;
       max-width: 1200px;
       margin: 0 auto;
+      @container (width >= 900px) {
+        padding: 7rem 3rem;
+      }
     }
     .dojo > div {
       display: grid;

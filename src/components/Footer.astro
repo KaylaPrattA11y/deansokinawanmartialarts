@@ -26,7 +26,7 @@ import SocialLink from './SocialLink.astro';
     .footer {
       background: var(--stone);
       border-top: 1px solid rgba(255, 255, 255, 0.04);
-      padding: 2rem 3rem;
+      padding: 2rem 1rem;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
@@ -34,6 +34,9 @@ import SocialLink from './SocialLink.astro';
       gap: 1.5rem;
       @container (width < 600px) {
         place-content: center;
+      }
+      @container (width >= 900px) {
+        padding: 2rem 3rem;
       }
     }
     .footer-logo {
