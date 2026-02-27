@@ -81,11 +81,13 @@ import { BASE_URL, ROUTES } from "../config/site";
       text-decoration: none;
     }
     .contact {
+      --padding-x: 1rem;
       container: contact / inline-size;
       background: var(--ink);
-      padding: 2rem 1rem;
+      padding: 2rem var(--padding-x);
       @container (width >= 900px) {
-        padding: 5rem 3rem;
+        --padding-x: 3rem;
+        padding: 5rem var(--padding-x);
       }
     }
     .info-inner {
@@ -127,11 +129,11 @@ import { BASE_URL, ROUTES } from "../config/site";
         max-inline-size: 300px;
       }
       @container (width < 600px) {
-        margin-left: -3rem;
+        margin-left: calc(var(--padding-x) * -1);
       }
     }
     iframe {
-      width: calc(100% + 3rem);
+      width: calc(100% + var(--padding-x));
       height: 225px;
     }
   }

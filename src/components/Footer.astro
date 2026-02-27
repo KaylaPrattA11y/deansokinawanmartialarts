@@ -8,36 +8,46 @@ import SocialLink from './SocialLink.astro';
 <footer>
   <Info />
   <div class="footer">
-    <div class="footer-logo">
-      <Image src={logo} alt="Dojo seal" width={50} height={50} />
-      <div>
-        Dean's Okinawan <br aria-hidden="true" /> Martial Arts
+    <div>
+      <div class="footer-logo">
+        <Image src={logo} alt="Dojo seal" width={50} height={50} />
+        <div>
+          Dean's Okinawan <br aria-hidden="true" /> Martial Arts
+        </div>
+      </div>
+      <div class="footer-copy">
+        © {new Date().getFullYear()} · Hollywood, Maryland · Shorin-Ryu Matsumura Seito
+      </div>
+      <div class="footer-social">
+        <SocialLink name="Facebook" url="https://www.facebook.com/DeansOkinawanMartialArts" icon="facebook" />
       </div>
     </div>
-    <div class="footer-copy">
-      © {new Date().getFullYear()} · Hollywood, Maryland · Shorin-Ryu Matsumura Seito
-    </div>
-    <SocialLink name="Facebook" url="https://www.facebook.com/DeansOkinawanMartialArts" icon="facebook" />
   </div>
 </footer>
 
 <style>
   @layer components {
+    footer {
+      container: footer / inline-size;
+    }
+    .footer > div {
+      display: grid;
+      justify-content: space-between;
+      align-items: center;
+      justify-items: center;
+      gap: 1.5rem;
+      padding: 2rem 1rem;
+      @container (width >= 600px) {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      }
+      @container (width >= 1200px) {
+        grid-template-columns: 0.5fr 1fr 0.5fr;
+        padding: 2rem 3rem;
+      }
+    }
     .footer {
       background: var(--stone);
       border-top: 1px solid rgba(255, 255, 255, 0.04);
-      padding: 2rem 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1.5rem;
-      @container (width < 600px) {
-        place-content: center;
-      }
-      @container (width >= 900px) {
-        padding: 2rem 3rem;
-      }
     }
     .footer-logo {
 			position: relative;
@@ -56,12 +66,16 @@ import SocialLink from './SocialLink.astro';
       font-size: 0.9rem;
       letter-spacing: 0.12em;
       color: var(--silver);
-      text-align: center;
+      /* @container (width >= 1200px) { */
+        text-align: center;
+      /* } */
     }
     .footer-social {
       text-align: center;
       display: grid;
-      justify-items: center;
+      @container (width >= 1200px)  {
+        justify-items: end;
+      }
     }
   }
 </style>
