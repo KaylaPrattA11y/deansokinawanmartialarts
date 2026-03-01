@@ -100,7 +100,7 @@ if (post.data.image) {
       margin: 0 auto;
       padding: 2rem;
     }
-    .content :global(p:first-of-type::first-letter) {
+    .content :global(> p:first-of-type::first-letter) {
       font-family: var(--ff-heading);
       font-weight: 900;
       color: var(--bright-red);
@@ -136,6 +136,23 @@ if (post.data.image) {
     a:link:hover,
     .content :global(a:link):hover {
       text-decoration: none;
+    }
+    .content :global(blockquote p) {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--paper);
+    }
+    .content :global(blockquote) {
+      margin: 0 4rem;
+      padding: 0;
+      text-align: center;
+    }
+    .content :global(blockquote::before, blockquote::after) {
+      content: "";
+      display: block;
+      width: 100px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--silver), transparent);
+      margin: 2rem auto;
     }
     footer {
       margin-top: 3rem;

@@ -105,7 +105,7 @@ const { name, title, img, imgAspectRatio, featured = false, id } = Astro.props a
       object-fit: cover;
       display: block;
     }
-    .content :global(p:first-of-type::first-letter) {
+    .content :global(> p:first-of-type::first-letter) {
       font-family: var(--ff-heading);
       font-weight: 900;
       color: var(--bright-red);

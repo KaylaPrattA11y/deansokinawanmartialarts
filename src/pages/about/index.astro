@@ -92,7 +92,7 @@ import Button from '../../components/Button.astro';
       display: grid;
       justify-items: center;
     }
-    .content :global(p:first-of-type::first-letter) {
+    .content :global(> p:first-of-type::first-letter) {
       font-family: var(--ff-heading);
       font-weight: 900;
       color: var(--bright-red);
