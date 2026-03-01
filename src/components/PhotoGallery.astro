@@ -2,7 +2,6 @@
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { Icon } from "astro-icon/components";
-import { BASE_URL, ROUTES, SITE_SEO } from "../config/site";
 
 export interface GalleryImage {
   image: string;
@@ -238,26 +237,6 @@ const validImages = galleryImages.filter(Boolean);
       btn.addEventListener('click', () => {
         handleSaveImage(btn);
       });
-    });
-  });
-</script>
-
-<script is:inline define:vars={{BASE_URL, ROUTES, SITE_SEO}}>
-  const dialog = document.querySelector('dialog');
-  const shareButton = dialog.querySelector('[data-share="true"]');
-
-  shareButton?.classList.toggle('d-none', !navigator.share);
-  shareButton.addEventListener('click', () => {
-    if (!navigator.share) return;
-    const title = `${shareButton.dataset.title} | ${SITE_SEO.name.short}`;
-    const description = shareButton.dataset.description;
-    const shareData = {
-      title: title,
-      text: description ? `${title}\n\n${description}` : title,
-      url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.slug}/`
-    };
-    navigator.share(shareData).catch((error) => {
-      console.error('Error sharing:', error);
     });
   });
 </script>

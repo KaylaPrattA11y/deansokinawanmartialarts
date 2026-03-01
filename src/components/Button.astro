@@ -3,12 +3,13 @@ interface ButtonProps {
   href: string;
   variant?: 'primary' | 'secondary';
   size?: 'sm' | 'md';
+  width?: 'auto' | 'full';
   id?: string;
 }
-const { href, variant = 'primary', size = 'md', id } = Astro.props as ButtonProps;
+const { href, variant = 'primary', size = 'md', width = 'auto', id } = Astro.props as ButtonProps;
 ---
 
-<a href={href} id={id} class={`btn-${variant} is-${size}`}><slot /></a>
+<a href={href} id={id} class={`btn-${variant} is-${size} is-${width}`}><slot /></a>
 
 <style>
 @layer components {
@@ -24,12 +25,16 @@ const { href, variant = 'primary', size = 'md', id } = Astro.props as ButtonProp
     transition: all 0.3s;
     position: relative;
     text-align: center;
+    box-sizing: border-box;
   }
   a.is-md {
     padding: 0.95rem 2.8rem;
   }
   a.is-sm {
     padding: 0.5rem 1.5rem;
+  }
+  a.is-full {
+    inline-size: 100%;
   }
   a:has(svg) {
     display: flex;

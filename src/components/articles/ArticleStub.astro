@@ -20,20 +20,18 @@ if (post.data.image) {
 
 <article class={`post-card${post.data.image ? ' has-image' : ''}`}>
   <div>
-  {
-    optimizedImage && (
-      <Image 
-        src={optimizedImage} 
-        alt={post.data.title} 
-        class="post-image"
-        widths={[300, 600, 900]}
-        sizes="(max-width: 900px) 50vw, 300px"
-      />
-    )
-  }
+  {optimizedImage && (
+    <Image 
+      src={optimizedImage} 
+      alt={post.data.title} 
+      class="post-image"
+      widths={[300, 600, 900]}
+      sizes="(max-width: 900px) 50vw, 300px"
+    />
+  )}
   </div>
   <div class="post-content">
-    <ArticleMeta {post} isStub={true} />
+    <ArticleMeta {post} isStub={true} useShareButton={false} />
     <Button variant="secondary" href={`${BASE_URL}${ROUTES.news}${post.slug}/`}>Read More</Button>
   </div>
 </article>

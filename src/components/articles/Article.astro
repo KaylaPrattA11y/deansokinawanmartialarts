@@ -30,7 +30,7 @@ if (post.data.image) {
 
 <article>
   <div class="wrapper">
-    <ArticleMeta {post} />
+    <ArticleMeta {post} useShareButton={true} />
     {optimizedImage && (
       <Image 
         src={optimizedImage} 

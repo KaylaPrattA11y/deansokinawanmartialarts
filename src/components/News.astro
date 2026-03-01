@@ -21,46 +21,42 @@ if (posts[0]?.data.image) {
 ---
 {posts.length > 0 && (
   <section aria-labelledby="news-heading">
-    <h2 id="news-heading">News & Updates</h2>
+    <div class="news-header">
+      <div>
+        <h2 id="news-heading">News & Updates</h2>
+      </div>
+      <div>
+      {posts.length > 1 && (
+      <div class="read-all hide-for-sm">
+        <Button href={BASE_URL + ROUTES.news} variant="secondary">
+          View All <span class="visually-hidden">News & Updates</span>
+        </Button>
+      </div>
+      )}
+      </div>
+    </div>
     <div class={`news${posts.length > 1 ? ' has-more' : ''}`}>
     {posts.map((post, index) => (
       <article class={optimizedImage ? 'has-image' : ''}>
         <div>
-          {index === 0 ? (
-            <>
-              {optimizedImage && (
-                <figure>
-                  <Image width={600} height={400} src={optimizedImage} alt={post.data.title} />
-                </figure>
-              )}
-              <ArticleMeta post={post}>
-                <a href={BASE_URL + ROUTES.news + post.slug + "/"}>Read more <span class="visually-hidden">about ${post.data.title}</span></a>
-              </ArticleMeta>
-            </>
-          ) : (
-          <div>
-            <time datetime={post.data.pubDate.toISOString()}>
-              {
-                new Date(post.data.pubDate).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })
-              }
-            </time>
-            <h3>{post.data.title}</h3>
-            {post.data.description && <p>{post.data.description}</p>}
-            <a href={BASE_URL + ROUTES.news + post.slug + "/"}>Read more <span class="visually-hidden">about ${post.data.title}</span></a>
-          </div>
+          {index === 0 && optimizedImage && (
+          <figure>
+            <Image width={600} height={400} src={optimizedImage} alt={post.data.title} />
+          </figure>
           )}
+          <ArticleMeta post={post} isStub={index !== 0} useShareButton={false}>
+            <div class="read-more">
+              <Button href={BASE_URL + ROUTES.news + post.slug + "/"} variant="secondary">Read more <span class="visually-hidden">about ${post.data.title}</span></Button>
+            </div>
+          </ArticleMeta>
         </div>
       </article>
     ))}
     </div>
     {posts.length > 1 && (
-    <div class="read-all">
-      <Button href={BASE_URL + ROUTES.news} variant="secondary">
-        View All <span class="visually-hidden">News & Updates</span>
+    <div class="read-all show-for-sm">
+      <Button href={BASE_URL + ROUTES.news} variant="primary" width="full">
+        View All News<span class="visually-hidden"> & Updates</span>
       </Button>
     </div>
     )}
@@ -99,15 +95,28 @@ if (posts[0]?.data.image) {
           "featured article2"
           "featured article3";
       }
-      margin-block-end: 2rem;
     }
-    .read-all {
+    .news-header {
       display: grid;
-      @container (width >= 900px) {
-        justify-content: end;
+      gap: 1rem;
+      align-items: center;
+      margin-block-end: 1rem;
+      @container (width >= 600px) {
+        margin-block-end: 2rem;
+        grid-template-columns: 1fr auto;
       }
     }
     .read-all {
+      display: grid;
+      margin-block-start: 2rem;
+      @container (width >= 600px) {
+        margin-block-start: 0;
+        justify-content: end;
+      }
+    }
+    .read-more {
+      margin-block-start: 2em;
+      display: grid;
     }
     time {
       font-family: var(--ff-heading);
@@ -177,23 +186,13 @@ if (posts[0]?.data.image) {
       line-height: 1.9;
       color: var(--silver);
     }
-    article a {
-      font-family: var(--ff-heading);
-      font-weight: 700;
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--bright-red);
-      margin-bottom: 1rem;
-    }
     h2 {
       font-family: var(--ff-heading);
       font-size: clamp(1.25rem, 3.5vw, 2rem);
       font-weight: 700;
       line-height: 1.1;
       color: var(--paper);
-      margin-block: 0 1em;
+      margin: 0;
     }
     figure {
       margin: 0;

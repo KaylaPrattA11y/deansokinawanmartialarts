@@ -1,9 +1,14 @@
 ---
 import { Icon } from 'astro-icon/components';
 import type { Post } from "../../types";
-import { BASE_URL, ROUTES, SITE_SEO } from '../../config/site';
 
-const { post, isStub = false } = Astro.props as { post: Post, isStub?: boolean };
+interface ArticleMetaProps {
+  post: Post;
+  isStub?: boolean;
+  useShareButton?: boolean;
+}
+
+const { post, isStub = false, useShareButton = false } = Astro.props as ArticleMetaProps;
 ---
 
 <header class="post-meta">
@@ -20,6 +25,25 @@ const { post, isStub = false } = Astro.props as { post: Post, isStub?: boolean }
     <>
       <h2>{post.data.title}</h2>
       {post.data.description && <p class="desc">{post.data.description}</p>}
+      {post.data.tags && (
+      <div class="tags">
+        {post.data.tags.map((tag) => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+      )}
+      {useShareButton && (
+      <button 
+        class="d-none"
+        type="button" 
+        data-share="true"
+        data-title={post.data.title}
+        data-description={post.data.description}
+        data-slug={post.slug}
+      >
+        <Icon name="share" /> Share
+      </button>
+      )}
     </>
   ) : (
     <div class="post-meta-full">
@@ -30,8 +54,14 @@ const { post, isStub = false } = Astro.props as { post: Post, isStub?: boolean }
         <div>
           {post.data.author && <span class="author">By {post.data.author}</span>}
           {post.data.description && <p class="lead">{post.data.description}</p>}
-        </div>
-        <div>
+          {post.data.tags && (
+          <div class="tags">
+            {post.data.tags.map((tag) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+          )}
+          {useShareButton && (
           <button 
             class="d-none"
             type="button" 
@@ -42,42 +72,13 @@ const { post, isStub = false } = Astro.props as { post: Post, isStub?: boolean }
           >
             <Icon name="share" /> Share
           </button>
+          )}
         </div>
       </div>
     </div>
   )}
-  {
-    post.data.tags && (
-      <div class="tags">
-        {post.data.tags.map((tag) => (
-          <span class="tag">{tag}</span>
-        ))}
-      </div>
-    )
-  }
   <slot></slot>
 </header>
-
-<script is:inline define:vars={{BASE_URL, ROUTES, SITE_SEO}}>
-  const shareButton = document.querySelector('[data-share="true"]');
-
-  shareButton?.classList.toggle('d-none', !navigator.share);
-  document.addEventListener('click', (e) => {
-    if (!navigator.share) return;
-    if (e.target instanceof HTMLButtonElement && e.target.matches('[data-share="true"]')) {
-      const title = `${shareButton.dataset.title} | ${SITE_SEO.name.short}`;
-      const description = shareButton.dataset.description;
-      const shareData = {
-        title: title,
-        text: description ? `${title}\n\n${description}` : title,
-        url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.slug}/`
-      };
-      navigator.share(shareData).catch((error) => {
-        console.error('Error sharing:', error);
-      });
-    }
-  });
-</script>
 
 <style>
   @layer components {
@@ -121,9 +122,11 @@ const { post, isStub = false } = Astro.props as { post: Post, isStub?: boolean }
     }
     .post-meta-full-info {
       display: grid;
-      grid-template-columns: 1fr auto;
       gap: 1rem;
-      align-items: end;
+      @container (width > 600px) {
+        grid-template-columns: 1fr auto;
+        align-items: end;
+      }
     }
     .desc, .lead {
       line-height: 1.7;
