@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import patch from "../assets/patch.jpg";
+import patch from "../assets/patch.png";
 import Button from "./Button.astro";
 import { BASE_URL, ROUTES } from "../config/site";
 ---
@@ -25,23 +25,20 @@ import { BASE_URL, ROUTES } from "../config/site";
         </div>
       </div>
     </div>
-    <div class="about-accent">
-      <div class="about-logo-display">
-        <Image src={patch} alt="Shorinryu Matsumura Seito Hohan Soken White Crane patch" />
-        <span class="about-logo-caption"
-          >Hollywood, Maryland · Est. Matsumura Lineage</span
-        >
-      </div>
-      <div class="accent-frame"></div>
-    </div>
+    <figure>
+      <Image 
+        src={patch} 
+        alt="Shorinryu Matsumura Seito Hohan Soken White Crane patch"
+        widths={[600, 900, 1200]}
+        sizes="(max-width: 600px) 100vw, 600px"
+       />
+      <figcaption class="about-logo-caption">Hollywood, Maryland · Est. Matsumura Lineage</figcaption>
+    </figure>
   </div>
 </section>
 
 <style>
   @layer components {
-    img {
-      inline-size: 70%;
-    }
     .dojo {
       container: dojo / inline-size;
       padding: 2rem 1rem;
@@ -58,7 +55,8 @@ import { BASE_URL, ROUTES } from "../config/site";
         grid-template-columns: 1fr 1fr;
         gap: 3rem;
       }
-      @container dojo (width >= 1200px) {
+      @container dojo (width >= 900px) {
+        grid-template-columns: 1.5fr 1fr;
         gap: 6rem;
       }
     }
@@ -79,33 +77,31 @@ import { BASE_URL, ROUTES } from "../config/site";
     .section-body p {
       max-width: 60ch;
     }
-    .about-accent {
-      position: relative;
-    }
-    .about-logo-display {
-      width: 100%;
-      aspect-ratio: 3 / 4;
-      background: var(--stone);
-      position: relative;
-      overflow: hidden;
-      display: flex;
+    figure {
+      margin: 0;
+      padding-inline: 2rem;
+      display: grid;
       align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 2rem;
+      justify-items: center;
+      gap: 1rem;
+      box-sizing: border-box;
+    }
+    figcaption {
+      font-family: var(--ff-heading);
+      font-size: 1rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--paper);
+      margin-bottom: 1rem;
+    }
+    img {
+      -webkit-box-reflect: var(--reflect-below);
+      block-size: auto;
+      inline-size: 100%;
     }
     .about-logo-caption {
       padding-inline: 1rem;
       text-align: center;
-    }
-    .accent-frame {
-      position: absolute;
-      top: 1.5rem;
-      left: 1.5rem;
-      right: -1.5rem;
-      bottom: -1.5rem;
-      border: 1px solid rgba(194, 189, 181, 0.15);
-      pointer-events: none;
     }
     .button-group {
       display: grid;
