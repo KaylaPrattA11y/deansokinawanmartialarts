@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 
-const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*');
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/**/*');
 
 let optimizedImage;
 if (post.data.image) {
@@ -34,7 +34,7 @@ if (post.data.image) {
     <div class="news-page-inner">
       <h1>{post.data.title}</h1>
       {post.data.caption && <p>{post.data.caption}</p>}
-      {optimizedImage && (
+      {optimizedImage ? (
         <Image 
           src={optimizedImage} 
           alt={post.data.title} 
@@ -42,7 +42,14 @@ if (post.data.image) {
           widths={[600, 900, 1200]}
           sizes="(max-width: 600px) 100vw, 600px"
         />
-      )}
+      ) : post.data.image ? (
+        <img 
+          src={post.data.image} 
+          alt={post.data.title} 
+          class="featured-image"
+          loading="lazy"
+        />
+      ) : null}
       <Button variant="secondary" href={BASE_URL + ROUTES.gallery}>Back to Photo Gallery</Button>
     </div>
   </div>
