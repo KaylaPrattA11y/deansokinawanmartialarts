@@ -11,3 +11,5 @@ Run the local backend with `npx decap-server`, then access the login page via `h
 Deploy to netlify with `npm run build` then `netlify deploy --prod`.
 ## Icon Library
 Get icons from https://icon-sets.iconify.design/. We typically use the Boxicons for this theme.
+## Port Forwarding for Phone Testing
+VSCODE: Press `F1`, find `View: Toggle Ports`. Then in the Ports panel, "Add Port" and enter the port number. Use the Forwarded Address on your mobile device.
