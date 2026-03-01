@@ -99,7 +99,7 @@ const validImages = galleryImages.filter(Boolean);
     )
   })}
   </div>
-  <dialog>
+  <dialog id="gallery-dialog">
     <figure>
       <div class="image-wrapper">
         <Icon name="spinner" size="56px" color="var(--ash)" />
@@ -141,7 +141,7 @@ const validImages = galleryImages.filter(Boolean);
 
 <script is:inline>
   function handleToggleLightbox(btn) {
-    const dialog = document.querySelector('dialog');
+    const dialog = document.getElementById('gallery-dialog');
     const shareButton = dialog.querySelector('[data-share="true"]');
     const figcaption = dialog.querySelector('figcaption');
     const dialogImg = dialog.querySelector('img');
@@ -247,38 +247,8 @@ const validImages = galleryImages.filter(Boolean);
       cursor: pointer;
     }
     dialog {
-      --anim-speed: 250ms;
       --border-width: 6px;
-      background: none;
-      margin: 0;
-      padding: 0;
-      min-inline-size: 100vw;
-      min-inline-size: 100dvw;
-      min-block-size: 100vh;
-      min-block-size: 100dvh;
-      inline-size: 100%;
-      block-size: 100%;
-      box-sizing: border-box;
       border: var(--border-width) solid var(--paper);
-      overflow: hidden;
-      scale: .9;
-      opacity: 0;
-      transition-duration: var(--anim-speed);
-      transition-property: display, scale, opacity;
-      transition-behavior: allow-discrete;
-    }
-    dialog::backdrop {
-      transition: backdrop-filter var(--anim-speed), background-color var(--anim-speed);
-      background-color: #000000bf;
-      backdrop-filter: blur(5px);
-    }
-    dialog[open] {
-      scale: 1;
-      opacity: 1;
-      @starting-style {
-        opacity: 0;
-        scale: .9;
-      }
     }
     dialog .image-wrapper {
       inline-size: 100%;

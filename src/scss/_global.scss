@@ -66,6 +66,39 @@
     background: linear-gradient(to right, transparent, var(--silver), transparent);
     margin: 2rem auto;
   }
+  dialog {
+    --anim-speed: 250ms;
+    container: dialog / inline-size;
+    background: none;
+    margin: 0;
+    padding: 0;
+    min-inline-size: 100vw;
+    min-inline-size: 100dvw;
+    min-block-size: 100vh;
+    min-block-size: 100dvh;
+    inline-size: 100%;
+    block-size: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    scale: .9;
+    opacity: 0;
+    transition-duration: var(--anim-speed);
+    transition-property: display, scale, opacity;
+    transition-behavior: allow-discrete;
+  }
+  dialog::backdrop {
+    transition: backdrop-filter var(--anim-speed), background-color var(--anim-speed);
+    background-color: #000000bf;
+    backdrop-filter: blur(5px);
+  }
+  dialog[open] {
+    scale: 1;
+    opacity: 1;
+    @starting-style {
+      opacity: 0;
+      scale: .9;
+    }
+  }
 }
 @layer utilities {
   .show-for-sm {

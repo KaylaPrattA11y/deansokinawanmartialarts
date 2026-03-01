@@ -140,22 +140,28 @@ const { title, description } = Astro.props;
 </script>
 
 <script is:inline define:vars={{BASE_URL, ROUTES, SITE_SEO}}>
-  // Share buttons within a dialog
-  const dialog = document.querySelector('dialog');
-  const shareButton = dialog.querySelector('[data-share="true"]');
+  // Check every dialog for share buttons
+  const dialogs = document.querySelectorAll('dialog');
+  
+  dialogs.forEach(dialog => {
+    // Share buttons within a dialog
+    const shareButtons = dialog.querySelectorAll('[data-share="true"]');
 
-  shareButton?.classList.toggle('d-none', !navigator.share);
-  shareButton.addEventListener('click', () => {
-    if (!navigator.share) return;
-    const title = `${shareButton.dataset.title} | ${SITE_SEO.name.short}`;
-    const description = shareButton.dataset.description;
-    const shareData = {
-      title: title,
-      text: description ? `${title}\n\n${description}` : title,
-      url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.slug}/`
-    };
-    navigator.share(shareData).catch((error) => {
-      console.error('Error sharing:', error);
+    shareButtons.forEach(shareButton => {
+      shareButton?.classList.toggle('d-none', !navigator.share);
+      shareButton.addEventListener('click', () => {
+        if (!navigator.share) return;
+        const title = `${shareButton.dataset.title} | ${SITE_SEO.name.short}`;
+        const description = shareButton.dataset.description;
+        const shareData = {
+          title: title,
+          text: description ? `${title}\n\n${description}` : title,
+          url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.slug}/`
+        };
+        navigator.share(shareData).catch((error) => {
+          console.error('Error sharing:', error);
+        });
+      });
     });
   });
 </script>

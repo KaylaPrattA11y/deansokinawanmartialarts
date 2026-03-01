@@ -15,6 +15,7 @@ let navItems = [
 	{ label: 'Free Trial', href: BASE_URL + '#trial', class: 'hide-for-sm hide-for-md' },
   { label: 'Gallery', href: BASE_URL + ROUTES.gallery, class: 'hide-for-sm' },
   { label: 'News', href: BASE_URL + ROUTES.news, class: 'hide-for-sm' },
+	// { label: 'FAQs', href: BASE_URL + ROUTES.faqs, class: 'hide-for-sm' },
 	{ label: 'Contact', href: BASE_URL + '#contact', class: 'hide-for-sm' },
 ];
 
@@ -34,7 +35,18 @@ navItems = navItems.filter(item => {
 				Dean's Okinawan <br aria-hidden="true" /> Martial Arts
 			</a>
 		</div>
-		<nav aria-label="Site navigation">
+		<nav aria-label="Site navigation" class="nav-large">
+			<a class="show-for-sm" aria-label="Contact" href={BASE_URL + '#contact'}><Icon name="phone" size="24px" /></a>
+			<button 
+				type="button" 
+				class="show-for-sm" 
+				aria-label="Toggle main menu" 
+				aria-haspopup="dialog"
+				aria-controls="sm-nav"
+				data-toggle="nav-menu"
+			>
+				<Icon name="menu" size="28px" />
+			</button>
 			{navItems.map(item => (
 			<a 
 				href={item.href}
@@ -44,10 +56,52 @@ navItems = navItems.filter(item => {
 				{item.label}
 			</a>
 			))}
-			<a class="show-for-sm" aria-label="Contact" href={BASE_URL + '#contact'}><Icon name="phone" size="24px" /></a>
 		</nav>
 	</div>
 </header>
+<dialog id="nav-menu">
+	<button type="button" aria-label="Close menu" data-toggle="nav-menu" aria-controls="nav-menu">
+		<Icon name="close" size="28px" />
+	</button>
+	<nav aria-label="Site navigation"  class="nav-dialog">
+		<a 
+			href={BASE_URL + ROUTES.home}
+			aria-current={currentPath === BASE_URL + ROUTES.home ? 'page' : undefined}
+		>
+			Home
+		</a>
+		{navItems.map(item => (
+		<a 
+			href={item.href}
+			aria-current={currentPath.startsWith(item.href) ? 'page' : undefined}
+		>
+			{item.label}
+		</a>
+		))}
+	</nav>
+</dialog>
+
+<script>
+	const menuToggleButtons = document.querySelectorAll('[data-toggle="nav-menu"]');
+	const navDialog = document.getElementById('nav-menu') as HTMLDialogElement;
+	
+	menuToggleButtons.forEach(button => {
+		button?.addEventListener('click', () => {
+			const isOpen = navDialog instanceof HTMLDialogElement && navDialog.open;
+			if (isOpen) {
+				navDialog?.close();
+			} else {
+				navDialog?.showModal();
+			}
+		});
+	});
+	// Close even when using local anchor
+	navDialog.addEventListener('click', (event) => {
+		if (event.target instanceof HTMLAnchorElement) {
+			navDialog.close();
+		}
+	});
+</script>
 
 <style>
 	@layer components {
@@ -63,7 +117,7 @@ navItems = navItems.filter(item => {
 		header > div {
 			min-block-size: var(--header-height);
 			display: grid;
-			gap: 2rem;
+			gap: 0.5rem;
 			grid-template-columns: auto 1fr;
 			justify-items: flex-end;
 			align-items: center;
@@ -80,11 +134,33 @@ navItems = navItems.filter(item => {
 			align-items: center;
 			grid-template-columns: 50px auto;
 		}
-		nav {
+		.nav-large {
 			display: flex;
-			gap: 2rem;
+			align-items: center;
+			gap: 1rem;
+			@container (width >= 600px) {
+				gap: 2rem;
+			}
 		}
-		a {
+		.nav-dialog {
+			display: grid;
+			justify-items: center;
+			gap: 1rem;
+			@container (width >= 600px) {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+		dialog button {
+			justify-self: end;
+		}
+		button {
+			appearance: none;
+			background: none;
+			border: none;
+			padding: 0;
+
+		}
+		a, button {
 			font-family: var(--ff-heading);
 			display: block;
 			text-decoration: none;
@@ -97,6 +173,9 @@ navItems = navItems.filter(item => {
 			text-decoration: underline;
 			text-decoration-color: var(--bright-red);
 			text-decoration-thickness: 2px;
+		}
+		dialog a {
+			font-size: 1.25rem;
 		}
 		nav a:hover {
 			text-decoration: underline;
