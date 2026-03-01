@@ -1,5 +1,7 @@
 ---
+import { Icon } from 'astro-icon/components';
 import type { Post } from "../../types";
+import { BASE_URL, ROUTES, SITE_SEO } from '../../config/site';
 
 const { post, isStub = false } = Astro.props as { post: Post, isStub?: boolean };
 ---
@@ -20,11 +22,29 @@ const { post, isStub = false } = Astro.props as { post: Post, isStub?: boolean }
       {post.data.description && <p class="desc">{post.data.description}</p>}
     </>
   ) : (
-    <>
-      <h1>{post.data.title}</h1>
-      {post.data.author && <span class="author">By {post.data.author}</span>}
-      {post.data.description && <p class="lead">{post.data.description}</p>}
-    </>
+    <div class="post-meta-full">
+      <div>
+        <h1>{post.data.title}</h1>
+      </div>
+      <div class="post-meta-full-info">
+        <div>
+          {post.data.author && <span class="author">By {post.data.author}</span>}
+          {post.data.description && <p class="lead">{post.data.description}</p>}
+        </div>
+        <div>
+          <button 
+            class="d-none"
+            type="button" 
+            data-share="true"
+            data-title={post.data.title}
+            data-description={post.data.description}
+            data-slug={post.slug}
+          >
+            <Icon name="share" /> Share
+          </button>
+        </div>
+      </div>
+    </div>
   )}
   {
     post.data.tags && (
@@ -37,6 +57,27 @@ const { post, isStub = false } = Astro.props as { post: Post, isStub?: boolean }
   }
   <slot></slot>
 </header>
+
+<script is:inline define:vars={{BASE_URL, ROUTES, SITE_SEO}}>
+  const shareButton = document.querySelector('[data-share="true"]');
+
+  shareButton?.classList.toggle('d-none', !navigator.share);
+  document.addEventListener('click', (e) => {
+    if (!navigator.share) return;
+    if (e.target instanceof HTMLButtonElement && e.target.matches('[data-share="true"]')) {
+      const title = `${shareButton.dataset.title} | ${SITE_SEO.name.short}`;
+      const description = shareButton.dataset.description;
+      const shareData = {
+        title: title,
+        text: description ? `${title}\n\n${description}` : title,
+        url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.slug}/`
+      };
+      navigator.share(shareData).catch((error) => {
+        console.error('Error sharing:', error);
+      });
+    }
+  });
+</script>
 
 <style>
   @layer components {
@@ -60,6 +101,29 @@ const { post, isStub = false } = Astro.props as { post: Post, isStub?: boolean }
       text-transform: uppercase;
       color: var(--silver);
       margin-bottom: 1rem;
+    }
+    button {
+      background: none;
+      margin: 0;
+      padding: 0;
+      appearance: none;
+      border: 0;
+      font-family: var(--ff-heading);
+      font-size: 1rem;
+      color: var(--paper);
+      text-decoration: underline;
+      text-decoration-color: var(--bright-red);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      cursor: pointer;
+      margin-block-end: 1.5rem;
+    }
+    .post-meta-full-info {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: end;
     }
     .desc, .lead {
       line-height: 1.7;

@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { Icon } from "astro-icon/components";
-import { BASE_URL, ROUTES } from "../config/site";
+import { BASE_URL, ROUTES, SITE_SEO } from "../config/site";
 
 export interface GalleryImage {
   image: string;
@@ -119,16 +119,14 @@ const validImages = galleryImages.filter(Boolean);
           >
           <Icon name="save" size="28px" />
         </button>
-        {typeof navigator.share === 'function' && (
-          <button 
-            class="image-share"
-            data-photo-gallery="share"
-            aria-label="Close"
-            type="button"
-          >
-            <Icon name="share" size="24px" />
-          </button>
-        )}
+        <button 
+          class="image-share d-none"
+          data-share="true"
+          aria-label="Close"
+          type="button"
+        >
+          <Icon name="share" size="24px" />
+        </button>
         <button 
           class="lightbox-trigger"
           data-photo-gallery="trigger"
@@ -142,9 +140,10 @@ const validImages = galleryImages.filter(Boolean);
   </dialog>
 </section>
 
-<script is:inline define:vars={{ BASE_URL, ROUTES }}>
+<script is:inline>
   function handleToggleLightbox(btn) {
     const dialog = document.querySelector('dialog');
+    const shareButton = dialog.querySelector('[data-share="true"]');
     const figcaption = dialog.querySelector('figcaption');
     const dialogImg = dialog.querySelector('img');
     const dialogTitle = dialog.querySelector('.image-title');
@@ -169,6 +168,9 @@ const validImages = galleryImages.filter(Boolean);
         dialogTitle.textContent = title || '';
         dialogCaption.textContent = caption || '';
         dialogCaption.hidden = !caption;
+        shareButton.dataset.title = title || '';
+        shareButton.dataset.description = caption || '';
+        shareButton.dataset.slug = slug || '';
       } else {
         dialogImg.classList.replace('v-visible', 'v-hidden');
         figcaption.classList.replace('v-visible', 'v-hidden');
@@ -178,6 +180,9 @@ const validImages = galleryImages.filter(Boolean);
         dialogTitle.textContent = '';
         dialogCaption.textContent = '';
         dialogCaption.hidden = true;
+        shareButton.dataset.title = '';
+        shareButton.dataset.description = '';
+        shareButton.dataset.slug = '';
       }
     };
     // Show image only after it loads
@@ -220,33 +225,6 @@ const validImages = galleryImages.filter(Boolean);
     }
   }
 
-  async function handleShareImage(btn) {
-    const dialog = btn.closest('dialog');
-    
-    if (!dialog.open) return;
-    const imageCaption = dialog.querySelector('figcaption p').textContent;
-    const dialogImg = dialog.querySelector('img');
-    const { slug } = dialogImg.dataset || dialogImg.src;
-    const imageTitle = dialogImg.alt || 'downloaded-image';
-
-    try {
-      // use Share API
-      if (navigator.share) {
-        await navigator.share({
-          title: imageTitle,
-          text: imageCaption || "Check out this photo from Dean's Okinawan Dojo!",
-          url: `${BASE_URL}${ROUTES.gallery}${slug}/`,
-        });
-      } else {
-        console.warn('Share API not supported in this browser');
-      }
-    } catch (error) {
-      console.error('Error sharing image: ', error);
-    } finally {
-
-    }
-  };
-
   // Attach click handlers to all lightbox buttons
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('button[data-photo-gallery="trigger"]').forEach((btn) => {
@@ -262,11 +240,24 @@ const validImages = galleryImages.filter(Boolean);
       });
     });
   });
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('button[data-photo-gallery="share"]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        handleShareImage(btn);
-      });
+</script>
+
+<script is:inline define:vars={{BASE_URL, ROUTES, SITE_SEO}}>
+  const dialog = document.querySelector('dialog');
+  const shareButton = dialog.querySelector('[data-share="true"]');
+
+  shareButton?.classList.toggle('d-none', !navigator.share);
+  shareButton.addEventListener('click', () => {
+    if (!navigator.share) return;
+    const title = `${shareButton.dataset.title} | ${SITE_SEO.name.short}`;
+    const description = shareButton.dataset.description;
+    const shareData = {
+      title: title,
+      text: description ? `${title}\n\n${description}` : title,
+      url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.slug}/`
+    };
+    navigator.share(shareData).catch((error) => {
+      console.error('Error sharing:', error);
     });
   });
 </script>
