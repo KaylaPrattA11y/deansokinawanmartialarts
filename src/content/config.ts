@@ -31,4 +31,12 @@ const gallery = defineCollection({
   }),
 });
 
-export const collections = { blog, gallery };
+const faqs = defineCollection({
+  type: 'content',
+  schema: z.object({
+    question: z.string(),
+    sortPriority: z.number().optional(),
+  }),
+});
+
+export const collections = { blog, gallery, faqs };

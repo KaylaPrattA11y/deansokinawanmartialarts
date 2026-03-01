@@ -1,0 +1,12 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { BASE_URL, ROUTES, SITE_SEO } from "../../config/site";
+
+const redirectTarget = `${BASE_URL}${ROUTES.faqs}1/`;
+---
+
+<Layout title={`Frequently Asked Questions | ${SITE_SEO.name.long}`}>
+  <script is:inline define:vars={{ redirectTarget }}>
+    window.location.replace(redirectTarget);
+  </script>
+</Layout>

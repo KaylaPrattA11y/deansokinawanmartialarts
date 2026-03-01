@@ -4,6 +4,10 @@ pubDate: 2026-02-25T19:19:00.000-05:00
 description: JEFF K IS ABOUT 2 SHOW U NERSSDRDS
 author: JEFF K (L33T)
 image: /images/iamcool.jpg
+tags:
+  - "1337"
+  - h4x
+  - pwn3d
 imageGallery:
   gallery:
     - image: /images/iamcool.jpg

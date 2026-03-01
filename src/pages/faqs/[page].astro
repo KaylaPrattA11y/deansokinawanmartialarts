@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import Layout from "../../layouts/Layout.astro";
+import InteriorPage from "../../components/InteriorPage.astro";
+import Faq from "../../components/Faq.astro";
+import { FAQS_PAGE_SIZE, SITE_SEO } from "../../config/site";
+import Pagination from "../../components/articles/Pagination.astro";
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const posts = await getCollection("faqs");
+  const sortedPosts = posts.sort((a, b) => {
+    if (a.data.sortPriority !== undefined && b.data.sortPriority !== undefined) {
+      return a.data.sortPriority - b.data.sortPriority;
+    } else if (a.data.sortPriority !== undefined) {
+      return -1;
+    } else if (b.data.sortPriority !== undefined) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
+  return paginate(sortedPosts, { pageSize: FAQS_PAGE_SIZE });
+};
+
+const { page } = Astro.props as {
+  page: {
+    data: CollectionEntry<"faqs">[];
+    currentPage: number;
+    lastPage: number;
+    url: {
+      prev?: string | null;
+      next?: string | null;
+    };
+  };
+};
+const posts = page.data;
+---
+
+<Layout title={`Frequently Asked Questions | ${SITE_SEO.name.long}`}>
+  <InteriorPage heading="Frequently Asked Questions">
+    {posts.map((post) => (
+    <Faq post={post} />
+    ))}
+    <Pagination page={page} />
+  </InteriorPage>
+</Layout>

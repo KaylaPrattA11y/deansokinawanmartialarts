@@ -8,6 +8,8 @@ export const SITE_SEO = {
 
 export const NEWS_PAGE_SIZE = 6;
 
+export const FAQS_PAGE_SIZE = 20;
+
 export const HOME_NEWS_PAGE_SIZE = 3;
 
 export const GALLERY_PAGE_SIZE = 28;
@@ -28,5 +30,6 @@ export const ROUTES = {
   instructors: 'instructors/',
   about: 'about/',
   admin: 'admin/',
+  faqs: 'faqs/',
   gallery: 'gallery/',
 };

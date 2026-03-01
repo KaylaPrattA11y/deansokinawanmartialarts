@@ -1,0 +1,100 @@
+---
+import { Icon } from 'astro-icon/components';
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<details>
+  <summary>
+    <Icon name="arrow-right" size="24px" color="var(--bright-red)" />
+    {post.data.question}
+  </summary>
+  <div class="content">
+    <Content />
+  </div>
+</details>
+
+<style>
+  @layer components {
+    details {
+      margin-block: 1em;
+      padding: 1rem;
+      background-color: #2e26228a;
+      border-radius: 10px;
+      @container (width >= 1200px) {
+        margin-block: 2em;
+        padding: 1.5rem;
+      }
+    }
+    summary {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.5rem;
+      font-family: var(--ff-heading);
+      font-weight: 700;
+      font-size: clamp(1.15rem,2vw,1.5rem);
+      color: var(--paper);
+      line-height: 1.2;
+    }
+    summary :global(svg) {
+      transition: rotate 0.3s ease;
+    }
+    details[open] summary :global(svg) {
+      rotate: 90deg;
+    }
+    .content :global(> p:first-of-type::first-letter) {
+      font-family: var(--ff-heading);
+      font-weight: 900;
+      color: var(--bright-red);
+      font-size: 2.5rem;
+      line-height: 1;
+      letter-spacing: 3px;
+    }
+    .content :global(h1,h2,h3,h4,h6,h6,p,ul,ol) {
+      max-inline-size: 80ch;
+    }
+    .content :global(h1,h2,h3,h4,h6,h6) {
+      font-family: var(--ff-heading);
+    }
+    .content :global(h1,h2,h3,h4,h6,h6,p, ul, ol) {
+      margin-block: 1em;
+    }
+    .content :global(p, ul, ol, strong, em, b, i) {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--silver);
+    }
+    .content :global(li::marker) {
+      color: var(--bright-red);
+    }
+    .content :global(img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .content :global(a:link, a:visited) {
+      color: var(--paper);
+      text-decoration-color: var(--bright-red);
+    }
+    .content :global(a:link):hover {
+      text-decoration: none;
+    }
+    .content :global(blockquote p) {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--paper);
+    }
+    .content :global(blockquote) {
+      margin: 0 4rem;
+      padding: 0;
+      text-align: center;
+    }
+    .content :global(blockquote::before, blockquote::after) {
+      content: "";
+      display: block;
+      width: 100px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--silver), transparent);
+      margin: 2rem auto;
+    }
+  }
+</style>

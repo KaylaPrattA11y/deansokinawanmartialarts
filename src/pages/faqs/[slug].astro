@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import InteriorPage from '../../components/InteriorPage.astro';
+import Button from '../../components/Button.astro';
+import { BASE_URL, ROUTES, SITE_SEO } from '../../config/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('faqs');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout 
+  title={`${post.data.question} | ${SITE_SEO.name.long}`} 
+  description={SITE_SEO.description}
+>
+  <InteriorPage heading={post.data.question}>
+    <div class="content">
+      <Content />
+    </div>
+    <Button variant="secondary" href={BASE_URL + ROUTES.faqs}>Back to FAQs</Button>
+  </InteriorPage>
+</Layout>
+
+<style>
+  @layer components {
+    .content :global(> p:first-of-type::first-letter) {
+      font-family: var(--ff-heading);
+      font-weight: 900;
+      color: var(--bright-red);
+      font-size: 2.5rem;
+      line-height: 1;
+      letter-spacing: 3px;
+    }
+    .content :global(h1,h2,h3,h4,h6,h6,p,ul,ol) {
+      max-inline-size: 80ch;
+    }
+    .content :global(h1,h2,h3,h4,h6,h6) {
+      font-family: var(--ff-heading);
+    }
+    .content :global(h1,h2,h3,h4,h6,h6,p, ul, ol) {
+      margin-block: 1em;
+    }
+    .content :global(p, ul, ol, strong, em, b, i) {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--silver);
+    }
+    .content :global(li::marker) {
+      color: var(--bright-red);
+    }
+    .content :global(img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .content :global(a:link, a:visited) {
+      color: var(--paper);
+      text-decoration-color: var(--bright-red);
+    }
+    .content :global(a:link):hover {
+      text-decoration: none;
+    }
+    .content :global(blockquote p) {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--paper);
+    }
+    .content :global(blockquote) {
+      margin: 0 4rem;
+      padding: 0;
+      text-align: center;
+    }
+    .content :global(blockquote::before, blockquote::after) {
+      content: "";
+      display: block;
+      width: 100px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--silver), transparent);
+      margin: 2rem auto;
+    }
+  }
+</style>

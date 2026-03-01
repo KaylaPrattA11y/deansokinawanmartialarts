@@ -11,7 +11,7 @@ public_folder: "/images"
 # https://decapcms.org/docs/widgets/
 collections:
   - name: "gallery"
-    label: "Photo Gallery Image"
+    label: "Photo Gallery Images"
     folder: "src/content/gallery"
     create: true
     slug: "{{slug}}"
@@ -50,3 +50,12 @@ collections:
               - {label: "Image", name: "image", widget: "image"}
               - {label: "Title", name: "title", widget: "string", required: false}
               - {label: "Caption", name: "caption", widget: "string", required: false}
+  - name: "faqs"
+    label: "Frequently Asked Questions"
+    folder: "src/content/faqs"
+    create: true
+    slug: "{{question}}"
+    fields:
+      - {label: "Question", name: "question", widget: "string"}
+      - {label: "Sort Priority", name: "sortPriority", widget: "number", required: false, hint: "Determines the order of the FAQs. Lower numbers (like 0 or 1) appear first."}
+      - {label: "Body", name: "body", widget: "markdown"}
