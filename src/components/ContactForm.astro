@@ -40,8 +40,8 @@ import { Icon } from 'astro-icon/components';
       </div>
     </div>
     <div class="field">
-      <label for="message">Message (optional)</label>
-      <textarea id="message" name="message" autocomplete="off" rows="5"></textarea>
+      <label for="message">Message</label>
+      <textarea id="message" name="message" autocomplete="off" rows="5" required></textarea>
     </div>
   </fieldset>
   <hr />
@@ -81,7 +81,7 @@ import { Icon } from 'astro-icon/components';
           successMessage.classList.remove('d-none')
         }
         // Scroll to success message
-        successMessage?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        form?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } else {
         alert('Sorry, there was an error sending your message. Please try again.');
       }
