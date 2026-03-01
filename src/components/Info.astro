@@ -1,7 +1,11 @@
 ---
+import { getCollection } from "astro:content";
 import { Icon } from "astro-icon/components";
 import { BASE_URL, ROUTES } from "../config/site";
 import ContactForm from "./ContactForm.astro";
+
+const latestNews = await getCollection("blog");
+const latestPhotos = await getCollection("gallery");
 ---
 
 <section class="contact">
@@ -58,12 +62,16 @@ import ContactForm from "./ContactForm.astro";
         <p>
           <a href={BASE_URL + ROUTES.instructors}>Meet our Instructors</a>
         </p>
+        {latestNews && latestNews.length > 1 && (
         <p>
           <a href={BASE_URL + ROUTES.news}>News & Updates</a>
         </p>
+        )}
+        {latestPhotos &&latestPhotos.length > 0 && (
         <p>
           <a href={BASE_URL + ROUTES.gallery}>Photo Gallery</a>
         </p>
+        )}
       </div>
     </div>
     <ContactForm />

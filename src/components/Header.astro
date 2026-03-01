@@ -1,11 +1,15 @@
 ---
+import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import logo from "../assets/logo.png";
 import { Icon } from 'astro-icon/components';
 import { BASE_URL, ROUTES } from "../config/site";
 
+const latestNews = await getCollection("blog");
+const latestPhotos = await getCollection("gallery");
+
 const currentPath = Astro.url.pathname;
-const navItems = [
+let navItems = [
   { label: 'About', href: BASE_URL + ROUTES.about, class: 'hide-for-sm hide-for-md' },
 	{ label: 'Classes', href: BASE_URL + '#classes', class: 'hide-for-sm hide-for-md' },
 	{ label: 'Free Trial', href: BASE_URL + '#trial', class: 'hide-for-sm hide-for-md' },
@@ -13,6 +17,13 @@ const navItems = [
   { label: 'News', href: BASE_URL + ROUTES.news, class: 'hide-for-sm' },
 	{ label: 'Contact', href: BASE_URL + '#contact', class: 'hide-for-sm' },
 ];
+
+navItems = navItems.filter(item => {
+  if (item.label === 'News' && latestNews && latestNews.length === 0) return false;
+  if (item.label === 'Gallery' && latestPhotos && latestPhotos.length === 0) return false;
+  return true;
+});	
+
 ---
 
 <header aria-label="Site header">
