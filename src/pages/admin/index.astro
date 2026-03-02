@@ -8,6 +8,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
+    <!-- Custom styles for responsive Decap CMS. See https://manikumar.in/blog/mobile-optimized-decap-netlify-cms/ -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hithismani/responsive-decap@main/dist/responsive.css">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
     <script is:inline>
@@ -70,3 +72,38 @@
     </script>
   </body>
 </html>
+
+<style is:inline>
+  @media (max-width: 799px) {
+    .css-ys2s0e-DateTimeControl {
+      flex-wrap: wrap !important;
+    }
+    .css-tp3lu5-LibraryTop,
+    .css-c5ftz9-StyledModal {
+      padding: 0 !important;
+      min-width: 100dvw !important;
+      min-height: 100dvh !important;
+      width: 100% !important;
+      height: 100% !important;
+      max-width: unset !important;
+    }
+    .css-1ipka12-CardGridContainer > div > div {
+      padding-block-end: 10rem !important;
+    }
+    .css-184s0iy-CloseButton-button-button {
+      inset: 0 auto auto 0;
+    }
+    .css-lqsztn-ButtonsContainer,
+    .css-gxsmc8-RowContainer {
+      display: block !important;
+    }
+    .css-1cx9csd {
+      display: block !important;
+    }
+    .css-bfotx5-UploadButton-button-button-default-default-disabled-disabled-button-button-gray-gray,
+    .css-1ceeuvy-ActionButton-button-button-default-default-disabled-disabled-button-button {
+      margin: 0 2px;
+    }
+    
+  }
+</style>
