@@ -4,7 +4,9 @@ import type { ImageMetadata } from "astro";
 import { Icon } from "astro-icon/components";
 
 export interface GalleryImage {
-  image: string;
+  mediaType?: 'photo' | 'video';
+  image?: string;
+  vimeoUrl?: string;
   title?: string;
   caption?: string;
   slug?: string;
@@ -21,99 +23,157 @@ const imageAssets = import.meta.glob<{ default: ImageMetadata }>('/src/assets/im
 // Load gallery images asynchronously
 const galleryImages = await Promise.all(
   images.map(async (img: GalleryImage) => {
-    if (!img.image) return null;
-    
-    const imagePath = img.image.replace("/images/", "/src/assets/images/");
-    
-    if (imageAssets[imagePath]) {
-      const optimizedImage = (await imageAssets[imagePath]()).default;
+    // if (!img.image && !img.vimeoUrl) return null;
+
+    if (img.mediaType === 'photo' && img.image) {
+      const imagePath = img.image.replace("/images/", "/src/assets/images/");
+      
+      if (imageAssets[imagePath]) {
+        const optimizedImage = (await imageAssets[imagePath]()).default;
+        return {
+          src: optimizedImage,
+          title: img.title,
+          caption: img.caption,
+          slug: img.slug,
+          isOptimized: true
+        };
+      }
+      // Fallback to public folder path for CMS-uploaded images
       return {
-        src: optimizedImage,
+        src: img.image,
         title: img.title,
         caption: img.caption,
         slug: img.slug,
-        isOptimized: true
+        isOptimized: false
       };
     }
-    // Fallback to public folder path for CMS-uploaded images
-    return {
-      src: img.image,
-      title: img.title,
-      caption: img.caption,
-      slug: img.slug,
-      isOptimized: false
-    };
+    if (img.mediaType === 'video') {
+      return {
+        vimeoUrl: img.vimeoUrl,
+        title: img.title,
+        caption: img.caption,
+        slug: img.slug,
+        isOptimized: false
+      };
+    }
+    return null;
   })
 );
-
 const validImages = galleryImages.filter(Boolean);
 ---
 
-<section aria-label={title || "Photo Gallery"}>
+<section aria-label={title || "Gallery"}>
   {title && <h2 class="gallery-title">{title}</h2>}
   <div class="photo-gallery">
   {validImages.map((img) => {
     if (!img) return null;
-    const imgSrc = typeof img.src === 'string' ? img.src : img.src.src;
-    return (
-      <figure>
-        <div>
-          {img.isOptimized ? (
-            <Image
-              src={img.src as ImageMetadata}
-              alt={img.title || ""}
-              class="gallery-image"
-              width={600}
-              height={600}
-              widths={[600, 900, 1200]}
-              sizes="(max-width: 600px) 100vw, 600px"
+    if (img.src) {
+      const imgSrc = typeof img.src === 'string' ? img.src : img.src.src;
+      return (
+        <figure class="media-wrapper">
+          <div>
+            {img.isOptimized ? (
+              <Image
+                src={img.src as ImageMetadata}
+                alt={img.title || ""}
+                class="gallery-image"
+                width={600}
+                height={600}
+                widths={[600, 900, 1200]}
+                sizes="(max-width: 600px) 100vw, 600px"
+              />
+            ) : (
+              <img
+                src={imgSrc}
+                alt={img.title || ""}
+                class="gallery-image"
+                loading="lazy"
+              />
+            )}
+            {(img.title || img.caption) && (
+            <figcaption class="figcaption">
+              {img.title && <div class="image-title">{img.title}</div>}
+              {img.caption && <div class="image-caption">{img.caption}</div>}
+            </figcaption>
+            )}
+          </div>
+          <button 
+            class="lightbox-trigger"
+            data-photo-gallery="trigger"
+            data-media-type="photo"
+            data-src={imgSrc}
+            data-title={img.title}
+            data-caption={img.caption}
+            data-slug={img.slug}
+            aria-label={`View ${img.title || 'image'}`}
+            type="button"
+          >
+            <Icon name="fullscreen" size="28px" color="var(--paper)" />
+          </button>
+        </figure>
+      )
+    }
+    if (img.vimeoUrl) {
+      // example https://vimeo.com/1110587814
+      const videoId = img.vimeoUrl.split('vimeo.com/').pop()?.split('?')[0] || '';
+      const src = `https://player.vimeo.com/video/${videoId}`;
+      return (
+        <div class="media-wrapper">
+          <div class="iframe-wrapper">
+            <iframe
+              title={img.title || "Embedded Content"}
+              src={`${src}?controls=0`}
+              class="gallery-embed"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              referrerpolicy="strict-origin-when-cross-origin" 
             />
-          ) : (
-            <img
-              src={imgSrc}
-              alt={img.title || ""}
-              class="gallery-image"
-              loading="lazy"
-            />
-          )}
-          {(img.title || img.caption) && (
-          <figcaption>
-            {img.title && <div class="image-title">{img.title}</div>}
-            {img.caption && <div class="image-caption">{img.caption}</div>}
-          </figcaption>
-          )}
+            {(img.title || img.caption) && (
+            <div class="figcaption">
+              {img.title && <div class="image-title">{img.title}</div>}
+              {img.caption && <div class="image-caption">{img.caption}</div>}
+            </div>
+            )}
+          </div>
+          <button 
+            class="lightbox-trigger"
+            data-photo-gallery="trigger"
+            data-media-type="video"
+            data-src={src}
+            data-title={img.title}
+            data-caption={img.caption}
+            data-slug={img.slug}
+            aria-label={`View ${img.title || 'video'}`}
+            type="button"
+          >
+            <Icon name="fullscreen" size="28px" color="var(--paper)" />
+          </button>
         </div>
-        <button 
-          class="lightbox-trigger"
-          data-photo-gallery="trigger"
-          data-src={imgSrc}
-          data-title={img.title}
-          data-caption={img.caption}
-          data-slug={img.slug}
-          aria-label={`View ${img.title || 'image'}`}
-          type="button"
-        >
-          <Icon name="fullscreen" size="28px" color="var(--paper)" />
-        </button>
-      </figure>
-    )
+      )
+    }
+    return null;
   })}
   </div>
   <dialog id="gallery-dialog">
-    <figure>
-      <div class="image-wrapper">
-        <Icon name="spinner" size="56px" color="var(--ash)" />
+    <div class="media-wrapper">
+      <Icon name="spinner" size="56px" color="var(--ash)" />
+      <div class="video-wrapper d-none">
+        <div class="iframe-wrapper">
+          <iframe class="v-hidden" title="Embedded Content" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" />
+        </div>
+      </div>
+      <div class="photo-wrapper d-none">
         <img src="" alt="" class="v-hidden" />
       </div>
-      <figcaption class="v-hidden">
+      <div class="figcaption v-hidden">
         <h1 class="image-title"></h1>
         <p class="image-caption"></p>
-      </figcaption>
+      </div>
       <div role="group" class="image-controls">
         <button 
-          class="image-save"
+          class="image-save d-none"
           data-photo-gallery="save"
-          aria-label="Close"
+          aria-label="Save image"
           type="button"
           >
           <Icon name="save" size="28px" />
@@ -121,7 +181,7 @@ const validImages = galleryImages.filter(Boolean);
         <button 
           class="image-share d-none"
           data-share="true"
-          aria-label="Close"
+          aria-label="Share media"
           type="button"
         >
           <Icon name="share" size="24px" />
@@ -129,66 +189,115 @@ const validImages = galleryImages.filter(Boolean);
         <button 
           class="lightbox-trigger"
           data-photo-gallery="trigger"
+          data-action="close"
           aria-label="Close"
           type="button"
         >
           <Icon name="close" size="32px" />
         </button>
       </div>
-    </figure>
+    </div>
   </dialog>
 </section>
 
 <script is:inline>
+  const dialog = document.getElementById('gallery-dialog');
+
+  dialog.addEventListener("close", () => document.body.classList.remove('overflow-hidden'));
+
   function handleToggleLightbox(btn) {
-    const dialog = document.getElementById('gallery-dialog');
-    const shareButton = dialog.querySelector('[data-share="true"]');
-    const figcaption = dialog.querySelector('figcaption');
+    const { mediaType, action } = btn.dataset;
+    const dialogMediaWrapper = dialog.querySelector('.media-wrapper');
+    const photoWrapper = dialog.querySelector('.photo-wrapper');
+    const videoWrapper = dialog.querySelector('.video-wrapper');
     const dialogImg = dialog.querySelector('img');
+    const dialogIframe = dialog.querySelector('iframe');
+    const figcaption = dialog.querySelector('.figcaption');
     const dialogTitle = dialog.querySelector('.image-title');
     const dialogCaption = dialog.querySelector('.image-caption');
+    const saveButton = dialog.querySelector('[data-photo-gallery="save"]');
+    const shareButton = dialog.querySelector('[data-share="true"]');
+    const resetSharedMetadata = () => {
+      shareButton.dataset.title = '';
+      shareButton.dataset.description = '';
+      shareButton.dataset.slug = '';
+    };
 
-    if (dialog.open) {
-      dialog.close();
-      document.body.classList.remove('overflow-hidden');
-    } else {
+    const resetPhoto = () => {
       dialogImg.classList.replace('v-visible', 'v-hidden');
       figcaption.classList.replace('v-visible', 'v-hidden');
-      dialog.showModal();
-      document.body.classList.add('overflow-hidden');
-    }
-    dialog.ontransitionend = () => {
-      if (dialog.open) {
-        const { src, title, caption, slug } = btn.dataset;
+      dialogImg.src = '';
+      dialogImg.alt = '';
+      dialogImg.dataset.slug = '';
+      dialogTitle.textContent = '';
+      dialogCaption.textContent = '';
+      dialogCaption.hidden = true;
+    };
 
-        dialogImg.src = src;
-        dialogImg.alt = title || '';
-        dialogImg.dataset.slug = slug;
-        dialogTitle.textContent = title || '';
-        dialogCaption.textContent = caption || '';
-        dialogCaption.hidden = !caption;
-        shareButton.dataset.title = title || '';
-        shareButton.dataset.description = caption || '';
-        shareButton.dataset.slug = slug || '';
-      } else {
-        dialogImg.classList.replace('v-visible', 'v-hidden');
-        figcaption.classList.replace('v-visible', 'v-hidden');
-        dialogImg.src = '';
-        dialogImg.alt = '';
-        dialogImg.dataset.slug = '';
-        dialogTitle.textContent = '';
-        dialogCaption.textContent = '';
-        dialogCaption.hidden = true;
-        shareButton.dataset.title = '';
-        shareButton.dataset.description = '';
-        shareButton.dataset.slug = '';
-      }
+    const resetVideo = () => {
+      dialogIframe.classList.replace('v-visible', 'v-hidden');
+      dialogIframe.src = '';
+      dialogIframe.title = 'Embedded Content';
     };
-    // Show image only after it loads
-    dialogImg.onload = () => {
-      dialogImg.classList.replace('v-hidden', 'v-visible');
-      figcaption.classList.replace('v-hidden', 'v-visible');
+
+    const closeDialog = () => {
+      dialogMediaWrapper.classList.add('v-hidden');
+      photoWrapper.classList.add('d-none');
+      videoWrapper.classList.add('d-none');
+      saveButton.classList.add('d-none');
+      resetPhoto();
+      resetVideo();
+      resetSharedMetadata();
+      dialog.close();
     };
+
+    if (action === 'close' || dialog.open) {
+      closeDialog();
+      return;
+    }
+
+    if (!mediaType) return;
+
+    const { src, title, caption, slug } = btn.dataset;
+
+    resetPhoto();
+    resetVideo();
+    resetSharedMetadata();
+
+    photoWrapper.classList.toggle('d-none', mediaType !== 'photo');
+    videoWrapper.classList.toggle('d-none', mediaType !== 'video');
+    saveButton.classList.toggle('d-none', mediaType !== 'photo');
+
+    if (mediaType === 'photo') {
+      dialogImg.onload = () => {
+        dialogImg.classList.replace('v-hidden', 'v-visible');
+        figcaption.classList.replace('v-hidden', 'v-visible');
+      };
+      dialogImg.src = src || '';
+      dialogImg.alt = title || '';
+      dialogImg.dataset.slug = slug || '';
+    }
+
+    if (mediaType === 'video') {
+      dialogIframe.onload = () => {
+        dialogIframe.classList.replace('v-hidden', 'v-visible');
+        figcaption.classList.replace('v-hidden', 'v-visible');
+      };
+      dialogIframe.src = `${src}?autoplay=1&muted=1` || ''; // muted so no jumpscares
+      dialogIframe.title = title || 'Embedded Content';
+    }
+
+    dialogTitle.textContent = title || '';
+    dialogCaption.textContent = caption || '';
+    dialogCaption.hidden = !caption;
+
+    shareButton.dataset.title = title || '';
+    shareButton.dataset.description = caption || '';
+    shareButton.dataset.slug = slug || '';
+
+    dialogMediaWrapper.classList.remove('v-hidden');
+    dialog.showModal();
+    document.body.classList.add('overflow-hidden');
   }
 
   async function handleSaveImage(btn) {
@@ -224,49 +333,65 @@ const validImages = galleryImages.filter(Boolean);
     }
   }
 
-  // Attach click handlers to all lightbox buttons
   document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('button[data-photo-gallery="trigger"]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        handleToggleLightbox(btn);
-      });
-    });
-  });
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('button[data-photo-gallery="save"]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        handleSaveImage(btn);
-      });
+    document.addEventListener('click', (event) => {
+      const triggerButton = event.target.closest('button[data-photo-gallery="trigger"]');
+      if (triggerButton) {
+        handleToggleLightbox(triggerButton);
+        return;
+      }
+
+      const saveButton = event.target.closest('button[data-photo-gallery="save"]');
+      if (saveButton) {
+        handleSaveImage(saveButton);
+      }
     });
   });
 </script>
 
 <style>
   @layer components {
-    button {
+    .lightbox-trigger {
       cursor: pointer;
     }
     dialog {
       --border-width: 6px;
       border: var(--border-width) solid var(--paper);
     }
-    dialog .image-wrapper {
+    dialog .media-wrapper {
       inline-size: 100%;
       block-size: 100%;
-      max-block-size: 85vh;
-      max-block-size: 85dvh;
-      position: relative;
+      max-block-size: 100vh;
+      max-block-size: 100dvh;
+      background: var(--paper);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
-    dialog .image-wrapper svg {
+    dialog .media-wrapper :is(.photo-wrapper, .video-wrapper) {
+      inline-size: 100%;
+      flex: 1 1 auto;
+      min-block-size: 50vh;
+      min-block-size: 50dvh;
+      max-block-size: 80vh;
+      max-block-size: 80dvh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    dialog .media-wrapper > svg {
       position: absolute;
-      inset: 50% auto auto 50%;
-      translate: -50% -50%;
+      inset: 25% auto auto 50%;
+      translate: -25% -50%;
       z-index: 0;
     }
     dialog img {
       inline-size: 100%;
       block-size: 100%;
-      object-fit: cover;
+      max-block-size: 100%;
+      object-fit: contain;
       border-radius: 4px;
       position: relative;
       z-index: 1;
@@ -284,7 +409,7 @@ const validImages = galleryImages.filter(Boolean);
       flex-shrink: 1;
       min-block-size: 0;
     }
-    dialog figcaption:has(.image-title:not(:empty), .image-caption:not(:empty)) {
+    dialog .figcaption:has(.image-title:not(:empty), .image-caption:not(:empty)) {
       background-color: var(--paper);
       inline-size: 100%;
       display: grid;
@@ -293,11 +418,13 @@ const validImages = galleryImages.filter(Boolean);
       align-content: start;
       padding: 2rem 1rem;
       box-sizing: border-box;
-      flex-shrink: 0;
+      flex: 1 1 auto;
       overflow-y: auto;
+      overflow-x: hidden;
       color: var(--ink);
+      min-block-size: 0;
     }
-    dialog figcaption :where(h1, p) {
+    dialog .figcaption :where(h1, p) {
       max-inline-size: 60ch;
     }
     dialog [role="group"] {
@@ -342,7 +469,7 @@ const validImages = galleryImages.filter(Boolean);
     figure {
       margin: 0;
     }
-    .photo-gallery figure {
+    .photo-gallery .media-wrapper {
       position: relative;
       aspect-ratio: 1 / 1;
       overflow: hidden;
@@ -352,7 +479,7 @@ const validImages = galleryImages.filter(Boolean);
       width: 100%;
       height: 100%;
     }
-    .photo-gallery figure button {
+    .photo-gallery .media-wrapper .lightbox-trigger {
       appearance: none;
       background: none;
       inline-size: 100%;
@@ -361,20 +488,21 @@ const validImages = galleryImages.filter(Boolean);
       padding: 0;
       border: 0;
     }
-    .photo-gallery figure button svg {
+    .photo-gallery .media-wrapper .lightbox-trigger svg {
       position: absolute;
       inset: 0 0 auto auto;
     }
-    .photo-gallery :where(figcaption, button) {
+    .photo-gallery :where(.figcaption, .lightbox-trigger) {
       position: absolute;
       inset: 0;
+      z-index: 1;
     }
-    .photo-gallery figcaption, 
-    .photo-gallery figure button {
+    .photo-gallery .figcaption, 
+    .photo-gallery .media-wrapper .lightbox-trigger {
       opacity: 0;
       transition: opacity 0.3s ease;
     }
-    .photo-gallery figcaption {
+    .photo-gallery .figcaption {
       padding: 0.5rem;
       box-sizing: border-box;
       background-color: rgba(0, 0, 0, 0.75);
@@ -382,8 +510,12 @@ const validImages = galleryImages.filter(Boolean);
       text-align: center;
       place-content: center;
     }
-    .photo-gallery figure:hover :Where(figcaption, button) {
+    .photo-gallery .media-wrapper:hover :where(.figcaption, .lightbox-trigger) {
       opacity: 1;
+    }
+    .media-wrapper > iframe {
+      position: relative;
+      z-index: 0;
     }
     .photo-gallery .image-title {
       font-family: var(--ff-heading);
@@ -421,6 +553,28 @@ const validImages = galleryImages.filter(Boolean);
       block-size: 100%;
       object-fit: cover;
       box-sizing: border-box;
+    }
+    .photo-gallery .iframe-wrapper {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 1;
+    }
+    .photo-gallery .iframe-wrapper iframe {
+      width: 200%;
+      height: 200%;
+      translate: -25% -25%;
+    }
+    dialog .iframe-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 16 / 9;
+    }
+    dialog .iframe-wrapper iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
     }
   }
 </style>

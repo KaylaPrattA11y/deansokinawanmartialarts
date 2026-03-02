@@ -11,13 +11,15 @@ public_folder: "/images"
 # https://decapcms.org/docs/widgets/
 collections:
   - name: "gallery"
-    label: "Photo Gallery Images"
+    label: "Photo/Video Gallery"
     folder: "src/content/gallery"
     create: true
     slug: "{{slug}}"
     identifier_field: "title"
     fields:
-      - {label: "Image", name: "image", widget: "image", hint: "Upload the image file for the gallery. Recommended dimensions: 1200x630px"}
+      - {label: "Media type", name: "mediaType", widget: "select", options: ["photo", "video"], default: "photo"}
+      - {label: "Image", name: "image", widget: "image", hint: "Upload the image file for the gallery. Recommended dimensions: 1200x630px", required: false}
+      - {label: "Vimeo video URL", name: "vimeoUrl", widget: "string", hint: "Paste the Vimeo video URL (e.g., 'https://vimeo.com/1110587814')", required: false}
       - {label: "Publish Date", name: "pubDate", widget: "datetime", hint: "This is the date that will be used to sort your images in the gallery. It does not have to be the date the photo was taken."}
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Caption", name: "caption", widget: "string", required: false}

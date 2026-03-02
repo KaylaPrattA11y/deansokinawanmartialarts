@@ -28,13 +28,15 @@ const { page } = Astro.props as {
   };
 };
 const posts = page.data;
-const pageDesc = `Explore our photo gallery showcasing the spirit and dedication of our students and instructors in Okinawan martial arts.`;
+const pageDesc = `Explore our photos and videos showcasing the spirit and dedication of our students and instructors in Okinawan martial arts.`;
 ---
 
-<Layout title={`Photo Gallery | ${SITE_SEO.name.long}`} description={pageDesc}>
-  <InteriorPage heading="Photo Gallery" lead={pageDesc}>
+<Layout title={`Gallery | ${SITE_SEO.name.long}`} description={pageDesc}>
+  <InteriorPage heading="Gallery" lead={pageDesc}>
     <PhotoGallery images={posts.map(post => ({
+      mediaType: post.data.mediaType,
       image: post.data.image,
+      vimeoUrl: post.data.vimeoUrl,
       title: post.data.title,
       caption: post.data.caption,
       slug: post.slug
