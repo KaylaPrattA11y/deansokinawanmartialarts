@@ -1,19 +1,27 @@
 ---
 interface ButtonProps {
-  href: string;
+  href?: string;
   variant?: 'primary' | 'secondary';
   size?: 'sm' | 'md';
   width?: 'auto' | 'full';
-  id?: string;
 }
-const { href, variant = 'primary', size = 'md', width = 'auto', id } = Astro.props as ButtonProps;
+const { href, variant = 'primary', size = 'md', width = 'auto', ...rest } = Astro.props as ButtonProps;
 ---
-
-<a href={href} id={id} class={`btn-${variant} is-${size} is-${width}`}><slot /></a>
+{href ? (
+  <a href={href} class={`btn-${variant} is-${size} is-${width}`} {...rest}><slot /></a>
+) :(
+  <button class={`btn-${variant} is-${size} is-${width}`} {...rest}><slot /></button>
+)}
 
 <style>
 @layer components {
-  a {
+  button {
+    appearance: none;
+    margin: 0;
+    border: 0;
+    background: none;
+  }
+  :is(a, button) {
     display: inline-block;
     font-family: var(--ff-heading);
     font-weight: 700;
@@ -26,17 +34,23 @@ const { href, variant = 'primary', size = 'md', width = 'auto', id } = Astro.pro
     position: relative;
     text-align: center;
     box-sizing: border-box;
+    line-height: normal;
   }
-  a.is-md {
+  @media (max-width: 600px) {
+    :is(a, button) {
+      inline-size: 100%;
+    }
+  }
+  :is(a, button).is-md {
     padding: 0.95rem 2.8rem;
   }
-  a.is-sm {
+  :is(a, button).is-sm {
     padding: 0.5rem 1.5rem;
   }
-  a.is-full {
+  :is(a, button).is-full {
     inline-size: 100%;
   }
-  a:has(svg) {
+  :is(a, button):has(svg) {
     display: flex;
     align-items: center;
     gap: 0.5rem;
