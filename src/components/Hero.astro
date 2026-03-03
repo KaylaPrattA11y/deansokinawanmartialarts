@@ -39,6 +39,7 @@ import Button from "./Button.astro";
       if (messageTextarea) {
         messageTextarea.value = 'I am interested in beginning my training with the 7-Day Free Trial.';
       }
+      contactForm.dispatchEvent(new Event('change', { bubbles: true }));
     }
   });
 </script>

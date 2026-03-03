@@ -33,3 +33,28 @@ export const ROUTES = {
   faqs: 'faqs/',
   gallery: 'gallery/',
 };
+
+export const CLASSES = [
+  {
+    name: "Youth Karate",
+    ages: "4 – 15",
+    description: "Foundational karate, kata, and kobudo instruction. Children develop discipline, confidence, and respect alongside physical skill.",
+    schedule: {
+      days: "Mon & Wed",
+      time: "6:00 – 7:00 PM"
+    }
+  },
+  {
+    name: "Adult Karate",
+    ages: "16 & Up",
+    description: "Comprehensive Shorin-Ryu training including empty-hand kata, bunkai, and traditional Okinawan self-defense applications.",
+    schedule: {
+      days: "Tue & Thu",
+      time: "6:00 – 8:00 PM"
+    }
+  },
+  {
+    name: "CPR Training",
+    description: "American Heart Association certified CPR and First Aid training. Open to dojo members and the wider community."
+  }
+];
