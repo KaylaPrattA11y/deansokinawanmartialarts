@@ -5,13 +5,14 @@ import type { ImageMetadata } from 'astro';
 interface InstructorProps {
   name: string;
   title?: string;
+  rank?: string;
   img?: ImageMetadata;
   imgAspectRatio?: string;
   featured?: boolean;
   id?: string;
 }
 
-const { name, title, img, imgAspectRatio, featured = false, id } = Astro.props as InstructorProps;
+const { name, title, rank, img, imgAspectRatio, featured = false, id } = Astro.props as InstructorProps;
 ---
 
 <li id={id} class={featured ? 'featured' : ''}>
@@ -26,7 +27,7 @@ const { name, title, img, imgAspectRatio, featured = false, id } = Astro.props a
   </div>
   )}
   <div>
-    {title && <p>{title}</p>}
+    {(title || rank) && <p><span>{title}</span><span>{rank}</span></p>}
     <h2>{name}</h2>
     <div class="content">
       <slot></slot>
@@ -45,6 +46,12 @@ const { name, title, img, imgAspectRatio, featured = false, id } = Astro.props a
       color: var(--silver);
       margin-bottom: 1rem;
     }
+    p > span:last-of-type:not(:empty)::before {
+      content: "•";
+      display: inline-block;
+      margin: 0 0.5rem;
+      color: var(--bright-red);
+      }
     h2 {
       font-family: var(--ff-heading);
       font-size: clamp(1rem, 3.5vw, 1.25rem);
