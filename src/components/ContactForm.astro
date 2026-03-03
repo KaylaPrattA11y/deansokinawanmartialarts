@@ -10,9 +10,9 @@ import { CLASSES } from '../config/site';
   id="contact-form"
 >
   <input type="hidden" name="form-name" value="Contact" />
-  <h2>Contact Us</h2>
+  <h2>Send a Message</h2>
   <div class="success-message d-none">
-    <p><Icon name="check" size="20px" /> Thank you! Your message has been sent successfully.</p>
+    <p><Icon name="check" size="20px" /> Your message has been sent successfully. We will get back to you at our earliest convenience.</p>
   </div>
   <fieldset>
     <legend class="visually-hidden">Contact Form</legend>
@@ -65,7 +65,7 @@ import { CLASSES } from '../config/site';
   </fieldset>
   <div class="short-divider"></div>
   <button type="submit">Send Message</button>
-  <p><small>We respect your privacy. Your information will never be shared.</small></p>
+  <p class="privacy"><small>We respect your privacy. Your information will never be shared.</small></p>
 </form>
 
 <script is:inline define:vars={{ CLASSES }}>
@@ -154,17 +154,6 @@ import { CLASSES } from '../config/site';
     :where(fieldset, button):disabled {
       opacity: 0.5;
     }
-    .validation {
-      margin-block-start: 0.25em;
-      color: var(--glow-red);
-      display: none;
-    }
-    .field:has(:user-invalid) .validation {
-      display: block;
-    }
-    :user-invalid {
-      border-color: var(--glow-red);
-    }
     fieldset {
       margin: 0;
       padding: 0;
@@ -185,16 +174,15 @@ import { CLASSES } from '../config/site';
       border-radius: 4px;
       padding: 1rem;
       color: #a8e6a3;
-      text-align: center;
+      margin-block-end: 1rem;
     }
     .success-message p {
       margin: 0;
       color: #a8e6a3;
       display: flex;
-      gap: 0.15rem;
-      align-items: center;
+      gap: 0.25rem;
     }
-    p:not(.validation) {
+    .privacy {
       text-align: center;
       color: var(--silver);
     }
@@ -309,6 +297,19 @@ import { CLASSES } from '../config/site';
       inset: 3px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       pointer-events: none;
+    }
+  }
+  @layer utilities {
+    .validation {
+      margin-block-start: 0.25em;
+      color: var(--glow-red);
+      display: none;
+    }
+    .field:has(:user-invalid) .validation {
+      display: block;
+    }
+    :user-invalid {
+      border-color: var(--glow-red);
     }
   }
 </style>

@@ -6,10 +6,21 @@ import ContactForm from "./ContactForm.astro";
 <section class="contact" id="contact-desktop">
   <div class="info-inner">
     <div>
+      <div class="info-block" id="contact-mobile">
+        <div class="info-block-title">Contact</div>
+        <p>
+          <a href="tel:+13013735031"><Icon name="phone" /> (301) 373-5031 — Home Office</a>
+        </p>
+        <p>
+          <a href="tel:+13019042742"><Icon name="mobile" /> (301) 904-2742 — Cell</a>
+        </p>
+        <p class="show-for-md">
+          <a href="#contact-form"><Icon name="mail" /> Send a message</a>
+        </p>
+      </div>
       <div class="info-block">
         <div class="info-block-title">Location</div>
         <address>
-          Dean's Okinawan Martial Arts & Self Defense<br />
           23725 Three Notch Road<br />
           Hollywood, Maryland 20636
         </address>
@@ -24,18 +35,6 @@ import ContactForm from "./ContactForm.astro";
             loading="lazy" 
             referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
-      </div>
-      <div class="info-block" id="contact-mobile">
-        <div class="info-block-title">Contact</div>
-        <p>
-          <a href="tel:+13013735031"><Icon name="phone" /> (301) 373-5031 — Home Office</a>
-        </p>
-        <p>
-          <a href="tel:+13019042742"><Icon name="mobile" /> (301) 904-2742 — Cell</a>
-        </p>
-        <p class="show-for-md">
-          <a href="#contact-form"><Icon name="mail" /> Send a message</a>
-        </p>
       </div>
       <div class="info-block">
         <div class="info-block-title">Hours</div>
@@ -86,8 +85,9 @@ import ContactForm from "./ContactForm.astro";
       margin: 0 auto;
       display: grid;
       gap: 1rem 2rem;
+      align-items: start;
       @container contact (width >= 600px) {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1.25fr;
       }
       @container contact (width >= 900px) {
         grid-template-columns: 1fr 1.5fr;
@@ -96,7 +96,7 @@ import ContactForm from "./ContactForm.astro";
     }
     .info-inner > div {
       display: grid;
-      gap: 1rem 2rem;
+      gap: 1.5rem 2rem;
       @container (width < 900px) {
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       }
@@ -107,9 +107,9 @@ import ContactForm from "./ContactForm.astro";
       letter-spacing: 0.4em;
       text-transform: uppercase;
       color: var(--cream);
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(194, 189, 181, 0.15);
+      margin-block-end: 0.5rem;
+      padding-block-end: 0.75rem;
+      border-block-end: 1px solid rgba(194, 189, 181, 0.15);
     }
     .info-block p,
     .info-block address {
