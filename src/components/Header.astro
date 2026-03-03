@@ -17,7 +17,7 @@ let navItems = [
   { label: 'Gallery', href: BASE_URL + ROUTES.gallery, class: 'hide-for-sm' },
   { label: 'News', href: BASE_URL + ROUTES.news, class: 'hide-for-sm' },
 	{ label: 'FAQs', href: BASE_URL + ROUTES.faqs, class: 'hide-for-sm' },
-	{ label: 'Contact', href: BASE_URL + '#contact-desktop', class: 'hide-for-sm' },
+	{ label: 'Contact', href: '#contact-desktop', class: 'hide-for-sm' },
 ];
 
 navItems = navItems.filter(item => {
@@ -37,7 +37,7 @@ navItems = navItems.filter(item => {
 			</a>
 		</div>
 		<nav aria-label="Site navigation" class="nav-large">
-			<a class="show-for-sm" aria-label="Contact" href={BASE_URL + '#contact-mobile'}><Icon name="phone" size="24px" /></a>
+			<a class="show-for-sm" aria-label="Contact" href="#contact-mobile"><Icon name="phone" size="24px" /></a>
 			<button 
 				type="button" 
 				class="show-for-sm" 
@@ -71,7 +71,7 @@ navItems = navItems.filter(item => {
 		>
 			Home
 		</a>
-		{navItems.filter(item => item.label !== 'Contact').map(item => (
+		{navItems.map(item => (
 		<a 
 			href={item.href}
 			aria-current={currentPath.startsWith(item.href) ? 'page' : undefined}
