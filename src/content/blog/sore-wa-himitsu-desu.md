@@ -10,11 +10,17 @@ imageGallery:
   gallery:
     - image: /images/pexels-artempodrez-6253308.jpg
       caption: He earned that belt.
+      mediaType: photo
     - image: /images/pexels-olia-danilevich-6005466.jpg
       title: What a lassie
       caption: Doing the thing that's real karate for sure
+      mediaType: photo
     - image: /images/pexels-paris-lopez-110224560-9651872.jpg
+      mediaType: photo
     - image: /images/pexels-sergey-platonov-114873806-10209893.jpg
+      mediaType: photo
+    - mediaType: video
+      vimeoUrl: https://vimeo.com/73552530
 ---
 Lorem ipsum dolor sit amet. Est consequatur necessitatibus *Sit repellat eum nisi possimus in molestias rerum* in blanditiis autem. Sit officia eius 33 asperiores voluptatibus **Sit dicta aut atque velit** qui eligendi autem eos quas ipsa quo illum sequi! Ea Quis culpa in dolorum veritatisest aliquid. 
 

@@ -10,7 +10,11 @@ tags:
   - pwn3d
 imageGallery:
   gallery:
-    - image: /images/iamcool.jpg
+    - mediaType: photo
+      image: /images/iamcool.jpg
+    - mediaType: photo
+      image: /images/pexels-atccommphoto-306765.jpg
+      title: foop
   description: HAHAHAAHAHA4AA HACXEDDDDD
 ---
 PPREPAIR TO BE XOMPLETEELY HACXXX00RRED N00BSS1!1!1!

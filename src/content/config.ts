@@ -13,7 +13,9 @@ const blog = defineCollection({
       title: z.string().optional(),
       description: z.string().optional(),
       gallery: z.array(z.object({
-        image: z.string(),
+        mediaType: z.enum(['photo', 'video']),
+        image: z.string().optional(),
+        vimeoUrl: z.string().optional(),
         title: z.string().optional(),
         caption: z.string().optional()
       })).optional()
@@ -24,7 +26,7 @@ const blog = defineCollection({
 const gallery = defineCollection({
   type: 'content',
   schema: z.object({
-    mediaType: z.enum(['photo', 'video']).optional(),
+    mediaType: z.enum(['photo', 'video']),
     image: z.string().optional(),
     vimeoUrl: z.string().optional(),
     pubDate: z.coerce.date(),

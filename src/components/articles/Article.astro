@@ -61,9 +61,12 @@ if (post.data.image) {
   @layer components {
     section {
       margin-block-start: 2rem;
-      outline: 1px solid rgba(194,189,181,0.15);
-      outline-offset: 4px;
-      padding: 1rem;
+      box-sizing: border-box;
+      @container (width >= 600px) {
+        outline: 1px solid rgba(194,189,181,0.15);
+        outline-offset: 4px;
+        padding: 1rem;
+      }
     }
     section h2 {
       margin-block: 0 1em;
@@ -94,9 +97,11 @@ if (post.data.image) {
       border-radius: 8px;
     }
     .wrapper {
+      --padding-x: 2rem;
       max-inline-size: 800px;
       margin: 0 auto;
-      padding: 2rem;
+      padding: 2rem var(--padding-x);
+      box-sizing: border-box;
     }
     .content :global(> p:first-of-type::first-letter) {
       font-family: var(--ff-heading);

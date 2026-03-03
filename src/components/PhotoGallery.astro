@@ -4,7 +4,7 @@ import type { ImageMetadata } from "astro";
 import { Icon } from "astro-icon/components";
 
 export interface GalleryImage {
-  mediaType?: 'photo' | 'video';
+  mediaType: 'photo' | 'video';
   image?: string;
   vimeoUrl?: string;
   title?: string;
@@ -47,7 +47,7 @@ const galleryImages = await Promise.all(
         isOptimized: false
       };
     }
-    if (img.mediaType === 'video') {
+    if (img.mediaType === 'video' && img.vimeoUrl) {
       return {
         vimeoUrl: img.vimeoUrl,
         title: img.title,
