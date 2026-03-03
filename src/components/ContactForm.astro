@@ -22,16 +22,17 @@ import { Icon } from 'astro-icon/components';
         <p class="validation">Please enter your name.</p>
       </div>
       <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" autocomplete="email" required />
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" name="phone" autocomplete="tel" required />
+        <p class="validation">Please enter a valid phone number so we can contact you.</p>
+      </div>
+      <div class="field">
+        <label for="email">Email (optional)</label>
+        <input type="email" id="email" name="email" autocomplete="email" />
         <p class="validation">Please enter a valid email address.</p>
       </div>
       <div class="field">
-        <label for="phone">Phone (optional)</label>
-        <input type="tel" id="phone" name="phone" autocomplete="tel" />
-      </div>
-      <div class="field">
-        <label for="interest">Interest</label>
+        <label for="interest">Interest (optional)</label>
         <select id="interest" name="interest">
           <option value="">Select an option...</option>
           <option value="Adult Karate">Adult Karate</option>
@@ -47,7 +48,7 @@ import { Icon } from 'astro-icon/components';
       <p class="validation">Please enter a message.</p>
     </div>
   </fieldset>
-  <hr />
+  <div class="short-divider"></div>
   <button type="submit">Send Message</button>
   <p><small>We respect your privacy. Your information will never be shared.</small></p>
 </form>
@@ -157,7 +158,6 @@ import { Icon } from 'astro-icon/components';
   form {
     container: form / inline-size;
     display: grid;
-    gap: 1rem;
     background-color: #2e26228a;
     border-inline-start: 3px solid var(--bright-red);
     padding: 2rem 1rem;

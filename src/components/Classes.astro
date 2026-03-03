@@ -1,7 +1,7 @@
 ---
 import Cards from "./cards/Cards.astro";
 import Card from "./cards/Card.astro";
-
+import Button from "./Button.astro";
 ---
 
 <section class="classes" id="classes">
@@ -20,6 +20,13 @@ import Card from "./cards/Card.astro";
             discipline, confidence, and respect alongside physical skill.
           </p>
           <div class="class-schedule">Mon &amp; Wed · 6:00 – 7:00 PM</div>
+          <Button 
+            type="button"
+            data-interest="Youth Karate"
+            data-anchor="contact-form"
+          >
+            Join Youth Karate
+          </Button>
         </div>
       </Card>
       <Card kanji="武">
@@ -31,6 +38,13 @@ import Card from "./cards/Card.astro";
             and traditional Okinawan self-defense applications.
           </p>
           <div class="class-schedule">Tue &amp; Thu · 6:00 – 8:00 PM</div>
+          <Button 
+            type="button"
+            data-interest="Adult Karate"
+            data-anchor="contact-form"
+          >
+            Join Adult Karate
+          </Button>
         </div>
       </Card>
       <Card kanji="道">
@@ -41,12 +55,44 @@ import Card from "./cards/Card.astro";
             American Heart Association certified CPR and First Aid training. Open
             to dojo members and the wider community.
           </p>
-          <div class="class-schedule">Contact for scheduling</div>
+          <Button 
+            type="button"
+            data-interest="CPR Training"
+            data-anchor="contact-form"
+          >
+            Schedule CPR Training
+          </Button>
         </div>
       </Card>
     </Cards>
   </div>
 </section>
+
+<script>
+  const classesSection = document.getElementById('classes');
+
+  classesSection?.addEventListener('click', event => {
+    if (event.target instanceof HTMLButtonElement) {
+      const contactForm = document.forms.namedItem('contact-form') as HTMLFormElement;
+      const interest = contactForm.elements.namedItem('interest') as HTMLSelectElement;
+      const messageTextarea = document.getElementById('message') as HTMLTextAreaElement;
+
+      const dataInterest = (event.target as HTMLButtonElement).getAttribute('data-interest');
+      
+      contactForm.reset();
+      if (interest && dataInterest) {
+        interest.value = dataInterest;
+      }
+      if (messageTextarea && dataInterest) {
+        if (['Youth Karate', 'Adult Karate'].includes(dataInterest)) {
+          messageTextarea.value = `I am interested in starting my free 7-day trial for ${dataInterest}.`;
+        } else {
+          messageTextarea.value = `I am interested in ${dataInterest}.`;
+        }
+      }
+    }
+  });
+</script>
 
 <style>
   @layer components {
@@ -117,6 +163,7 @@ import Card from "./cards/Card.astro";
       letter-spacing: 0.2em;
       color: var(--glow-red);
       text-transform: uppercase;
+      margin-block: 1em;
     }
   }
 </style>

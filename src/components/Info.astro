@@ -1,19 +1,15 @@
 ---
-import { getCollection } from "astro:content";
 import { Icon } from "astro-icon/components";
-import { BASE_URL, ROUTES } from "../config/site";
 import ContactForm from "./ContactForm.astro";
-
-const latestNews = await getCollection("blog");
-const latestPhotos = await getCollection("gallery");
 ---
 
-<section class="contact">
+<section class="contact" id="contact-desktop">
   <div class="info-inner">
     <div>
       <div class="info-block">
         <div class="info-block-title">Location</div>
         <address>
+          Dean's Okinawan Martial Arts & Self Defense<br />
           23725 Three Notch Road<br />
           Hollywood, Maryland 20636
         </address>
@@ -29,7 +25,7 @@ const latestPhotos = await getCollection("gallery");
             referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
-      <div class="info-block" id="contact">
+      <div class="info-block" id="contact-mobile">
         <div class="info-block-title">Contact</div>
         <p>
           <a href="tel:+13013735031"><Icon name="phone" /> (301) 373-5031 — Home Office</a>
@@ -53,25 +49,6 @@ const latestPhotos = await getCollection("gallery");
           Tuesday &amp; Thursday<br />
           6:00 – 8:00 PM
         </p>
-      </div>
-      <div class="info-block show-for-md">
-        <div class="info-block-title">More Information</div>
-        <p>
-          <a href={BASE_URL + ROUTES.about}>About</a>
-        </p>
-        <p>
-          <a href={BASE_URL + ROUTES.instructors}>Meet our Instructors</a>
-        </p>
-        {latestNews && latestNews.length > 1 && (
-        <p>
-          <a href={BASE_URL + ROUTES.news}>News & Updates</a>
-        </p>
-        )}
-        {latestPhotos &&latestPhotos.length > 0 && (
-        <p>
-          <a href={BASE_URL + ROUTES.gallery}>Gallery</a>
-        </p>
-        )}
       </div>
     </div>
     <ContactForm />

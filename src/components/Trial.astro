@@ -9,15 +9,21 @@ import Button from "./Button.astro"
   <p>
     Come train with us. Experience the tradition firsthand.
   </p>
-  <Button variant="primary" href="#contact-form" id="selectFreeTrial">Claim Your Trial</Button>
+  <Button type="button" data-anchor="contact-form">Claim Your Trial</Button>
 </section>
 
-<script is:inline>
-  document.getElementById('selectFreeTrial')?.addEventListener('click', () => {
-    const messageTextarea = document.getElementById('message');
+<script>
+  const trialSection = document.getElementById('trial');
 
-    if (messageTextarea) {
-      messageTextarea.value = 'I am interested in the 7-Day Free Trial.';
+  trialSection?.addEventListener('click', event => {
+    if (event.target instanceof HTMLButtonElement) {
+      const contactForm = document.forms.namedItem('contact-form') as HTMLFormElement;
+      const messageTextarea = document.getElementById('message') as HTMLTextAreaElement;
+
+      contactForm.reset();
+      if (messageTextarea) {
+        messageTextarea.value = 'I am interested in the 7-Day Free Trial.';
+      }
     }
   });
 </script>

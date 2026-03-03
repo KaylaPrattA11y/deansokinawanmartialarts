@@ -167,6 +167,19 @@ const { title, description } = Astro.props;
   });
 </script>
 
+<script>
+  // Global anchor click listener
+  document.addEventListener("click", event => {
+    if (event.target instanceof HTMLButtonElement && event.target.hasAttribute('data-anchor')) {
+      const anchor = event.target.getAttribute('data-anchor');
+      const targetElement = document.getElementById(anchor || '');
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  });
+</script>
+
 <style>
 	@layer base {
 		html,

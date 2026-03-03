@@ -4,7 +4,7 @@ import logo from "../assets/logo.png";
 import Button from "./Button.astro";
 ---
 
-<section aria-labelledby="hero-heading" class="hero fade-in">
+<section aria-labelledby="hero-heading" class="hero fade-in" id="hero">
   <div class="hero-content">
     <div class="hero-logo">
       <Image src={logo} alt="Dojo seal" width={125} height={125} fetchpriority="high" />
@@ -21,11 +21,27 @@ import Button from "./Button.astro";
       <span>Self-Control</span>
     </div>
     <div role="group" class="hero-buttons">
-      <Button href="#trial" variant="primary">Begin Your Training</Button>
-      <Button href="#classes" variant="secondary">View Schedule</Button>
+      <Button type="button" variant="primary" data-anchor="contact-form">Begin Your Training</Button>
+      <Button type="button" variant="secondary" data-anchor="classes">View Schedule</Button>
     </div>
   </div>
 </section>
+
+<script>
+  const heroSection = document.getElementById('hero');
+
+  heroSection?.addEventListener('click', event => {
+    if (event.target instanceof HTMLButtonElement && event.target.getAttribute('data-anchor') === 'contact-form') {
+      const contactForm = document.forms.namedItem('contact-form') as HTMLFormElement;
+      const messageTextarea = document.getElementById('message') as HTMLTextAreaElement;
+
+      contactForm.reset();
+      if (messageTextarea) {
+        messageTextarea.value = 'I am interested in beginning my training with the 7-Day Free Trial.';
+      }
+    }
+  });
+</script>
 
 <style>
 	@layer components {
@@ -93,7 +109,7 @@ import Button from "./Button.astro";
     .hero-buttons {
       display: flex;
       flex-wrap: wrap;
-      gap: 2rem;
+      gap: 1rem 2rem;
       justify-content: center;
     }
 	}
