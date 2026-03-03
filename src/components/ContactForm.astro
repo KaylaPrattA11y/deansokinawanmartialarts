@@ -76,6 +76,15 @@ import { CLASSES } from '../config/site';
   const frequencyFieldset = document.getElementById('frequency');
   const successMessage = form?.querySelector('.success-message');
   const submitButton = form?.querySelector('button[type="submit"]');
+  const SCROLL_OFFSET = 110;
+
+  const scrollToWithOffset = (target) => {
+    const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET);
+    window.scrollTo({
+      top,
+      behavior: 'smooth'
+    });
+  };
 
   const handleInterestChange = () => {
     const value = interestSelect?.value;
@@ -105,16 +114,25 @@ import { CLASSES } from '../config/site';
     }
   });
 
+  form?.addEventListener('invalid', event => {
+    event.preventDefault();
+
+    const target = event.target;
+    if (target instanceof HTMLElement) {
+      scrollToWithOffset(target);
+      target.focus({ preventScroll: true });
+    }
+  }, true);
+
   form?.addEventListener('submit', async event => {
     event.preventDefault();
-    form.reportValidity();
 
-    if (!form.checkValidity()) {
-      form?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!form.reportValidity()) {
+      return;
     }
-    
-    if (!submitButton) return;
-    
+
+    if (!submitButton || !fieldset) return;
+
     try {
       const formData = new FormData(form);
       const formName = form.getAttribute('name') || 'Contact';
@@ -131,12 +149,10 @@ import { CLASSES } from '../config/site';
       });
       
       if (response.ok) {
-        // Show success message
         if (successMessage) {
           successMessage.classList.remove('d-none')
         }
-        // Scroll to success message
-        form?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scrollToWithOffset(form);
       } else {
         alert('Sorry, there was an error sending your message. Please try again.');
       }
