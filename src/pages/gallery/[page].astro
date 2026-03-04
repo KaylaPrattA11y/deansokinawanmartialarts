@@ -3,7 +3,7 @@ import type { GetStaticPaths } from "astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import InteriorPage from "../../components/InteriorPage.astro";
-import { GALLERY_PAGE_SIZE, SITE_SEO } from "../../config/site";
+import { GALLERY_PAGE_SIZE } from "../../config/site";
 import Pagination from "../../components/articles/Pagination.astro";
 import PhotoGallery from "../../components/PhotoGallery.astro";
 
@@ -31,7 +31,7 @@ const posts = page.data;
 const pageDesc = `Explore our photos and videos showcasing the spirit and dedication of our students and instructors in Okinawan martial arts.`;
 ---
 
-<Layout title={`Gallery | ${SITE_SEO.name.long}`} description={pageDesc}>
+<Layout title="Gallery" description={pageDesc}>
   <InteriorPage heading="Gallery" lead={pageDesc}>
     <PhotoGallery images={posts.map(post => ({
       mediaType: post.data.mediaType,

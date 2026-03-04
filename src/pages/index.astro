@@ -6,14 +6,14 @@ import News from '../components/News.astro';
 import Dojo from '../components/Dojo.astro';
 import Classes from '../components/Classes.astro';
 import Trial from '../components/Trial.astro';
-import { SITE_SEO, HOME_NEWS_PAGE_SIZE } from '../config/site';
+import { HOME_NEWS_PAGE_SIZE } from '../config/site';
 
 const posts = (await getCollection("blog"))
   .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
   .slice(0, HOME_NEWS_PAGE_SIZE);
 ---
 
-<Layout title={SITE_SEO.name.long} description={SITE_SEO.description}>
+<Layout>
 	<Hero />
   <News posts={posts} />
   <Dojo />

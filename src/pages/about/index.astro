@@ -3,14 +3,16 @@ import { Image } from 'astro:assets';
 import hohanSoken from '../../assets/images/hohan-soken.jpg';
 import Layout from '../../layouts/Layout.astro';
 import InteriorPage from "../../components/InteriorPage.astro";
-import { BASE_URL, ROUTES, SITE_SEO } from '../../config/site';
+import { BASE_URL, ROUTES } from '../../config/site';
 import Button from '../../components/Button.astro';
+
+const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides training in both Shorin Ryu Matsumura Seito and Kobudo.";
 ---
 
-<Layout title={`About | ${SITE_SEO.name.long}`} description={SITE_SEO.description}>
+<Layout title="About" description={pageDesc}>
 	<InteriorPage 
-    heading="About | Shorin-Ryu Matsumura Seito" 
-    lead="Dean’s Okinawan Martial Arts and Self Defense provides training in both Shorin Ryu Matsumura Seito and Kobudo."
+    heading={`About | Shorin-Ryu Matsumura Seito`} 
+    lead={pageDesc}
   >
     <hr />
     <div class="tenets">

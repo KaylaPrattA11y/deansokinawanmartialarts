@@ -7,7 +7,7 @@ import InteriorPage from "../../components/InteriorPage.astro";
 import ArticleStub from "../../components/articles/ArticleStub.astro";
 import Cards from "../../components/cards/Cards.astro";
 import Card from "../../components/cards/Card.astro";
-import { NEWS_PAGE_SIZE, SITE_SEO } from "../../config/site";
+import { NEWS_PAGE_SIZE } from "../../config/site";
 import Pagination from "../../components/articles/Pagination.astro";
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
@@ -31,10 +31,13 @@ const { page } = Astro.props as {
   };
 };
 const posts = page.data;
+const pageTitle = "News & Updates";
+const pageDesc = "Dojo news, belt promotions, seminar announcements, and training updates from Dean's Okinawan Karate, Shorin-Ryu Matsumura Seito, in Hollywood, Maryland.";
 ---
 
-<Layout title={`News & Updates | ${SITE_SEO.name.long}`} description="Latest news and updates from our dojo.">
-  <InteriorPage heading="News & Updates">
+
+<Layout title={pageTitle} description={pageDesc}>
+  <InteriorPage heading={pageTitle}>
     <Cards>
       {posts.map((post) => (
       <Card>

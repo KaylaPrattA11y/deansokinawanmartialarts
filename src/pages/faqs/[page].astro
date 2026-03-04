@@ -5,7 +5,7 @@ import type { GetStaticPaths } from "astro";
 import Layout from "../../layouts/Layout.astro";
 import InteriorPage from "../../components/InteriorPage.astro";
 import Faq from "../../components/Faq.astro";
-import { FAQS_PAGE_SIZE, SITE_SEO } from "../../config/site";
+import { FAQS_PAGE_SIZE } from "../../config/site";
 import Pagination from "../../components/articles/Pagination.astro";
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
@@ -37,9 +37,39 @@ const { page } = Astro.props as {
   };
 };
 const posts = page.data;
+
+const stripMarkdown = (content: string) =>
+  content
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, " ")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^>\s+/gm, "")
+    .replace(/[*_~]/g, "")
+    .replace(/^\s*(?:[-+]\s+|\d+\.\s+)/gm, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const faqPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: posts.map((post) => ({
+    "@type": "Question",
+    name: post.data.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: stripMarkdown(post.body),
+    },
+  })),
+};
 ---
 
-<Layout title={`Frequently Asked Questions | ${SITE_SEO.name.long}`}>
+<Layout
+  title="Frequently Asked Questions"
+  description="Frequently Asked Questions about Dean's Okinawan Karate, including class information, training details, and more."
+  schema={faqPageSchema}
+>
   <InteriorPage heading="Frequently Asked Questions">
     {posts.map((post) => (
     <Faq post={post} />

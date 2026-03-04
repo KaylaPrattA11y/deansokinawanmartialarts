@@ -1,9 +1,21 @@
 export const SITE_SEO = {
   name: {
-    long: "Dean's Okinawan Martial Arts & Self Defense | Shorin-Ryu Matsumura Seito",
-    short: "Dean's Okinawan Martial Arts"
+    long: "Dean's Okinawan Karate | Shorin-Ryu Matsumura Seito",
+    short: "Dean's Okinawan Karate"
   },
-  description: "A premier martial arts school specializing in Shorin-Ryu Matsumura Seito, offering top-notch training in Okinawan martial arts and self-defense techniques."
+  description: "Shorin-Ryu Matsumura Seito karate in Hollywood, MD. Traditional Okinawan martial arts training for youth and adults. Self-defense, kobudo, and kata instruction."
+}
+
+export const SITE_SCHEMA = {
+  type: "SportsActivityLocation",
+  name: SITE_SEO.name.short,
+  imagePath: "/images/logo.avif",
+  address: {
+    locality: "Hollywood",
+    region: "MD",
+    country: "US",
+  },
+  sameAs: [] as string[],
 }
 
 export const NEWS_PAGE_SIZE = 6;

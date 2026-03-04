@@ -1,12 +1,14 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { BASE_URL, ROUTES, SITE_SEO } from "../../config/site";
+import { BASE_URL, ROUTES } from "../../config/site";
 
-const pageDesc = `Latest news and updates from our dojo.`;
 const redirectTarget = `${BASE_URL}${ROUTES.news}1/`;
+
+const pageTitle = "News & Updates";
+const pageDesc = "Dojo news, belt promotions, seminar announcements, and training updates from Dean's Okinawan Karate, Shorin-Ryu Matsumura Seito, in Hollywood, Maryland.";
 ---
 
-<Layout title={`News & Updates | ${SITE_SEO.name.long}`} description={pageDesc}>
+<Layout title={pageTitle} description={pageDesc}>
   <script is:inline define:vars={{ redirectTarget }}>
     window.location.replace(redirectTarget);
   </script>

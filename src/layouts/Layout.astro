@@ -8,14 +8,62 @@ import '@fontsource-variable/cinzel';
 import '@fontsource-variable/noto-serif-jp';
 import '@fontsource-variable/eb-garamond';
 import '../scss/site.scss';
-import { BASE_URL, ROUTES, SITE_SEO, IS_DEV } from '../config/site';
+import { BASE_URL, ROUTES, SITE_SEO, SITE_SCHEMA, IS_DEV } from '../config/site';
 
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
+  schema?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
-const { title, description } = Astro.props;
+const { title, description = SITE_SEO.description, schema } = Astro.props;
+const pageTitle = title ? `${title} | ${SITE_SEO.name.short}` : SITE_SEO.name.long;
+const siteOrigin = Astro.site?.toString();
+
+const toAbsoluteUrl = (path: string) => {
+  if (!siteOrigin) return undefined;
+  return new URL(path, siteOrigin).toString();
+};
+
+const websiteUrl = toAbsoluteUrl(BASE_URL);
+const logoUrl = toAbsoluteUrl(SITE_SCHEMA.imagePath);
+const pageUrl = siteOrigin ? new URL(Astro.url.pathname, siteOrigin).toString() : undefined;
+
+const organizationSchema: Record<string, unknown> = {
+  "@context": "https://schema.org",
+  "@type": SITE_SCHEMA.type,
+  name: SITE_SCHEMA.name,
+  description,
+  ...(websiteUrl ? { url: websiteUrl } : {}),
+  ...(logoUrl ? { image: logoUrl } : {}),
+  ...(SITE_SCHEMA.sameAs.length ? { sameAs: SITE_SCHEMA.sameAs } : {}),
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: SITE_SCHEMA.address.locality,
+    addressRegion: SITE_SCHEMA.address.region,
+    addressCountry: SITE_SCHEMA.address.country,
+  },
+};
+
+const webPageSchema: Record<string, unknown> = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: pageTitle,
+  description,
+  ...(pageUrl ? { url: pageUrl } : {}),
+  ...(websiteUrl
+    ? {
+        isPartOf: {
+          "@type": "WebSite",
+          name: SITE_SCHEMA.name,
+          url: websiteUrl,
+        },
+      }
+    : {}),
+};
+
+const customSchema = Array.isArray(schema) ? schema : schema ? [schema] : [];
+const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
 ---
 
 <!doctype html>
@@ -29,11 +77,11 @@ const { title, description } = Astro.props;
 		<meta name="generator" content={Astro.generator} />
 		<script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 		<SEO
-      title={title}
+      title={pageTitle}
       description={description}
       openGraph={{
         basic: {
-          title: title,
+          title: pageTitle,
           type: "website",
           image: BASE_URL + "logo.png",
         }
@@ -47,11 +95,12 @@ const { title, description } = Astro.props;
             name: "twitter:image",
             content: BASE_URL + "logo.png",
           },
-          { name: "twitter:title", content: title },
+          { name: "twitter:title", content: pageTitle },
           { name: "twitter:description", content: description },
         ],
       }}
     />
+		<script type="application/ld+json" set:html={JSON.stringify(schemaGraph)}></script>
 	</head>
 	<body>
     <a href="#main-content" class="skip-link">Skip to main content</a>

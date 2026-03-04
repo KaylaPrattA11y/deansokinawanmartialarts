@@ -3,7 +3,6 @@ import Layout from '../../layouts/Layout.astro';
 import InteriorPage from "../../components/InteriorPage.astro";
 import Instructors from '../../components/instructors/Instructors.astro';
 import Instructor from '../../components/instructors/Instructor.astro';
-import { SITE_SEO } from '../../config/site';
 import type { ImageMetadata } from 'astro';
 
 const instructorImageModules = import.meta.glob<{ default: ImageMetadata }>(
@@ -18,12 +17,15 @@ const instructorImages = Object.fromEntries(
   ])
 );
 
+const pageTitle = "Meet our Instructors";
+const pageDesc = "Expert Shorin-Ryu Matsumura Seito instructors with decades of Okinawan karate experience. Direct lineage to Master Hohan Soken. Youth and adult classes.";
+
 ---
 
-<Layout title={`Meet our Instructors | ${SITE_SEO.name.long}`} description={SITE_SEO.description}>
+<Layout title={pageTitle} description={pageDesc}>
 	<InteriorPage 
-    heading="Meet our Instructors" 
-    lead="Meet our dedicated instructors who bring a wealth of knowledge and experience to our dojo. Each instructor is committed to helping students of all ages and skill levels achieve their martial arts goals."
+    heading={pageTitle} 
+    lead={pageDesc}
   >
     <hr />
     <Instructors>
