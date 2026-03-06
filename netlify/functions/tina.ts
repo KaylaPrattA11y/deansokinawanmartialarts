@@ -43,7 +43,7 @@ const tinaBackend = TinaNodeBackend({
   databaseClient,
 })
 
-app.post('/api/tina/{*splat}', async (req, res, next) => {
+app.post('/api/tina/*', async (req, res, next) => {
   try {
     await tinaBackend(req, res)
   } catch (e) {
@@ -52,7 +52,7 @@ app.post('/api/tina/{*splat}', async (req, res, next) => {
   }
 })
 
-app.get('/api/tina/{*splat}', async (req, res, next) => {
+app.get('/api/tina/*', async (req, res, next) => {
   try {
     await tinaBackend(req, res)
   } catch (e) {
