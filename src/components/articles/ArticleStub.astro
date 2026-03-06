@@ -39,8 +39,8 @@ if (post.data.image) {
 <style>
   @layer components {
     .post-card.has-image {
+      display: grid;
       @container (width > 600px) and (width < 900px) {
-        display: grid;
         grid-template-columns: 0.5fr 1fr;
       }
     }
@@ -58,6 +58,8 @@ if (post.data.image) {
       display: grid;
       align-items: start;
       align-content: space-between;
+      block-size: 100%;
+      box-sizing: border-box;
     }
     .read-more {
       font-family: var(--ff-heading);
