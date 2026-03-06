@@ -1,27 +1,42 @@
 /**
- * Patches the TinaCMS admin index.html after `tinacms build` to inject
- * a `process` polyfill. TinaCMS bundles Node-only code (e.g. chalk /
- * supports-color) that references `process.stdout`, which crashes in
- * the browser without this shim.
+ * Patches the TinaCMS admin bundle after `tinacms build`.
+ *
+ * next-auth/react ships pre-compiled JSX that uses React 19's element
+ * symbol ("react.transitional.element"). React 18's reconciler only
+ * recognises "react.element", so it treats those elements as plain
+ * objects → React error #31.
+ *
+ * Fix: swap the symbol string in the generated JS bundle so every
+ * element uses the React 18 symbol.
  */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-const ADMIN_HTML = 'public/admin/index.html';
-
-const PROCESS_SHIM = `<script>window.process=window.process||{env:{},stdout:{isTTY:false},stderr:{isTTY:false}};</script>`;
+const ASSETS_DIR = 'public/admin/assets';
 
 try {
-  let html = readFileSync(ADMIN_HTML, 'utf-8');
+  const files = readdirSync(ASSETS_DIR).filter((f) => f.endsWith('.js'));
+  let patched = 0;
 
-  if (html.includes('window.process')) {
-    console.log('[patch-admin] process shim already present, skipping.');
-  } else {
-    // Inject just before the first <script> tag
-    html = html.replace('<script', PROCESS_SHIM + '\n    <script');
-    writeFileSync(ADMIN_HTML, html, 'utf-8');
-    console.log('[patch-admin] Injected process polyfill into admin/index.html');
+  for (const file of files) {
+    const filePath = join(ASSETS_DIR, file);
+    const src = readFileSync(filePath, 'utf-8');
+
+    if (src.includes('react.transitional.element')) {
+      const updated = src.replaceAll(
+        'react.transitional.element',
+        'react.element',
+      );
+      writeFileSync(filePath, updated, 'utf-8');
+      patched++;
+      console.log(`[patch-admin] Patched ${file}: react.transitional.element → react.element`);
+    }
+  }
+
+  if (patched === 0) {
+    console.log('[patch-admin] No files needed patching (no transitional element symbols found)');
   }
 } catch (err) {
-  console.error('[patch-admin] Could not patch admin HTML:', err.message);
+  console.error('[patch-admin] Patch failed:', err.message);
   process.exit(1);
 }

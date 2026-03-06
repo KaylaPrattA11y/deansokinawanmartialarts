@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # Local Netlify folder
 .netlify
+
+# TinaCMS admin build output (also covered by public/admin/.gitignore)
+public/admin/index.html
+public/admin/assets/
