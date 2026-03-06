@@ -32,12 +32,12 @@ const tinaBackend = TinaNodeBackend({
   databaseClient,
 })
 
-app.post('/api/tina/*', async (req, res) => {
+app.post('/api/tina/{*splat}', async (req, res) => {
   // Modify request if needed
   tinaBackend(req, res)
 })
 
-app.get('/api/tina/*', async (req, res) => {
+app.get('/api/tina/{*splat}', async (req, res) => {
   // Modify request if needed
   tinaBackend(req, res)
 })
