@@ -8,7 +8,7 @@ import { defineConfig } from "eslint/config";
 export default defineConfig([
   // Global ignore patterns so ESLint doesn't lint build output or Astro internals
   {
-    ignores: ["dist/**", ".astro/**", "public/**"],
+    ignores: ["dist/**", ".astro/**", "public/**", "tina/**"],
   },
   // TypeScript configs
   ...tseslint.configs.recommended,

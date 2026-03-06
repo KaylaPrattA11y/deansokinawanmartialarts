@@ -1,0 +1,54 @@
+fragment UserParts on User {
+  __typename
+  users {
+    __typename
+    username
+    name
+    email
+    password {
+      value
+      passwordChangeRequired
+    }
+  }
+}
+
+fragment BlogParts on Blog {
+  __typename
+  title
+  pubDate
+  description
+  author
+  image
+  tags
+  body
+  imageGallery {
+    __typename
+    title
+    description
+    gallery {
+      __typename
+      mediaType
+      image
+      vimeoUrl
+      title
+      caption
+    }
+  }
+}
+
+fragment GalleryParts on Gallery {
+  __typename
+  mediaType
+  image
+  vimeoUrl
+  pubDate
+  title
+  caption
+}
+
+fragment FaqsParts on Faqs {
+  __typename
+  question
+  sortPriority
+  body
+}
