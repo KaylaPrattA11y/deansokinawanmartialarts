@@ -17,7 +17,7 @@
     Cache-Control = "public, max-age=31536000"
 
 [functions]
-  node_bundler = "nft"
+  node_bundler = "esbuild"
 
 [[redirects]]
   from = "/api/tina/*"
