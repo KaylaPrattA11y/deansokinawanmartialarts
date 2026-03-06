@@ -149,7 +149,7 @@ const { post, isStub = false, useShareButton = false } = Astro.props as ArticleM
       flex-wrap: wrap;
       margin: 1rem 0;
     }
-    .tag {
+    .tag:not(:empty) {
       font-family: var(--ff-heading);
       background: var(--stone);
       padding: 0.25rem 0.75rem;
