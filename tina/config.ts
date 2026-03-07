@@ -4,19 +4,13 @@ import {
   UsernamePasswordAuthJSProvider,
 } from "tinacms-authjs/dist/tinacms";
 
-const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
-
-// const branch =
-//   process.env.GITHUB_BRANCH ||
-//   process.env.VERCEL_GIT_COMMIT_REF ||
-//   process.env.HEAD ||
-//   "main";
+const isLocalTina = process.env.TINA_PUBLIC_IS_LOCAL === "true";
+const isProd = process.env.NODE_ENV === "production";
+const prodUrl = process.env.URL || "https://deansokinawanmartialarts.netlify.app";
 
 export default defineConfig({
-  ...(isLocal ? {} : { 
-    contentApiUrlOverride: `${process.env.TINA_PUBLIC_SITE_URL}/api/tina/gql` 
-  }),
-  authProvider: isLocal
+  ...(isLocalTina ? {} : { contentApiUrlOverride: "/api/tina/gql" }),
+  authProvider: isLocalTina
     ? new LocalAuthProvider()
     : new UsernamePasswordAuthJSProvider(),
   build: {
@@ -25,8 +19,12 @@ export default defineConfig({
   },
   media: {
     tina: {
-      mediaRoot: "images",
-      publicFolder: "public",
+        mediaRoot: isProd
+          ? `${prodUrl}/images`
+          : "images",
+        publicFolder: isProd
+          ? `${prodUrl}/public`
+          : "public",
     },
   },
   schema: {
