@@ -15,6 +15,8 @@ export const SITE_SCHEMA = {
     region: "MD",
     country: "US",
   },
+  telephone: "(301) 373-5031",
+  priceRange: "$$",
   sameAs: [] as string[],
 }
 
