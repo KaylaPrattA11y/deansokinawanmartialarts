@@ -14,6 +14,9 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'always',
   vite: {
+    define: {
+      'process.env.TINA_PUBLIC_IS_LOCAL': JSON.stringify(process.env.TINA_PUBLIC_IS_LOCAL ?? 'false')
+    },
     server: {
       proxy: {
         '/api/tina': {
