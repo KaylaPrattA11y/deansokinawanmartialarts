@@ -17,17 +17,6 @@ app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
 
-// Log env var presence (not values) for debugging
-console.log('[tina] Env check:', {
-  NEXTAUTH_SECRET: !!process.env.NEXTAUTH_SECRET,
-  NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-  MONGODB_URI: !!process.env.MONGODB_URI,
-  GITHUB_OWNER: !!process.env.GITHUB_OWNER,
-  GITHUB_REPO: !!process.env.GITHUB_REPO,
-  GITHUB_PERSONAL_ACCESS_TOKEN: !!process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
-  TINA_PUBLIC_IS_LOCAL: process.env.TINA_PUBLIC_IS_LOCAL,
-});
-
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true'
 
 const tinaBackend = TinaNodeBackend({
@@ -66,6 +55,15 @@ app.use((err: Error, _req: express.Request, res: express.Response) => {
   console.error('[tina] Unhandled error:', err)
   if (!res.headersSent) {
     res.status(500).json({ error: err.message || 'Internal Server Error' })
+  }
+})
+
+app.get('/media/*', async (req, res, next) => {
+  req.url = req.url.replace('/media/', '/api/tina/media/')
+  try {
+    await tinaBackend(req, res)
+  } catch (e) {
+    next(e)
   }
 })
 
