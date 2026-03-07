@@ -13,10 +13,7 @@ const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 //   "main";
 
 export default defineConfig({
-  ...(isLocal ? {} : { 
-    contentApiUrlOverride: "/api/tina/gql",
-    mediaUrlOverride: "/api/tina/media",
-  }),
+  ...(isLocal ? {} : { contentApiUrlOverride: "/api/tina/gql" }),
   authProvider: isLocal
     ? new LocalAuthProvider()
     : new UsernamePasswordAuthJSProvider(),

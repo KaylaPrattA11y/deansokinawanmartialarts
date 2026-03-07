@@ -69,31 +69,4 @@ app.use((err: Error, _req: express.Request, res: express.Response) => {
   }
 })
 
-app.get('/api/tina/media*', async (req, res, next) => {
-  try {
-    await tinaBackend(req, res)
-  } catch (e) {
-    console.error('[tina] media GET error:', e)
-    next(e)
-  }
-})
-
-app.post('/api/tina/media*', async (req, res, next) => {
-  try {
-    await tinaBackend(req, res)
-  } catch (e) {
-    console.error('[tina] media POST error:', e)
-    next(e)
-  }
-})
-
-app.delete('/api/tina/media*', async (req, res, next) => {
-  try {
-    await tinaBackend(req, res)
-  } catch (e) {
-    console.error('[tina] media DELETE error:', e)
-    next(e)
-  }
-})
-
 export const handler = ServerlessHttp(app)
