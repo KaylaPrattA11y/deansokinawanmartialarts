@@ -67,4 +67,13 @@ app.get('/media/*', async (req, res, next) => {
   }
 })
 
+// Global error handler - must have exactly 4 arguments for Express to recognize it
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error('[tina] Unhandled error:', err)
+  if (!res.headersSent) {
+    res.status(500).json({ error: err.message || 'Internal Server Error' })
+  }
+})
+
 export const handler = ServerlessHttp(app)
