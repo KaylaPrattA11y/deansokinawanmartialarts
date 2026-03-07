@@ -10,6 +10,8 @@ tags:
 imageGallery:
   gallery:
     - mediaType: photo
+      title: Gh gfrhh
+      caption: K
 ---
 
 ## My post!
