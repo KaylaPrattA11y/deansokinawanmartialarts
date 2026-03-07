@@ -4,13 +4,17 @@ import {
   UsernamePasswordAuthJSProvider,
 } from "tinacms-authjs/dist/tinacms";
 
-const isLocalTina = process.env.TINA_PUBLIC_IS_LOCAL === "true";
-const isProd = process.env.NODE_ENV === "production";
-const prodUrl = process.env.URL;
+const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
+
+// const branch =
+//   process.env.GITHUB_BRANCH ||
+//   process.env.VERCEL_GIT_COMMIT_REF ||
+//   process.env.HEAD ||
+//   "main";
 
 export default defineConfig({
-  ...(isLocalTina ? {} : { contentApiUrlOverride: "/api/tina/gql" }),
-  authProvider: isLocalTina
+  ...(isLocal ? {} : { contentApiUrlOverride: "/api/tina/gql" }),
+  authProvider: isLocal
     ? new LocalAuthProvider()
     : new UsernamePasswordAuthJSProvider(),
   build: {
@@ -19,12 +23,8 @@ export default defineConfig({
   },
   media: {
     tina: {
-        mediaRoot: isProd
-          ? `${prodUrl}/images`
-          : "images",
-        publicFolder: isProd
-          ? `${prodUrl}/public`
-          : "public",
+      mediaRoot: "images",
+      publicFolder: "public",
     },
   },
   schema: {
