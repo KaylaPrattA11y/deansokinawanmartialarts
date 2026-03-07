@@ -5,6 +5,7 @@ import {
 } from "tinacms-authjs/dist/tinacms";
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
+const siteUrl = process.env.TINA_PUBLIC_SITE_URL ?? "";
 
 // const branch =
 //   process.env.GITHUB_BRANCH ||
@@ -14,7 +15,7 @@ const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 
 export default defineConfig({
   ...(isLocal ? {} : {
-    contentApiUrlOverride: "/api/tina/gql",
+    contentApiUrlOverride: `${siteUrl}/api/tina/gql`,
   }),
   authProvider: isLocal
     ? new LocalAuthProvider()
