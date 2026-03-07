@@ -6,7 +6,7 @@ import {
 
 const isLocalTina = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 const isProd = process.env.NODE_ENV === "production";
-const prodUrl = process.env.URL || "https://deansokinawanmartialarts.netlify.app";
+const prodUrl = process.env.URL;
 
 export default defineConfig({
   ...(isLocalTina ? {} : { contentApiUrlOverride: "/api/tina/gql" }),
