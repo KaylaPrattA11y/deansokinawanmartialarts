@@ -6,6 +6,9 @@ import {
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 const siteUrl = process.env.TINA_PUBLIC_SITE_URL ?? "";
+const mediaUrl = typeof window !== "undefined" 
+  ? `${window.location.origin}/api/tina/media`
+  : `${siteUrl}/api/tina/media`;
 
 // const branch =
 //   process.env.GITHUB_BRANCH ||
@@ -16,7 +19,7 @@ const siteUrl = process.env.TINA_PUBLIC_SITE_URL ?? "";
 export default defineConfig({
   ...(isLocal ? {} : { 
     contentApiUrlOverride: "/api/tina/gql",
-    mediaUrlOverride: `${siteUrl}/api/tina/media`,
+    mediaUrlOverride: mediaUrl,
   }),
   authProvider: isLocal
     ? new LocalAuthProvider()
