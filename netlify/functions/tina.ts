@@ -50,29 +50,12 @@ app.get('/api/tina/*', async (req, res, next) => {
   }
 })
 
-// Global error handler to log unhandled errors
-app.use((err: Error, _req: express.Request, res: express.Response) => {
-  console.error('[tina] Unhandled error:', err)
-  if (!res.headersSent) {
-    res.status(500).json({ error: err.message || 'Internal Server Error' })
-  }
-})
-
 app.get('/media/*', async (req, res, next) => {
   req.url = req.url.replace('/media/', '/api/tina/media/')
   try {
     await tinaBackend(req, res)
   } catch (e) {
     next(e)
-  }
-})
-
-// Global error handler - must have exactly 4 arguments for Express to recognize it
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  console.error('[tina] Unhandled error:', err)
-  if (!res.headersSent) {
-    res.status(500).json({ error: err.message || 'Internal Server Error' })
   }
 })
 
