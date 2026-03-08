@@ -1,9 +1,7 @@
 import { defineConfig } from "tinacms";
 
-const branch = process.env.GITHUB_BRANCH || "main";
-
 export default defineConfig({
-  branch,
+  branch: "main",
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID,
   token: process.env.TINA_TOKEN,
   search: {
