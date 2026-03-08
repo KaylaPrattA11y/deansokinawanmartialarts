@@ -3,7 +3,7 @@ title: WATTSSS UP N00BBBBSSSS!!1!1!!1!1!
 pubDate: 2026-02-25T19:19:00.000-05:00
 description: JEFF K IS ABOUT 2 SHOW U NERSSDRDS
 author: JEFF K (L33T)
-image: /images/iamcool.jpg
+image: /uploads/iamcool.jpg
 tags:
   - "1337"
   - h4x
@@ -11,9 +11,9 @@ tags:
 imageGallery:
   gallery:
     - mediaType: photo
-      image: /images/iamcool.jpg
+      image: /uploads/iamcool.jpg
     - mediaType: photo
-      image: /images/pexels-atccommphoto-306765.jpg
+      image: /uploads/pexels-atccommphoto-306765.jpg
       title: foop
   description: HAHAHAAHAHA4AA HACXEDDDDD
 ---

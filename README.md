@@ -110,7 +110,7 @@ Content changes made through the admin UI in local mode are written directly to 
 │   └── site.webmanifest
 │
 ├── src/
-│   ├── assets/images/        # Optimized images processed by Astro
+│   ├── assets/uploads/        # Optimized images processed by Astro
 │   ├── components/           # Astro & React components
 │   │   ├── Header.astro
 │   │   ├── Footer.astro

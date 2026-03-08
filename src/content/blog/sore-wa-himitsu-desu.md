@@ -3,21 +3,21 @@ title: Sore wa himitsu desu
 pubDate: 2026-02-25T17:37:00.000-05:00
 description: This is a secret.
 author: Xellos
-image: /images/xelloss_profile.webp
+image: /uploads/xelloss_profile.webp
 imageGallery:
   title: My first gallery
   description: With stock photos.
   gallery:
-    - image: /images/pexels-artempodrez-6253308.jpg
+    - image: /uploads/pexels-artempodrez-6253308.jpg
       caption: He earned that belt.
       mediaType: photo
-    - image: /images/pexels-olia-danilevich-6005466.jpg
+    - image: /uploads/pexels-olia-danilevich-6005466.jpg
       title: What a lassie
       caption: Doing the thing that's real karate for sure
       mediaType: photo
-    - image: /images/pexels-paris-lopez-110224560-9651872.jpg
+    - image: /uploads/pexels-paris-lopez-110224560-9651872.jpg
       mediaType: photo
-    - image: /images/pexels-sergey-platonov-114873806-10209893.jpg
+    - image: /uploads/pexels-sergey-platonov-114873806-10209893.jpg
       mediaType: photo
     - mediaType: video
       vimeoUrl: https://vimeo.com/73552530
