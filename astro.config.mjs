@@ -5,12 +5,18 @@ import react from '@astrojs/react';
 
 import icon from 'astro-icon';
 
-const site = process.env.SITE_URL ?? process.env.URL;
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  ...(site ? { site } : {}  ),
-  integrations: [react(), icon()],
+  site: "https://deansokinawanmartialarts.netlify.app",
+  integrations: [
+    react(), 
+    icon(), 
+    sitemap({
+      filter: page => page !== "https://deansokinawanmartialarts.netlify.app/admin/",
+    })
+  ],
   output: 'static',
   trailingSlash: 'always',
 });

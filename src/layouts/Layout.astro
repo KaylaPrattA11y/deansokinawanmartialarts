@@ -69,11 +69,11 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<link rel="preload" as="image" href="/images/logo.png" fetchpriority="high" />
 		<meta name="generator" content={Astro.generator} />
-		<script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 		<SEO
       title={pageTitle}
       description={description}
