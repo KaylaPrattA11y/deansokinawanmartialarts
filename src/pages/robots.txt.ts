@@ -3,8 +3,8 @@ import type { APIRoute } from 'astro';
 const getRobotsTxt = (sitemapURL: URL) => `\
 User-agent: *
 Allow: /
-Disallow: https://deansokinawanmartialarts.netlify.app/admin/
-Sitemap: https://deansokinawanmartialarts.netlify.app
+Disallow: /admin/
+Sitemap: https://deansokinawanmartialarts.netlify.app/sitemap-index.xml
 `;
 
 export const GET: APIRoute = ({ site }) => {
