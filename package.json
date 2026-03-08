@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/eslint-plugin-jsx-a11y": "^6.10.1",
+    "@types/node": "^25.3.5",
     "@types/react-syntax-highlighter": "^15.5.13",
     "eslint-plugin-astro": "^1.6.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",

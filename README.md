@@ -55,10 +55,10 @@ Create a `.env` file in the project root. The variables below are **only needed 
 
 ```env
 
-# ── Self-hosted TinaCMS Configuration ────────────────────────
-TINA_CLIENT_ID=<token>
+NEXT_PUBLIC_TINA_CLIENT_ID=<token>
 TINA_SEARCH_TOKEN=<token>
-TINA_CONTENT_TOKEN=<token>
+TINA_TOKEN=<token>
+GITHUB_BRANCH=<token>
 
 ---
 
@@ -299,12 +299,10 @@ Or push to the configured branch and Netlify will build automatically.
 
 Set these in the Netlify dashboard under **Site settings > Environment variables**:
 
-- `GITHUB_OWNER`
-- `GITHUB_REPO`
-- `GITHUB_PERSONAL_ACCESS_TOKEN`
-- `MONGODB_URI`
-- `NEXTAUTH_SECRET`
-- `SITE_URL` (optional but recommended)
+- `NEXT_PUBLIC_TINA_CLIENT_ID`
+- `TINA_SEARCH_TOKEN`
+- `TINA_TOKEN`
+- `GITHUB_BRANCH`
 
 ---
 

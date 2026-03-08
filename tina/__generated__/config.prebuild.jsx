@@ -1,9 +1,10 @@
 // tina/config.ts
 import { defineConfig } from "tinacms";
+var branch = process.env.GITHUB_BRANCH || "main";
 var config_default = defineConfig({
-  token: process.env.TINA_CONTENT_TOKEN,
+  branch,
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID,
-  branch: process.env.NEXT_PUBLIC_TINA_BRANCH,
+  token: process.env.TINA_TOKEN,
   search: {
     tina: {
       indexerToken: process.env.TINA_SEARCH_TOKEN,
