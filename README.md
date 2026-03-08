@@ -54,24 +54,11 @@ A static website for Dean's Okinawan Karate (Shorin-Ryu Matsumura Seito) dojo in
 Create a `.env` file in the project root. The variables below are **only needed for production / cloud CMS mode** — local development works out of the box without them.
 
 ```env
-# ── TinaCMS ─────────────────────────────────────────
-TINA_PUBLIC_IS_LOCAL=true          # "true" for local dev, "false" for production CMS
 
-# ── GitHub (production CMS) ─────────────────────────
-GITHUB_OWNER=<github-username-or-org>
-GITHUB_REPO=<repo-name>
-GITHUB_PERSONAL_ACCESS_TOKEN=<token>
-GITHUB_BRANCH=main                # optional, defaults to main
-
-# ── MongoDB (production CMS) ────────────────────────
-MONGODB_URI=<mongodb+srv://...>
-
-# ── Auth (production CMS) ──────────────────────────
-NEXTAUTH_SECRET=<random-secret>
-
-# ── Site URL (optional) ─────────────────────────────
-SITE_URL=https://www.example.com  # overrides Netlify's URL env var for canonical URLs
-```
+# ── Self-hosted TinaCMS Configuration ────────────────────────
+TINA_CLIENT_ID=<token>
+TINA_SEARCH_TOKEN=<token>
+TINA_CONTENT_TOKEN=<token>
 
 ---
 
@@ -98,8 +85,7 @@ Content changes made through the admin UI in local mode are written directly to 
 
 | Command | Description |
 |---|---|
-| `npm run dev` | Start local dev server with TinaCMS in **local** mode (`TINA_PUBLIC_IS_LOCAL=true`) |
-| `npm run dev:prod` | Start local dev server with TinaCMS in **production** mode (talks to GitHub + MongoDB) |
+| `npm run dev` | Start local dev server with TinaCMS in **local** mode |
 | `npm run build` | Build TinaCMS assets then build the Astro site to `dist/` |
 | `npm run preview` | Preview the production build locally |
 | `npm run astro` | Run Astro CLI commands directly (e.g. `npm run astro -- --help`) |
@@ -118,17 +104,13 @@ Content changes made through the admin UI in local mode are written directly to 
 ├── content/
 │   └── users/index.json      # TinaCMS user accounts (production auth)
 │
-├── netlify/
-│   └── functions/
-│       └── tina.ts           # Serverless function — proxies TinaCMS API in production
-│
 ├── public/                   # Static assets (served as-is)
 │   ├── admin/                # TinaCMS admin UI build output
 │   ├── images/               # Uploaded media (managed by TinaCMS)
 │   └── site.webmanifest
 │
 ├── src/
-│   ├── assets/images/        # Optimised images processed by Astro
+│   ├── assets/images/        # Optimized images processed by Astro
 │   ├── components/           # Astro & React components
 │   │   ├── Header.astro
 │   │   ├── Footer.astro
@@ -168,7 +150,6 @@ Content changes made through the admin UI in local mode are written directly to 
 │
 └── tina/                     # TinaCMS configuration
     ├── config.ts             # Schema definitions for all collections
-    ├── database.ts           # Database adapter (local SQLite or MongoDB + GitHub)
     └── __generated__/        # Auto-generated TinaCMS types & client (do not edit)
 ```
 

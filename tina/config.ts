@@ -1,44 +1,27 @@
-import { LocalAuthProvider, defineConfig } from "tinacms";
-import {
-  TinaUserCollection,
-  UsernamePasswordAuthJSProvider,
-} from "tinacms-authjs/dist/tinacms";
-
-const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
-// the contentApiUrlOverride needs an absolute URL (with origin) otherwise TinaCMS constructs the media URL as undefined/media
-const siteUrl = process.env.TINA_PUBLIC_SITE_URL ?? "";
-// For local development, we can use TinaCMS's built-in media store which saves files to the local filesystem. For production, we want to use Cloudinary for media storage, so we load the Cloudinary media store dynamically to avoid including it in the local development bundle.
-const getMediaStore = () => {
-  if (isLocal) {
-    return {
-      tina: {
-        mediaRoot: "images",
-        publicFolder: "public",
-      },
-    }
-  }
-  return {
-    loadCustomStore: async () => {
-      const pack = await import('next-tinacms-cloudinary')
-      return pack.TinaCloudCloudinaryMediaStore
-    },
-  }
-}
+import { defineConfig } from "tinacms";
 
 export default defineConfig({
-  // For local development, we can use the default content API URL which points to the local filesystem. For production, we need to override the content API URL to point to our deployed serverless function that handles GraphQL requests.
-  ...(isLocal ? {} : { contentApiUrlOverride: `${siteUrl}/api/tina/gql`, }),
-  authProvider: isLocal
-    ? new LocalAuthProvider()
-    : new UsernamePasswordAuthJSProvider(),
+  token: process.env.TINA_CONTENT_TOKEN,
+  clientId: process.env.TINA_CLIENT_ID,
+  branch: "main",
+  search: {
+    tina: {
+      indexerToken: process.env.TINA_SEARCH_TOKEN,
+      stopwordLanguages: ['eng'],
+    },
+  },
   build: {
     outputFolder: "admin",
     publicFolder: "public",
   },
-  media: getMediaStore(),
+  media: {
+    tina: {
+      mediaRoot: "images",
+      publicFolder: "public",
+    },
+  },
   schema: {
     collections: [
-      TinaUserCollection,
       {
         label: "News & Updates",
         name: "blog",

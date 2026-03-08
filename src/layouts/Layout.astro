@@ -1,6 +1,4 @@
 ---
-import { Icon } from 'astro-icon/components';
-import Button from '../components/Button.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SEO } from "astro-seo";
@@ -8,7 +6,7 @@ import '@fontsource-variable/cinzel';
 import '@fontsource-variable/noto-serif-jp';
 import '@fontsource-variable/eb-garamond';
 import '../scss/site.scss';
-import { BASE_URL, ROUTES, SITE_SEO, SITE_SCHEMA, IS_DEV } from '../config/site';
+import { BASE_URL, ROUTES, SITE_SEO, SITE_SCHEMA } from '../config/site';
 
 interface Props {
   title?: string;
@@ -109,60 +107,8 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
 			<slot />
 		</main>
 		<Footer />
-		{IS_DEV ? (
-			<div class="admin-link">
-				<Button href={BASE_URL + ROUTES.admin} size="sm"><Icon name="edit" size="18px" /> Admin</Button>
-			</div>
-		) : (
-			<div id="admin-link" class="admin-link d-none">
-				<Button href={BASE_URL + ROUTES.admin} size="sm"><Icon name="edit" size="18px" /> Admin</Button>
-			</div>
-		)}
 	</body>
 </html>
-
-<script is:inline>
-	function updateUI() {
-    const user = window.netlifyIdentity?.currentUser();
-    const adminLink = document.getElementById('admin-link');
-		
-		if (adminLink) {
-			if (user) {
-				adminLink.classList.remove('d-none');
-			} else {
-				adminLink.classList.add('d-none');
-			}
-		}
-  }
-  
-  // Wait for netlifyIdentity to be ready
-  function initNetlifyIdentity() {
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', () => {
-        updateUI();
-      });
-      window.netlifyIdentity.on('login', () => {
-        updateUI();
-      });
-      window.netlifyIdentity.on('logout', () => {
-        updateUI();
-      });
-      
-      // Check immediately in case init already fired
-      updateUI();
-    } else {
-      // Retry if not loaded yet
-      setTimeout(initNetlifyIdentity, 100);
-    }
-  }
-  
-  // Start when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initNetlifyIdentity);
-  } else {
-    initNetlifyIdentity();
-  }
-</script>
 
 <script is:inline define:vars={{BASE_URL, ROUTES, SITE_SEO}}>
   // Share buttons in the main document
@@ -241,11 +187,6 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
 		main {
 			container: main / inline-size;
 			margin-block-start: var(--header-height);
-		}
-		.admin-link {
-			position: fixed;
-			inset: auto 0 0 auto;
-			z-index: 1000;
 		}
 	}
 </style>
