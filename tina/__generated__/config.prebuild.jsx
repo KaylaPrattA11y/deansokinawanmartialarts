@@ -2,7 +2,7 @@
 import { defineConfig } from "tinacms";
 var config_default = defineConfig({
   token: process.env.TINA_CONTENT_TOKEN,
-  clientId: process.env.TINA_CLIENT_ID,
+  clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID,
   branch: "main",
   search: {
     tina: {
