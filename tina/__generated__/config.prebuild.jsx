@@ -1,13 +1,15 @@
 // tina/config.ts
-import { LocalAuthProvider, defineConfig } from "tinacms";
-import {
-  TinaUserCollection,
-  UsernamePasswordAuthJSProvider
-} from "tinacms-authjs/dist/tinacms";
-var isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
+import { defineConfig } from "tinacms";
 var config_default = defineConfig({
-  ...isLocal ? {} : { contentApiUrlOverride: "/api/tina/gql" },
-  authProvider: isLocal ? new LocalAuthProvider() : new UsernamePasswordAuthJSProvider(),
+  token: process.env.TINA_CONTENT_TOKEN,
+  clientId: process.env.TINA_CLIENT_ID,
+  branch: "main",
+  search: {
+    tina: {
+      indexerToken: process.env.TINA_SEARCH_TOKEN,
+      stopwordLanguages: ["eng"]
+    }
+  },
   build: {
     outputFolder: "admin",
     publicFolder: "public"
@@ -20,7 +22,6 @@ var config_default = defineConfig({
   },
   schema: {
     collections: [
-      TinaUserCollection,
       {
         label: "News & Updates",
         name: "blog",

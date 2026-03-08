@@ -54,10 +54,6 @@ type Query {
   collections: [Collection!]!
   node(id: String): Node!
   document(collection: String, relativePath: String): DocumentNode!
-  user(relativePath: String): User!
-  authenticate(sub: String!, password: String!): UserUsers
-  authorize: UserUsers
-  userConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: UserFilter): UserConnection!
   blog(relativePath: String): Blog!
   blogConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: BlogFilter): BlogConnection!
   gallery(relativePath: String): Gallery!
@@ -67,7 +63,6 @@ type Query {
 }
 
 input DocumentFilter {
-  user: UserFilter
   blog: BlogFilter
   gallery: GalleryFilter
   faqs: FaqsFilter
@@ -96,54 +91,7 @@ type Collection {
   documents(before: String, after: String, first: Float, last: Float, sort: String, filter: DocumentFilter, folder: String): DocumentConnection!
 }
 
-union DocumentNode = User | Blog | Gallery | Faqs | Folder
-
-type UserUsersPassword {
-  value: String!
-  passwordChangeRequired: Boolean
-}
-
-type UserUsers {
-  username: String!
-  name: String
-  email: String
-  password: UserUsersPassword!
-}
-
-type User implements Node & Document {
-  users: [UserUsers]
-  id: ID!
-  _sys: SystemInfo!
-  _values: JSON!
-}
-
-input StringFilter {
-  startsWith: String
-  eq: String
-  exists: Boolean
-  in: [String]
-}
-
-input UserUsersFilter {
-  username: StringFilter
-  name: StringFilter
-  email: StringFilter
-}
-
-input UserFilter {
-  users: UserUsersFilter
-}
-
-type UserConnectionEdges {
-  cursor: String!
-  node: User
-}
-
-type UserConnection implements Connection {
-  pageInfo: PageInfo!
-  totalCount: Float!
-  edges: [UserConnectionEdges]
-}
+union DocumentNode = Blog | Gallery | Faqs | Folder
 
 type BlogImageGalleryGallery {
   mediaType: String!
@@ -171,6 +119,13 @@ type Blog implements Node & Document {
   id: ID!
   _sys: SystemInfo!
   _values: JSON!
+}
+
+input StringFilter {
+  startsWith: String
+  eq: String
+  exists: Boolean
+  in: [String]
 }
 
 input DatetimeFilter {
@@ -312,9 +267,6 @@ type Mutation {
   deleteDocument(collection: String, relativePath: String!): DocumentNode!
   createDocument(collection: String, relativePath: String!, params: DocumentMutation!): DocumentNode!
   createFolder(collection: String, relativePath: String!): DocumentNode!
-  updatePassword(password: String!): Boolean!
-  updateUser(relativePath: String!, params: UserMutation!): User!
-  createUser(relativePath: String!, params: UserMutation!): User!
   updateBlog(relativePath: String!, params: BlogMutation!): Blog!
   createBlog(relativePath: String!, params: BlogMutation!): Blog!
   updateGallery(relativePath: String!, params: GalleryMutation!): Gallery!
@@ -324,7 +276,6 @@ type Mutation {
 }
 
 input DocumentUpdateMutation {
-  user: UserMutation
   blog: BlogMutation
   gallery: GalleryMutation
   faqs: FaqsMutation
@@ -332,26 +283,9 @@ input DocumentUpdateMutation {
 }
 
 input DocumentMutation {
-  user: UserMutation
   blog: BlogMutation
   gallery: GalleryMutation
   faqs: FaqsMutation
-}
-
-input UserUsersPasswordMutation {
-  value: String
-  passwordChangeRequired: Boolean!
-}
-
-input UserUsersMutation {
-  username: String
-  name: String
-  email: String
-  password: UserUsersPasswordMutation
-}
-
-input UserMutation {
-  users: [UserUsersMutation]
 }
 
 input BlogImageGalleryGalleryMutation {
