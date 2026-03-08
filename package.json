@@ -21,6 +21,7 @@
     "astro": "^5.17.1",
     "astro-icon": "^1.1.5",
     "astro-seo": "^1.1.0",
+    "cloudinary": "^2.9.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
@@ -28,6 +29,7 @@
     "mongodb": "^7.1.0",
     "mongodb-level": "^0.0.4",
     "next-auth": "^4.24.13",
+    "next-tinacms-cloudinary": "^23.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-is": "^18.3.1",
@@ -38,6 +40,7 @@
     "tinacms-gitprovider-github": "^4.0.12"
   },
   "devDependencies": {
+    "@netlify/functions": "^5.1.2",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/eslint-plugin-jsx-a11y": "^6.10.1",

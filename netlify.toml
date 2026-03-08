@@ -26,8 +26,8 @@
   force = true
 
 [[redirects]]
-  from = "/media/*"
-  to = "/.netlify/functions/tina/api/tina/media/:splat"
+  from = "/api/cloudinary/media*"
+  to = "/.netlify/functions/cloudinary/:splat"
   status = 200
   force = true
 
