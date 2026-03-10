@@ -9,7 +9,7 @@ const { heading, lead } = Astro.props as InteriorPageProps;
 
 <div class="interior-page fade-in">
   <div class="interior-page-inner">
-    {heading && <h1>{heading}</h1>}
+    {heading && <h1 id="main-content-anchor">{heading}</h1>}
     {lead && <p>{lead}</p>}
     <slot />
   </div>
