@@ -113,8 +113,11 @@ if (post.data.image) {
     .content :global(h1,h2,h3,h4,h6,h6) {
       font-family: var(--ff-heading);
     }
-    .content :global(h1,h2,h3,h4,h6,h6,p, ul, ol) {
+    .content :global(h1,h2,h3,h4,h6,h6,p,ul,ol) {
       margin-block: 1em;
+    }
+    .content :global(li) {
+      margin-block: 0.5em;
     }
     .content :global(p, ul, ol, strong, em, b, i) {
       font-size: 1.1rem;
