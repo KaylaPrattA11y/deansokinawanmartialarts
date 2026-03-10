@@ -35,4 +35,5 @@ export default defineConfig([
   },
   // Astro files - use Astro-specific linting
   ...pluginAstro.configs.recommended,
+  ...pluginAstro.configs["jsx-a11y-recommended"],
 ]);
