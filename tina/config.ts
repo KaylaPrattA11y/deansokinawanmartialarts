@@ -152,6 +152,11 @@ export default defineConfig({
                     label: "Caption",
                     name: "caption",
                   },
+                  {
+                    type: "string",
+                    label: "Credit",
+                    name: "credit",
+                  },
                 ],
               },
             ],
@@ -207,6 +212,11 @@ export default defineConfig({
             type: "string",
             label: "Caption",
             name: "caption",
+          },
+          {
+            type: "string",
+            label: "Credit",
+            name: "credit",
           },
         ],
       },

@@ -17,7 +17,8 @@ const blog = defineCollection({
         image: z.string().optional(),
         vimeoUrl: z.string().optional(),
         title: z.string().optional(),
-        caption: z.string().optional()
+        caption: z.string().optional(),
+        credit: z.string().optional()
       })).optional()
     }).optional(),
   }),
@@ -32,6 +33,7 @@ const gallery = defineCollection({
     pubDate: z.coerce.date(),
     title: z.string(),
     caption: z.string().optional(),
+    credit: z.string().optional()
   }),
 });
 

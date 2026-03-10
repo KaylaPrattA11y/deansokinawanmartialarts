@@ -9,6 +9,7 @@ export interface GalleryImage {
   vimeoUrl?: string;
   title?: string;
   caption?: string;
+  credit?: string;
   slug?: string;
 }
 
@@ -34,6 +35,7 @@ const galleryImages = await Promise.all(
           src: optimizedImage,
           title: img.title,
           caption: img.caption,
+          credit: img.credit,
           slug: img.slug,
           isOptimized: true
         };
@@ -43,6 +45,7 @@ const galleryImages = await Promise.all(
         src: img.image,
         title: img.title,
         caption: img.caption,
+        credit: img.credit,
         slug: img.slug,
         isOptimized: false
       };
@@ -52,6 +55,7 @@ const galleryImages = await Promise.all(
         vimeoUrl: img.vimeoUrl,
         title: img.title,
         caption: img.caption,
+        credit: img.credit,
         slug: img.slug,
         isOptimized: false
       };
@@ -104,6 +108,7 @@ const validImages = galleryImages.filter(Boolean);
             data-src={imgSrc}
             data-title={img.title}
             data-caption={img.caption}
+            data-credit={img.credit}
             data-slug={img.slug}
             aria-label={`View ${img.title || 'image'}`}
             type="button"
@@ -132,6 +137,7 @@ const validImages = galleryImages.filter(Boolean);
             <div class="figcaption">
               {img.title && <div class="image-title">{img.title}</div>}
               {img.caption && <div class="image-caption">{img.caption}</div>}
+              {img.credit && <div class="image-credit">Credit: <strong>{img.credit}</strong></div>}
             </div>
             )}
           </div>
@@ -142,6 +148,7 @@ const validImages = galleryImages.filter(Boolean);
             data-src={src}
             data-title={img.title}
             data-caption={img.caption}
+            data-credit={img.credit}
             data-slug={img.slug}
             aria-label={`View ${img.title || 'video'}`}
             type="button"
@@ -168,6 +175,7 @@ const validImages = galleryImages.filter(Boolean);
       <div class="figcaption v-hidden">
         <h1 class="image-title">loading image...</h1>
         <p class="image-caption"></p>
+        <small class="image-credit">Credit: <strong></strong></small>
       </div>
       <div role="group" class="image-controls">
         <button 
@@ -215,6 +223,7 @@ const validImages = galleryImages.filter(Boolean);
     const figcaption = dialog.querySelector('.figcaption');
     const dialogTitle = dialog.querySelector('.image-title');
     const dialogCaption = dialog.querySelector('.image-caption');
+    const dialogCredit = dialog.querySelector('.image-credit');
     const saveButton = dialog.querySelector('[data-photo-gallery="save"]');
     const shareButton = dialog.querySelector('[data-share="true"]');
     const resetSharedMetadata = () => {
@@ -232,6 +241,8 @@ const validImages = galleryImages.filter(Boolean);
       dialogTitle.textContent = '';
       dialogCaption.textContent = '';
       dialogCaption.hidden = true;
+      dialogCredit.firstElementChild.textContent = '';
+      dialogCredit.hidden = true;
     };
 
     const resetVideo = () => {
@@ -258,7 +269,7 @@ const validImages = galleryImages.filter(Boolean);
 
     if (!mediaType) return;
 
-    const { src, title, caption, slug } = btn.dataset;
+    const { src, title, caption, credit, slug } = btn.dataset;
 
     resetPhoto();
     resetVideo();
@@ -290,6 +301,8 @@ const validImages = galleryImages.filter(Boolean);
     dialogTitle.textContent = title || '';
     dialogCaption.textContent = caption || '';
     dialogCaption.hidden = !caption;
+    dialogCredit.firstElementChild.textContent = credit || '';
+    dialogCredit.hidden = !credit;
 
     shareButton.dataset.title = title || '';
     shareButton.dataset.description = caption || '';

@@ -200,7 +200,7 @@ Content lives in `src/content/` and is defined by both Astro's content config (`
 
 - **Path:** `src/content/gallery/`
 - **Format:** Markdown with YAML frontmatter
-- **Fields:** `mediaType` (`photo` | `video`), `image`, `vimeoUrl`, `pubDate`, `title`, `caption`
+- **Fields:** `mediaType` (`photo` | `video`), `image`, `vimeoUrl`, `pubDate`, `title`, `caption`, `credit`
 - **Notes:** Supports both uploaded images and Vimeo video embeds
 
 ### FAQs (`faqs`)

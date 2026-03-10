@@ -50,7 +50,8 @@ const { Content } = await post.render();
     .content :global(li) {
       margin-block: 0.5em;
     }
-    .content :global(p, ul, ol, strong, em, b, i) {
+    .content :global(p, ul, ol),
+    .content :global(p:where(strong, em, b, i)) {
       font-size: 1.1rem;
       line-height: 1.5;
       color: var(--silver);
