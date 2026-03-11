@@ -11,7 +11,7 @@ const { post } = Astro.props as { post: Post };
 
 let optimizedImage;
 if (post.data.image) {
-  const imagePath = post.data.image.replace('/images/', '/src/assets/images/');
+  const imagePath = post.data.image.replace('/uploads/', '/src/assets/images/');
   if (images[imagePath]) {
     optimizedImage = (await images[imagePath]()).default;
   }
@@ -19,8 +19,8 @@ if (post.data.image) {
 ---
 
 <article class={`post-card${post.data.image ? ' has-image' : ''}`}>
-  <div>
   {optimizedImage && (
+  <div class="post-card-image-wrapper">
     <Image 
       src={optimizedImage} 
       alt={post.data.title} 
@@ -28,8 +28,8 @@ if (post.data.image) {
       widths={[300, 600, 900]}
       sizes="(max-width: 900px) 50vw, 300px"
     />
-  )}
   </div>
+  )}
   <div class="post-content">
     <ArticleMeta {post} isStub={true} useShareButton={false} />
     <Button variant="secondary" href={`${BASE_URL}${ROUTES.news}${post.slug}/`}>Read More</Button>
@@ -44,14 +44,16 @@ if (post.data.image) {
         grid-template-columns: 0.5fr 1fr;
       }
     }
-    .post-image {
-      inline-size: 100%;
-      block-size: 100%;
-      object-fit: cover;
+    .post-card-image-wrapper {
       aspect-ratio: 16 / 9;
       @container (width > 600px) and (width < 900px) {
         aspect-ratio: 3 / 4;
       }
+    }
+    .post-image {
+      inline-size: 100%;
+      block-size: 100%;
+      object-fit: cover;
     }
     .post-content {
       padding: 1.5rem;

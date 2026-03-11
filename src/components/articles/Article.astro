@@ -21,7 +21,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/
 
 let optimizedImage;
 if (post.data.image) {
-  const imagePath = post.data.image.replace('/images/', '/src/assets/images/');
+  const imagePath = post.data.image.replace('/uploads/', '/src/assets/images/');
   if (images[imagePath]) {
     optimizedImage = (await images[imagePath]()).default;
   }
