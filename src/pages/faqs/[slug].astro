@@ -31,13 +31,6 @@ const { Content } = await post.render();
 
 <style>
   @layer components {
-    .content :global(> p:first-of-type::first-letter) {
-      font-family: var(--ff-heading);
-      font-weight: 900;
-      color: var(--bright-red);
-      font-size: 2.5rem;
-      line-height: 1;
-    }
     .content :global(h1,h2,h3,h4,h6,h6,p,ul,ol) {
       max-inline-size: 80ch;
     }
