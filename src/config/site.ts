@@ -3,7 +3,20 @@ export const SITE_SEO = {
     long: "Dean's Okinawan Karate | Shorin-Ryu Matsumura Seito",
     short: "Dean's Okinawan Karate"
   },
-  description: "Shorin-Ryu Matsumura Seito karate in Hollywood, MD. Traditional Okinawan martial arts training for youth and adults. Self-defense, kobudo, and kata instruction."
+  description: "Shorin-Ryu Matsumura Seito karate in Hollywood, MD. Traditional Okinawan martial arts training for youth and adults. Self-defense, kobudo, and kata instruction.",
+  keywords: [
+    "Okinawan karate",
+    "Shorin-Ryu",
+    "Matsumura Seito",
+    "martial arts",
+    "karate classes",
+    "self-defense",
+    "Southern Maryland karate",
+    "SOMD karate",
+    "youth karate",
+    "adult karate",
+    "Hollywood MD"
+  ],
 }
 
 export const SITE_SCHEMA = {
@@ -47,6 +60,10 @@ export const ROUTES = {
   faqs: 'faqs/',
   gallery: 'gallery/',
 };
+
+export const FLAGS = {
+  usePagefind: false,
+}
 
 export const CLASSES = [
   {
