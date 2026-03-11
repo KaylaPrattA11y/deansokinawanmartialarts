@@ -35,7 +35,6 @@ A static website for Dean's Okinawan Karate (Shorin-Ryu Matsumura Seito) dojo in
 | Icons | [astro-icon](https://github.com/natemoo-re/astro-icon) + [Iconify](https://icon-sets.iconify.design/) |
 | Fonts | `@fontsource-variable` — Cinzel, EB Garamond, Noto Serif JP |
 | Hosting | [Netlify](https://www.netlify.com/) (static site + serverless functions) |
-| Database | MongoDB (via `mongodb-level`, used by TinaCMS in production) |
 | Git Provider | GitHub (TinaCMS reads/writes content to this repo) |
 
 ---
@@ -44,7 +43,6 @@ A static website for Dean's Okinawan Karate (Shorin-Ryu Matsumura Seito) dojo in
 
 - **Node.js** >= 18 (LTS recommended)
 - **npm** (ships with Node)
-- A **MongoDB** instance (only required for production TinaCMS)
 - A **GitHub** personal access token (only required for production TinaCMS)
 
 ---
@@ -89,6 +87,13 @@ Content changes made through the admin UI in local mode are written directly to 
 | `npm run build` | Build TinaCMS assets then build the Astro site to `dist/` |
 | `npm run preview` | Preview the production build locally |
 | `npm run astro` | Run Astro CLI commands directly (e.g. `npm run astro -- --help`) |
+| `npx netlify deploy --prod` | Deploys the current build to Netlify. Costs 15 credits. |
+
+---
+
+## Other stuff
+
+Clear cache: `rm -rf .astro node_modules/.vite node_modules/.cache dist && npm run dev`
 
 ---
 
@@ -100,9 +105,6 @@ Content changes made through the admin UI in local mode are written directly to 
 ├── netlify.toml              # Netlify build, headers, redirects, functions config
 ├── package.json
 ├── tsconfig.json             # Strict Astro TypeScript config w/ React JSX
-│
-├── content/
-│   └── users/index.json      # TinaCMS user accounts (production auth)
 │
 ├── public/                   # Static assets (served as-is)
 │   ├── admin/                # TinaCMS admin UI build output
@@ -161,6 +163,12 @@ TinaCMS provides a visual editing interface for non-technical users to manage si
 
 ### Local Mode (default for development)
 
+For `astro-pagefind` features to function, an initial build must be performed.
+```bash
+npm run build
+```
+
+Then for development: 
 ```bash
 npm run dev
 ```
@@ -174,10 +182,6 @@ npm run dev
 ```bash
 npm run dev:prod
 ```
-
-- Uses `UsernamePasswordAuthJSProvider` — requires login (user accounts stored in `content/users/index.json`).
-- Content is stored in GitHub (via `tinacms-gitprovider-github`) and indexed in MongoDB (via `mongodb-level`).
-- On Netlify, the serverless function at `netlify/functions/tina.ts` handles API requests, redirected from `/api/tina/*`.
 
 ### Admin UI
 
