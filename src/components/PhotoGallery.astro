@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import { FLAGS } from '../config/site';
 
 export interface GalleryImage {
   mediaType: 'photo' | 'video';
@@ -26,7 +27,7 @@ const validImages = images.filter(img =>
 <section aria-label={title || "Gallery"}>
   {title && <h2 class="gallery-title">{title}</h2>}
   <div class="photo-gallery">
-    {validImages.map((img) => {
+    {validImages.map((img, index) => {
     if (img.mediaType === 'photo' && img.image) {
       return (
         <figure class="media-wrapper">
@@ -47,6 +48,7 @@ const validImages = images.filter(img =>
               class="lightbox-trigger"
               data-photo-gallery="trigger"
               data-media-type="photo"
+              data-index={index}
               data-src={img.image}
               data-title={img.title}
               data-caption={img.caption}
@@ -148,14 +150,32 @@ const validImages = images.filter(img =>
           <Icon name="close" size="32px" />
         </button>
       </div>
+      {FLAGS.useLightboxControls && (
+      <div role="group" class="lightbox-controls">
+        <button 
+          class="image-prev"
+          data-photo-gallery="prev"
+          aria-label="Previous image"
+          type="button"
+          >
+          <Icon name="arrow-left" size="28px" color="var(--theme-red)" />
+        </button>
+        <button 
+          class="image-next"
+          data-photo-gallery="next"
+          aria-label="Next image"
+          type="button"
+        >
+          <Icon name="arrow-right" size="28px" color="var(--theme-red)" />
+        </button>
+      </div>
+      )}
     </div>
   </dialog>
 </section>
 
 <script is:inline>
   const dialog = document.getElementById('gallery-dialog');
-
-  dialog.addEventListener("close", () => document.body.classList.remove('overflow-hidden'));
 
   function handleToggleLightbox(btn) {
     const { mediaType, action } = btn.dataset;
@@ -254,7 +274,6 @@ const validImages = images.filter(img =>
 
     dialogMediaWrapper.classList.remove('v-hidden');
     dialog.showModal();
-    document.body.classList.add('overflow-hidden');
   }
 
   async function handleSaveImage(btn) {
@@ -384,7 +403,7 @@ const validImages = images.filter(img =>
     dialog .figcaption :where(h1, p) {
       max-inline-size: 60ch;
     }
-    dialog [role="group"] {
+    dialog .image-controls {
       display: flex;
       gap: 0.25rem;
       position: absolute;
@@ -398,13 +417,34 @@ const validImages = images.filter(img =>
       background: #000000;
       background: linear-gradient(180deg,rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.35) 30%, rgba(0, 0, 0, 0) 100%);
     }
+    dialog .image-controls button {
+      color: var(--paper);
+      background: none;
+    }
+    dialog .lightbox-controls {
+      display: flex;
+      gap: 0.25rem;
+      padding-inline: 4px;
+      position: absolute;
+      z-index: 1;
+      justify-content: space-between;
+      box-sizing: border-box;
+      inset: 50% auto auto 0;
+      inline-size: 100%;
+      color: var(--ink);
+    }
+    dialog .lightbox-controls button {
+      background: var(--ink);
+      outline: 1px solid var(--paper);
+      border-radius: 50%;
+      display: grid;
+      place-content: center;
+    }
     dialog [role="group"] button {
       appearance: none;
       margin: 0;
       padding: 0;
-      background: none;
       border: 0;
-      color: var(--paper);
       block-size: 2rem;
       inline-size: 2rem;
     }
