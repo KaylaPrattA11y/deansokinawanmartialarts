@@ -2,13 +2,12 @@
 import '@fontsource-variable/cinzel';
 import '@fontsource-variable/noto-serif-jp';
 import '@fontsource-variable/eb-garamond';
-import { SEO } from "astro-seo";
+import { AstroSEO } from 'astro-seo-plugin';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../scss/site.scss';
 import { BASE_URL, ROUTES, SITE_SEO, SITE_SCHEMA } from '../config/site';
 import logo from '../assets/logo.svg';
-import ogImage from '../assets/og-image.jpg';
 
 interface Props {
   title?: string;
@@ -16,6 +15,7 @@ interface Props {
   schema?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
+const ogImageUrl = `${Astro.site}og-image.jpg`;
 const { title, description = SITE_SEO.description, schema } = Astro.props;
 const pageTitle = title ? `${title} | ${SITE_SEO.name.short}` : SITE_SEO.name.long;
 const siteOrigin = Astro.site?.toString();
@@ -76,29 +76,39 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
 		<link rel="icon" href="/favicon.ico" />
 		<link rel="preload" as="image" href={logo.src} fetchpriority="high" />
 		<meta name="generator" content={Astro.generator} />
-		<SEO
+    <AstroSEO
       title={pageTitle}
       description={description}
       openGraph={{
-        basic: {
-          title: pageTitle,
-          type: "website",
-          image: ogImage.src,
+        title: pageTitle,
+        description: description,
+        image: ogImageUrl,
+        type: "website"
+      }}
+      jsonLd={{
+        "@type": "WebPage",
+        name: pageTitle,
+        description: description
+      }}
+      robots={{
+        index: false,
+        follow: true,
+        noarchive: true,
+        nosnippet: true,
+        maxSnippet: 150,
+      }}
+      additionalLinkTags={[
+        { rel: "canonical", href: "#" },
+        { rel: "prev", href: Astro.url },
+        { rel: "next", href: Astro.url },
+        { rel: "alternate", href: Astro.url }
+      ]}
+      additionalMetaTags={[
+        {
+        name: "keywords",
+        content: SITE_SEO.keywords.join(", ")
         }
-      }}
-      extend={{
-        // extending the default link tags
-        link: [{ rel: "icon", href: "/favicon.ico" }],
-        // extending the default meta tags
-        meta: [
-          {
-            name: "twitter:image",
-            content: ogImage.src,
-          },
-          { name: "twitter:title", content: pageTitle },
-          { name: "twitter:description", content: description },
-        ],
-      }}
+      ]}
     />
 		<script type="application/ld+json" set:html={JSON.stringify(schemaGraph)}></script>
 	</head>
