@@ -113,32 +113,6 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
 </html>
 
 <script is:inline define:vars={{BASE_URL, ROUTES, SITE_SEO}}>
-  // Share buttons in the main document
-  const shareButtons = document.querySelectorAll('[data-share="true"]');
-
-  shareButtons.forEach(shareButton => {
-    shareButton.classList.toggle('d-none', !navigator.share);
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!navigator.share) return;
-    if (e.target instanceof HTMLButtonElement && e.target.matches('[data-share="true"]')) {
-      const shareButton = e.target;
-      const title = `${shareButton.dataset.title} | ${SITE_SEO.name.short}`;
-      const description = shareButton.dataset.description;
-      const shareData = {
-        title: title,
-        text: description ? `${title}\n\n${description}` : title,
-        url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.slug}/`
-      };
-      navigator.share(shareData).catch((error) => {
-        console.error('Error sharing:', error);
-      });
-    }
-  });
-</script>
-
-<script is:inline define:vars={{BASE_URL, ROUTES, SITE_SEO}}>
   // Check every dialog for share buttons
   const dialogs = document.querySelectorAll('dialog');
   
@@ -163,9 +137,31 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
       });
     });
   });
-</script>
 
-<script>
+  // Share buttons in the main document
+  const shareButtons = document.querySelectorAll('[data-share="true"]');
+
+  shareButtons.forEach(shareButton => {
+    shareButton.classList.toggle('d-none', !navigator.share);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!navigator.share) return;
+    if (e.target instanceof HTMLButtonElement && e.target.matches('[data-share="true"]')) {
+      const shareButton = e.target;
+      const title = `${shareButton.dataset.title} | ${SITE_SEO.name.short}`;
+      const description = shareButton.dataset.description;
+      const shareData = {
+        title: title,
+        text: description ? `${title}\n\n${description}` : title,
+        url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.slug}/`
+      };
+      navigator.share(shareData).catch((error) => {
+        console.error('Error sharing:', error);
+      });
+    }
+  });
+
   // Global anchor click listener
   document.addEventListener("click", event => {
     if (event.target instanceof HTMLButtonElement && event.target.hasAttribute('data-anchor')) {
