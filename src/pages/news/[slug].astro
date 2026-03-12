@@ -22,7 +22,7 @@ const toAbsoluteUrl = (path: string) => {
 
 const articleUrl = siteOrigin ? new URL(Astro.url.pathname, siteOrigin).toString() : undefined;
 const articleImageUrl = post.data.image ? toAbsoluteUrl(post.data.image) : undefined;
-const publisherLogoUrl = toAbsoluteUrl('/images/logo.avif');
+const publisherLogoUrl = toAbsoluteUrl('/logo.png');
 
 const articleSchema = {
   "@context": "https://schema.org",
