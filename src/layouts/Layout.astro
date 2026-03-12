@@ -136,6 +136,10 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
         });
       });
     });
+    // Listen for dialog toggle events
+    dialog.addEventListener('toggle', () => {
+      document.body.classList.toggle('overflow-y-hidden', dialog.open);
+    });
   });
 
   // Share buttons in the main document
