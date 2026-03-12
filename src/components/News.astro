@@ -2,22 +2,14 @@
 import type { CollectionEntry } from "astro:content";
 import Button from "./Button.astro";
 import { BASE_URL, ROUTES } from "../config/site";
-import { Image } from "astro:assets";
 import ArticleMeta from "./articles/ArticleMeta.astro";
 
 const { posts } = Astro.props as {
   posts: CollectionEntry<"blog">[];
 };
 
-const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*');
-
-let optimizedImage: ImageMetadata | undefined;
-if (posts[0]?.data.image) {
-  const imagePath = posts[0].data.image.replace('/images/', '/src/assets/images/');
-  if (images[imagePath]) {
-    optimizedImage = (await images[imagePath]()).default;
-  }
-}
+const featuredPost = posts[0];
+const featuredImage = featuredPost?.data.image;
 ---
 {posts.length > 0 && (
   <section aria-labelledby="news-heading">
@@ -37,11 +29,11 @@ if (posts[0]?.data.image) {
     </div>
     <div class={`news${posts.length > 1 ? ' has-more' : ''}`}>
     {posts.map((post, index) => (
-      <article class={optimizedImage ? 'has-image' : ''}>
+      <article class={featuredImage ? 'has-image' : ''}>
         <div>
-          {index === 0 && optimizedImage && (
+          {index === 0 && featuredImage && (
           <figure>
-            <Image width={600} height={400} src={optimizedImage} alt={post.data.title} />
+            <img src={featuredImage} alt={post.data.title} loading="eager" />
           </figure>
           )}
           <ArticleMeta post={post} isStub={index !== 0} useShareButton={false}>

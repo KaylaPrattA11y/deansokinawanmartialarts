@@ -1,32 +1,21 @@
 ---
-import { Image } from "astro:assets";
 import { BASE_URL, ROUTES } from "../../config/site";
 import type { Post } from "../../types";
 import ArticleMeta from "./ArticleMeta.astro";
 import Button from "../Button.astro";
 
-const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*');
-
 const { post } = Astro.props as { post: Post };
-
-let optimizedImage;
-if (post.data.image) {
-  const imagePath = post.data.image.replace('/uploads/', '/src/assets/images/');
-  if (images[imagePath]) {
-    optimizedImage = (await images[imagePath]()).default;
-  }
-}
+const featuredImage = post.data.image;
 ---
 
-<article class={`post-card${post.data.image ? ' has-image' : ''}`}>
-  {optimizedImage && (
+<article class={`post-card${featuredImage ? ' has-image' : ''}`}>
+  {featuredImage && (
   <div class="post-card-image-wrapper">
-    <Image 
-      src={optimizedImage} 
+    <img 
+      src={featuredImage} 
       alt={post.data.title} 
       class="post-image"
-      widths={[300, 600, 900]}
-      sizes="(max-width: 900px) 50vw, 300px"
+      loading="eager"
     />
   </div>
   )}
