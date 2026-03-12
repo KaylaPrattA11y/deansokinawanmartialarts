@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import hohanSoken from '../../assets/images/hohan-soken.jpg';
+import logo from '../../assets/logo.svg';
+import patch from '../../assets/patch.svg';
 import Layout from '../../layouts/Layout.astro';
 import InteriorPage from "../../components/InteriorPage.astro";
 import { BASE_URL, ROUTES } from '../../config/site';
@@ -23,32 +24,80 @@ const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides train
       <span>Self-Control</span>
     </div>
     <div class="short-divider" aria-hidden="true"></div>
-    <div class="grid">
+    <div class="grid grid-intro">
       <section class="content" aria-labelledby="section-1-heading">
         <h2 id="section-1-heading">Dojo Philosophy and Credentials</h2>
-        <p>We are a traditional school that teaches the principles and traditions of these ancient arts.</p>
-        <p>Under the direction of <a href={BASE_URL + ROUTES.instructors + '#kyoshi-wayne-dean'}>Kyoshi Wayne Dean</a>, an 8th Dan, it strives to present the material in a way that each student will benefit both physically and mentally while stressing the principles of Character, Sincerity, Effort, Etiquette, and Self-Control.</p>
-        <div class="img-wrapper">
-          <Image 
-            src={hohanSoken}
-            alt="Hohan Soken"
-          />
-        </div>
-        <p>Each class is designed such that the student not only learns the basic techniques of the art, the Kata of the system and the applications the kata is stressing but also they are exposed to the rich history of Okinawa and the origins of these ancient arts.</p>
-        <p>In addition the students are taught a variety of self defense techniques centered on everyday situations that will enable the student to better prepare for unexpected encounters with an advisory.</p>
+        <p>We are a traditional martial arts school dedicated to preserving the principles and traditions of these ancient arts. Under the direction of <a href={BASE_URL + ROUTES.instructors + '#kyoshi-wayne-dean'}>Kyoshi Wayne Dean</a>, 8th Dan, we emphasize character, sincerity, effort, etiquette, and self-control — developing each student physically and mentally.</p>
+        <p>Each class covers the fundamental techniques, kata, and their practical applications alongside the rich history of Okinawa and the origins of these arts. Students also learn self-defense techniques drawn from everyday situations, preparing them to respond confidently to unexpected encounters.</p>
       </section>
       <section class="content" aria-labelledby="section-2-heading">
         <h2 id="section-2-heading">Family-Oriented Classes</h2>
-        <p>The Dojo offers children’s and adult classes in a friendly family-oriented atmosphere and parents are encouraged to participate and observe how their child is being trained.</p> 
-        <p>Kyoshi Wayne Dean is a 8th Dan and has been studying Shorin Ryu Matsumura Orthodox Karate since 1971. His original and current instructor both were students of Master Hohan Soken while stationed in Okinawa.</p> 
-        <p>He holds a teaching license and Dojo charter license issued by the Okinawa Konanryu Kohokan Karate-Kobudo-Hakutsuru Kyokai Association. Since September 2002 he has operated his own Karate Dojo located in Southern Maryland offering both children and adult classes in Karate, Kobudo, and Self Defense. </p>
+        <p>The dojo offers children's and adult classes in a welcoming, family-oriented atmosphere, and parents are encouraged to observe and participate in their child's training.</p> 
+        <p>Kyoshi Wayne Dean holds an 8th Dan and has studied Shorin Ryu Matsumura Orthodox Karate since 1971. Both his original and current instructors trained under Master Hohan Soken while stationed in Okinawa. He holds a teaching license and dojo charter issued by the Okinawa Konanryu Kohokan Karate-Kobudo-Hakutsuru Kyokai Association, and has operated his Southern Maryland dojo since September 2002, offering classes in Karate, Kobudo, and Self-Defense for children and adults.</p>
+        <div class="cta">
+          <Button variant="primary" href={BASE_URL + ROUTES.instructors}>
+            Meet our Instructors
+          </Button>
+          <Button variant="secondary" href={BASE_URL + "#classes"}>
+            See Class Schedule
+          </Button>
+        </div>
       </section>
     </div>
-    <div class="cta">
-      <Button variant="primary" href={BASE_URL + ROUTES.instructors}>
-        Meet our Instructors
-      </Button>
-    </div>
+    <div class="short-divider"></div>
+    <section aria-labelledby="symbology-heading">
+      <h2 class="symbology-heading" id="symbology-heading">Symbology and Definitions</h2>
+      <div class="grid grid-defs">
+        <figure>
+          <div>
+            <Image 
+              src={logo} 
+              alt="Dojo seal" 
+              loading="lazy" 
+            />
+            <figcaption>
+              <h3>Dojo seal</h3>
+              <div class="credit">Graphic credit: Katharina Fleming</div>
+              <dl>
+                <dt>Red Octagon</dt>
+                <dd>Represent the kanji for "rice", which has eight points. We use this eight-point pattern to align ourselves in kata training.</dd>
+                <dt>White Crane (right)</dt>
+                <dd>Identifies the style taught in this dojo.</dd>
+                <dt>Sai (bottom)</dt>
+                <dd>This dojo offers a modest amount of kobudo (weapons) training.</dd>
+                <dt>Black three-point swirl (left)</dt>
+                <dd>Represents the Ryukyu Islands of Okinawa, symbolizing the connection to the origins of these ancient arts.</dd>
+                <dt>Black triangle with kanji 武道 (center)</dt>
+                <dd>Means "Martial Arts".</dd>
+              </dl>
+            </figcaption>
+          </div>
+        </figure>
+        <figure>
+          <div>
+            <Image 
+              src={patch} 
+              alt="Dojo patch" 
+              loading="lazy" 
+            />
+            <figcaption>
+              <h3>Dojo patch</h3>
+              <div class="credit">Graphic credit: Katharina Fleming</div>
+              <dl>
+                <dt>Shorinryu Matsumura Seito</dt>
+                <dd>A traditional Okinawan karate style originating from the techniques of Bushi Matsumura Sokon (1798-1890), preserved and formalized by Hohan Soken.</dd>
+                <dt>Historic temple (top)</dt>
+                <dd>The last remaining historic temple associated with this style.</dd>
+                <dt>White Crane (bottom)</dt>
+                <dd>Identifies the style taught in this dojo.</dd>
+                <dt>Kanji 空手 (left and right)</dt>
+                <dd>Means "empty hand", referring to the style of martial arts practiced in this dojo.</dd>
+              </dl>
+            </figcaption>
+          </div>
+        </figure>
+      </div>
+    </section>
   </InteriorPage>
 </Layout>
 
@@ -61,7 +110,7 @@ const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides train
       flex-wrap: wrap;
       margin-block-end: 2rem;
     }
-    .tenets span {
+    .tenets span, .credit {
       font-family: var(--ff-body);
       font-style: italic;
       font-size: 0.9rem;
@@ -73,9 +122,11 @@ const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides train
     }
     .grid {
       display: grid;
-      gap: 2rem;
+      gap: 3rem 2rem;
+    }
+    .grid-intro {
       @container (width >= 900px) {
-        grid-template-columns: 1.5fr 1fr;
+        grid-template-columns: 1fr 1.5fr;
       }
     }
     .img-wrapper {
@@ -91,8 +142,13 @@ const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides train
     }
     .cta {
       margin-block-start: 2rem;
-      display: grid;
-      justify-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .symbology-heading {
+      text-align: center;
     }
     .content :global(> p:first-of-type::first-letter) {
       font-family: var(--ff-heading);
@@ -127,6 +183,37 @@ const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides train
     .content :global(a:link, a:visited) {
       color: var(--paper);
       text-decoration-color: var(--bright-red);
+    }
+    figure {
+      container: figure / inline-size;
+      margin: 0;
+      display: grid;
+      align-content: start;
+    }
+    figure > div {
+      display: grid;
+      gap: 1rem;
+      @container (width >= 600px) {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    figure img {
+      max-block-size: 500px;
+      block-size: 100%;
+      inline-size: 100%;
+      margin-inline: auto;
+      text-align: center;
+    }
+    dt {
+      font-family: var(--ff-heading);
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      color: var(--glow-red);
+      text-transform: uppercase;
+      margin-block: 1em 0.5em;
+    }
+    dd {
+      margin-inline-start: 1em;
     }
   }
 </style>
