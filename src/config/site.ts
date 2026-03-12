@@ -22,7 +22,7 @@ export const SITE_SEO = {
 export const SITE_SCHEMA = {
   type: "SportsActivityLocation",
   name: SITE_SEO.name.short,
-  imagePath: "/images/logo.avif",
+  imagePath: "/logo.png",
   address: {
     locality: "Hollywood",
     region: "MD",
