@@ -19,4 +19,12 @@ export default defineConfig({
   ],
   output: 'static',
   trailingSlash: 'always',
+  vite: {
+    server: {
+      watch: {
+        usePolling: true,
+        interval: 100
+      }
+    }
+  }
 });
