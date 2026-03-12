@@ -32,7 +32,15 @@ if (post.data.image) {
   )}
   <div class="post-content">
     <ArticleMeta {post} isStub={true} useShareButton={false} />
-    <Button variant="secondary" href={`${BASE_URL}${ROUTES.news}${post.slug}/`}>Read More</Button>
+    <div class="post-footer">
+      <Button 
+        width="full" 
+        variant="secondary" 
+        href={`${BASE_URL}${ROUTES.news}${post.slug}/`}
+      >
+        Read More
+      </Button>
+    </div>
   </div>
 </article>
 
@@ -40,11 +48,14 @@ if (post.data.image) {
   @layer components {
     .post-card.has-image {
       display: grid;
+      align-content: start;
+      grid-template-rows: auto 1fr;
       @container (width > 600px) and (width < 900px) {
         grid-template-columns: 0.5fr 1fr;
       }
     }
     .post-card-image-wrapper {
+      overflow: hidden;
       aspect-ratio: 16 / 9;
       @container (width > 600px) and (width < 900px) {
         aspect-ratio: 3 / 4;
@@ -62,6 +73,9 @@ if (post.data.image) {
       align-content: space-between;
       block-size: 100%;
       box-sizing: border-box;
+    }
+    .post-footer {
+      align-self: end;
     }
     .read-more {
       font-family: var(--ff-heading);
