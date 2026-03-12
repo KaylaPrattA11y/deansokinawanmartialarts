@@ -106,13 +106,14 @@ const validImages = images.filter(img =>
   </div>
   <dialog id="gallery-dialog">
     <div class="media-wrapper">
-      <Icon name="spinner" size="56px" color="var(--ash)" />
       <div class="video-wrapper d-none">
+        <Icon name="spinner" size="56px" color="var(--ash)" />
         <div class="iframe-wrapper">
           <iframe class="v-hidden" title="Embedded Content" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" />
         </div>
       </div>
       <div class="photo-wrapper d-none">
+        <Icon name="spinner" size="56px" color="var(--ash)" />
         <img src="" alt="" class="v-hidden" />
       </div>
       <div class="figcaption v-hidden">
@@ -337,10 +338,10 @@ const validImages = images.filter(img =>
       align-items: center;
       justify-content: center;
     }
-    dialog .media-wrapper > svg {
+    dialog :is(.photo-wrapper, .video-wrapper) >  svg {
       position: absolute;
-      inset: 25% auto auto 50%;
-      translate: -25% -50%;
+      inset: 50% auto auto 50%;
+      translate: -50% -50%;
       z-index: 0;
     }
     dialog img {
