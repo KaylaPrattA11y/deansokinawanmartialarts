@@ -2,9 +2,7 @@
 import Cards from "./cards/Cards.astro";
 import Card from "./cards/Card.astro";
 import Button from "./Button.astro";
-import { CLASSES } from '../config/site';
-
-const [youthClass, adultClass, cprClass] = CLASSES;
+import { YOUTH_CLASS, ADULT_CLASS, CPR_CLASS } from '../constants';
 ---
 
 <section class="classes" id="classes">
@@ -16,47 +14,47 @@ const [youthClass, adultClass, cprClass] = CLASSES;
     <Cards>
       <Card kanji="子">
         <div class="class-entry">
-          <div class="class-age">{youthClass.ages}</div>
-          <h3 class="class-name">{youthClass.name}</h3>
+          <div class="class-age">{YOUTH_CLASS.ages}</div>
+          <h3 class="class-name">{YOUTH_CLASS.name}</h3>
           <p class="class-desc">
-            {youthClass.description}
+            {YOUTH_CLASS.description}
           </p>
-          <div class="class-schedule">{youthClass.schedule?.days} · {youthClass.schedule?.time}</div>
+          <div class="class-schedule">{YOUTH_CLASS.schedule}</div>
           <Button 
             type="button"
-            data-interest={youthClass.name}
+            data-interest={YOUTH_CLASS.name}
             data-anchor="contact-form"
           >
-            Join {youthClass.name}
+            Join {YOUTH_CLASS.name}
           </Button>
         </div>
       </Card>
       <Card kanji="武">
         <div class="class-entry">
-          <div class="class-age">{adultClass.ages}</div>
-          <h3 class="class-name">{adultClass.name}</h3>
-          <p class="class-desc">{adultClass.description}</p>
-          <div class="class-schedule">{adultClass.schedule?.days} · {adultClass.schedule?.time}</div>
+          <div class="class-age">{ADULT_CLASS.ages}</div>
+          <h3 class="class-name">{ADULT_CLASS.name}</h3>
+          <p class="class-desc">{ADULT_CLASS.description}</p>
+          <div class="class-schedule">{ADULT_CLASS.schedule}</div>
           <Button 
             type="button"
-            data-interest={adultClass.name}
+            data-interest={ADULT_CLASS.name}
             data-anchor="contact-form"
           >
-            Join {adultClass.name}
+            Join {ADULT_CLASS.name}
           </Button>
         </div>
       </Card>
       <Card kanji="道">
         <div class="class-entry">
           <div class="class-age">Certified Instruction</div>
-          <h3 class="class-name">{cprClass.name}</h3>
-          <p class="class-desc">{cprClass.description}</p>
+          <h3 class="class-name">{CPR_CLASS.name}</h3>
+          <p class="class-desc">{CPR_CLASS.description}</p>
           <Button 
             type="button"
-            data-interest="CPR Training"
+            data-interest={CPR_CLASS.name}
             data-anchor="contact-form"
           >
-            Schedule {cprClass.name}
+            Schedule {CPR_CLASS.name}
           </Button>
         </div>
       </Card>

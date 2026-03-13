@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { CLASSES } from '../config/site';
+import { CLASSES, YOUTH_CLASS, ADULT_CLASS } from '../constants';
+import CalendarAddKarateClass from './CalendarAddKarateClass.astro';
 ---
 
 <form 
@@ -36,12 +37,18 @@ import { CLASSES } from '../config/site';
         <label for="interest">Interest (optional)</label>
         <select id="interest" name="interest">
           <option value="">Select an option...</option>
-          {CLASSES.map(cls => <option value={cls.name}>{cls.name}</option>)}
+          {CLASSES.map((cls: any) => <option value={cls.name}>{cls.name}</option>)}
           <option value="Other">Other</option>
         </select>
       </div>
       <div id="class-schedule" class="d-none">
-        <strong>Schedule:</strong> <span></span>
+        <div><strong>Next Class:</strong></div>
+        <div id="calendar-add-youth" class="d-none">
+          <CalendarAddKarateClass karateClass={YOUTH_CLASS} />
+        </div>
+        <div id="calendar-add-adult" class="d-none">
+          <CalendarAddKarateClass karateClass={ADULT_CLASS} />
+        </div>
       </div>
       <fieldset class="field d-none" id="frequency" disabled>
         <legend>Frequency (optional)</legend>
@@ -72,6 +79,8 @@ import { CLASSES } from '../config/site';
   const form = document.forms.namedItem('contact-form');
   const interestSelect = document.getElementById('interest');
   const classSchedule = document.getElementById('class-schedule');
+  const calendarAddYouth = document.getElementById('calendar-add-youth');
+  const calendarAddAdult = document.getElementById('calendar-add-adult');
   const fieldset = form?.querySelector('fieldset');
   const frequencyFieldset = document.getElementById('frequency');
   const successMessage = form?.querySelector('.success-message');
@@ -90,14 +99,12 @@ import { CLASSES } from '../config/site';
     const value = interestSelect?.value;
     
     if (value && ['Youth Karate', 'Adult Karate'].includes(value)) {
-      const selectedClass = CLASSES.find(cls => cls.name === value);
-      
       frequencyFieldset.disabled = false;
       frequencyFieldset.classList.remove('d-none');
       classSchedule.classList.remove('d-none');
-      if (selectedClass && selectedClass.schedule) {
-        classSchedule.querySelector('span').textContent = `${selectedClass.schedule.days} · ${selectedClass.schedule.time}`;
-      }
+      calendarAddYouth.classList.toggle('d-none', value !== 'Youth Karate');
+      calendarAddAdult.classList.toggle('d-none', value !== 'Adult Karate');
+
     } else {  
       frequencyFieldset.disabled = true;
       frequencyFieldset.classList.add('d-none');

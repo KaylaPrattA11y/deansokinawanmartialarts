@@ -3,14 +3,15 @@ import type { GetStaticPaths } from "astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import InteriorPage from "../../components/InteriorPage.astro";
-import { GALLERY_PAGE_SIZE } from "../../config/site";
+import { GALLERY_PAGE_SIZE } from "../../constants";
 import Pagination from "../../components/articles/Pagination.astro";
 import PhotoGallery from "../../components/PhotoGallery.astro";
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   const photoGallery = await getCollection("gallery");
   const sortedImages = photoGallery.sort(
-    (a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+    (a: CollectionEntry<"gallery">, b: CollectionEntry<"gallery">) =>
+      new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
   );
 
   return paginate(sortedImages, { pageSize: GALLERY_PAGE_SIZE });

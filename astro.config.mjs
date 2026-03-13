@@ -5,6 +5,8 @@ import icon from 'astro-icon';
 
 import sitemap from '@astrojs/sitemap';
 
+import react from '@astrojs/react';
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://deansokinawanmartialarts.netlify.app",
@@ -12,7 +14,8 @@ export default defineConfig({
     icon(), 
     sitemap({
       filter: page => page !== "https://deansokinawanmartialarts.netlify.app/admin/",
-    })
+    }), 
+    react()
   ],
   output: 'static',
   trailingSlash: 'always',

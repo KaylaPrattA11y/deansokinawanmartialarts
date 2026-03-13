@@ -1,0 +1,19 @@
+---
+import CalendarAddButton from './CalendarAddButton';
+
+const { karateClass } = Astro.props;
+---
+
+<CalendarAddButton client:only="react"
+  name={`${karateClass.name} - Dean's Okinawan Martial Arts`}
+  recurrence="weekly"
+  recurrence_interval="1"
+  recurrence_byDay={karateClass.recurrence_byDay}
+  startDate={karateClass?.startDate}
+  startTime={karateClass.startTime}
+  endTime={karateClass.endTime}
+  location="Deans Okinawan Martial Arts, 23725 Three Notch Rd, Hollywood, MD 20636"
+  data-category="Karate Class"
+  data-utm-campaign="class_schedule"
+  buttonStyle="date"
+/>

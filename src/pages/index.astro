@@ -6,10 +6,10 @@ import News from '../components/News.astro';
 import Dojo from '../components/Dojo.astro';
 import Classes from '../components/Classes.astro';
 import Trial from '../components/Trial.astro';
-import { HOME_NEWS_PAGE_SIZE } from '../config/site';
+import { HOME_NEWS_PAGE_SIZE } from '../constants';
 
 const posts = (await getCollection("blog"))
-  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
+  .sort((a: { data: { pubDate: string } }, b: { data: { pubDate: string } }) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
   .slice(0, HOME_NEWS_PAGE_SIZE);
 ---
 
