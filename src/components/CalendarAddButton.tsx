@@ -8,6 +8,8 @@ export default function CalendarAddButton(props: AddToCalendarButtonType) {
       {...props}
       timeZone="America/New_York"
       options={['Apple', 'Google', 'iCal']}
+      hideBranding={true}
+      lightMode="dark"
       data-utm-source="https://deansokinawanmartialarts.netlify.app/"
       data-utm-medium="website"
     ></AddToCalendarButton>
