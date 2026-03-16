@@ -19,6 +19,5 @@ export default defineConfig([
     languageOptions: { globals: globals.browser },
   },
   // Astro files - use Astro-specific linting
-  ...pluginAstro.configs.recommended,
-  ...pluginAstro.configs["jsx-a11y-recommended"],
+  ...pluginAstro.configs.recommended
 ]);

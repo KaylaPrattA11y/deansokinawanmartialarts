@@ -123,6 +123,19 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
 </html>
 
 <script is:inline define:vars={{BASE_URL, ROUTES, SITE_SEO}}>
+  function closeDropdownMenus() {
+    const expandedDropdowns = document.querySelectorAll('[data-component="dropdown"].is-expanded');
+      
+    expandedDropdowns.forEach(dropdown => {
+      const toggleButton = document.querySelector(`[aria-controls="${dropdown.id}"]`);
+
+      dropdown.classList.remove('is-expanded');
+      if (toggleButton) {
+        toggleButton.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
   // Check every dialog for share buttons
   const dialogs = document.querySelectorAll('dialog');
   
@@ -159,31 +172,45 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
     shareButton.classList.toggle('d-none', !navigator.share);
   });
 
-  document.addEventListener('click', (e) => {
-    if (!navigator.share) return;
-    if (e.target instanceof HTMLButtonElement && e.target.matches('[data-share="true"]')) {
-      const shareButton = e.target;
-      const title = `${shareButton.dataset.title} | ${SITE_SEO.name.short}`;
-      const description = shareButton.dataset.description;
-      const shareData = {
-        title: title,
-        text: description ? `${title}\n\n${description}` : title,
-        url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.slug}/`
-      };
-      navigator.share(shareData).catch((error) => {
-        console.error('Error sharing:', error);
-      });
+  document.addEventListener('click', event => {
+    // Handle share button clicks
+    if (navigator.share) {
+      if (event.target instanceof HTMLButtonElement && event.target.matches('[data-share="true"]')) {
+        const shareButton = event.target;
+        const title = `${shareButton.dataset.title} | ${SITE_SEO.name.short}`;
+        const description = shareButton.dataset.description;
+        const shareData = {
+          title: title,
+          text: description ? `${title}\n\n${description}` : title,
+          url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.slug}/`
+        };
+        
+        navigator.share(shareData).catch((error) => {
+          console.error('Error sharing:', error);
+        });
+      }
     }
-  });
-
-  // Global anchor click listener
-  document.addEventListener("click", event => {
+    // Handle anchor link clicks for smooth scrolling
     if (event.target instanceof HTMLButtonElement && event.target.hasAttribute('data-anchor')) {
       const anchor = event.target.getAttribute('data-anchor');
       const targetElement = document.getElementById(anchor || '');
       if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth' });
       }
+    }
+    // Handle clicks outside of a dropdown menu
+    if (
+      event.target instanceof HTMLElement 
+      && !event.target.closest('[data-component="dropdown"].is-expanded') 
+      && !event.target.matches('[data-component="dropdown"].is-expanded *')
+      && !event.target.closest('[data-toggle="calendar-dropdown"]')
+    ) {
+      closeDropdownMenus();
+    }
+  });
+  document.addEventListener('keyup', event => {
+    if (event.key === 'Escape') {
+      closeDropdownMenus();
     }
   });
 </script>

@@ -29,7 +29,7 @@ A static website for Dean's Okinawan Karate (Shorin-Ryu Matsumura Seito) dojo in
 | Layer | Technology |
 |---|---|
 | Framework | [Astro](https://astro.build/) (static output) |
-| UI | Astro components + [React](https://react.dev/) (islands) |
+| UI | Astro components (islands) |
 | CMS | [TinaCMS](https://tina.io/) (self-hosted, AuthJS auth) |
 | Styling | SCSS (via `sass-embedded`) |
 | Icons | [astro-icon](https://github.com/natemoo-re/astro-icon) + [Iconify](https://icon-sets.iconify.design/) |

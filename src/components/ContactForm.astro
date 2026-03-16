@@ -1,6 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { CLASSES, YOUTH_CLASS, ADULT_CLASS } from '../constants';
+import { YOUTH_CLASS, ADULT_CLASS } from '../constants';
 import CalendarAddKarateClass from './CalendarAddKarateClass.astro';
 ---
 
@@ -37,17 +37,17 @@ import CalendarAddKarateClass from './CalendarAddKarateClass.astro';
         <label for="interest">Interest (optional)</label>
         <select id="interest" name="interest">
           <option value="">Select an option...</option>
-          {CLASSES.map((cls: any) => <option value={cls.name}>{cls.name}</option>)}
+          <option value={YOUTH_CLASS.name}>{YOUTH_CLASS.name}</option>
+          <option value={ADULT_CLASS.name}>{ADULT_CLASS.name}</option>
           <option value="Other">Other</option>
         </select>
       </div>
       <div id="class-schedule" class="d-none">
-        <div><strong>Next Class:</strong></div>
         <div id="calendar-add-youth" class="d-none">
-          <CalendarAddKarateClass karateClass={YOUTH_CLASS} />
+          <CalendarAddKarateClass id="yc-contact" karateClass={YOUTH_CLASS} />
         </div>
         <div id="calendar-add-adult" class="d-none">
-          <CalendarAddKarateClass karateClass={ADULT_CLASS} />
+          <CalendarAddKarateClass id="ac-contact" karateClass={ADULT_CLASS} />
         </div>
       </div>
       <fieldset class="field d-none" id="frequency" disabled>
@@ -75,19 +75,19 @@ import CalendarAddKarateClass from './CalendarAddKarateClass.astro';
   <p class="privacy"><small>We respect your privacy. Your information will never be shared.</small></p>
 </form>
 
-<script is:inline define:vars={{ CLASSES }}>
-  const form = document.forms.namedItem('contact-form');
-  const interestSelect = document.getElementById('interest');
-  const classSchedule = document.getElementById('class-schedule');
-  const calendarAddYouth = document.getElementById('calendar-add-youth');
-  const calendarAddAdult = document.getElementById('calendar-add-adult');
-  const fieldset = form?.querySelector('fieldset');
-  const frequencyFieldset = document.getElementById('frequency');
-  const successMessage = form?.querySelector('.success-message');
-  const submitButton = form?.querySelector('button[type="submit"]');
+<script>
+  const form = document.forms.namedItem('contact-form') as HTMLFormElement;
+  const interestSelect = document.getElementById('interest') as HTMLSelectElement;
+  const classSchedule = document.getElementById('class-schedule') as HTMLDivElement;
+  const calendarAddYouth = document.getElementById('calendar-add-youth') as HTMLDivElement;
+  const calendarAddAdult = document.getElementById('calendar-add-adult') as HTMLDivElement;
+  const fieldset = form?.querySelector('fieldset') as HTMLFieldSetElement;
+  const frequencyFieldset = document.getElementById('frequency') as HTMLFieldSetElement;
+  const successMessage = form?.querySelector('.success-message') as HTMLDivElement;
+  const submitButton = form?.querySelector('button[type="submit"]') as HTMLButtonElement;
   const SCROLL_OFFSET = 110;
 
-  const scrollToWithOffset = (target) => {
+  const scrollToWithOffset = (target: HTMLElement) => {
     const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET);
     window.scrollTo({
       top,
@@ -182,7 +182,6 @@ import CalendarAddKarateClass from './CalendarAddKarateClass.astro';
       padding: 0;
       border: 0;
       display: block;
-      overflow: hidden;
     }
     h2 {
       font-family: var(--ff-heading);
@@ -203,8 +202,9 @@ import CalendarAddKarateClass from './CalendarAddKarateClass.astro';
     .success-message p {
       margin: 0;
       color: #a8e6a3;
-      display: flex;
+      display: grid;
       gap: 0.25rem;
+      grid-template-columns: min-content auto;
     }
     .privacy {
       text-align: center;

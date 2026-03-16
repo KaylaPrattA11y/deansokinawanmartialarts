@@ -3,6 +3,7 @@ import Cards from "./cards/Cards.astro";
 import Card from "./cards/Card.astro";
 import Button from "./Button.astro";
 import { YOUTH_CLASS, ADULT_CLASS, CPR_CLASS } from '../constants';
+import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
 ---
 
 <section class="classes" id="classes">
@@ -14,12 +15,12 @@ import { YOUTH_CLASS, ADULT_CLASS, CPR_CLASS } from '../constants';
     <Cards>
       <Card kanji="子">
         <div class="class-entry">
-          <div class="class-age">{YOUTH_CLASS.ages}</div>
-          <h3 class="class-name">{YOUTH_CLASS.name}</h3>
+          <div class="class-age">Ages {YOUTH_CLASS.ages}</div>
+          <h3 class="class-name visually-hidden">{YOUTH_CLASS.name}</h3>
+          <CalendarAddKarateClass id="yc-classes" karateClass={YOUTH_CLASS} />
           <p class="class-desc">
             {YOUTH_CLASS.description}
           </p>
-          <div class="class-schedule">{YOUTH_CLASS.schedule}</div>
           <Button 
             type="button"
             data-interest={YOUTH_CLASS.name}
@@ -31,12 +32,12 @@ import { YOUTH_CLASS, ADULT_CLASS, CPR_CLASS } from '../constants';
       </Card>
       <Card kanji="武">
         <div class="class-entry">
-          <div class="class-age">{ADULT_CLASS.ages}</div>
-          <h3 class="class-name">{ADULT_CLASS.name}</h3>
+          <div class="class-age">Ages {ADULT_CLASS.ages}</div>
+          <h3 class="class-name visually-hidden">{ADULT_CLASS.name}</h3>
+          <CalendarAddKarateClass id="ac-classes" karateClass={ADULT_CLASS} />
           <p class="class-desc">{ADULT_CLASS.description}</p>
-          <div class="class-schedule">{ADULT_CLASS.schedule}</div>
           <Button 
-            type="button"
+            type="button" 
             data-interest={ADULT_CLASS.name}
             data-anchor="contact-form"
           >

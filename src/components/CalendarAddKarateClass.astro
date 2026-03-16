@@ -1,19 +1,423 @@
 ---
-import CalendarAddButton from './CalendarAddButton';
+import { Icon } from 'astro-icon/components';
+import { type IKarateClass } from '../constants';
 
-const { karateClass } = Astro.props;
+interface IKarateClassProps {
+  karateClass: IKarateClass;
+  id: string; // unique ID for this instance (e.g. "youth-class-1")
+}
+
+const { karateClass, id } = Astro.props as IKarateClassProps;
+
+function formatMilitaryToStandard(militaryTime: string) {
+  // Assumes militaryTime is a string like "HH:mm" or "HH:mm:ss"
+  const [hours, minutes, seconds] = militaryTime.split(':');
+
+  const dateObj = new Date();
+  dateObj.setHours(Number(hours), Number(minutes), Number(seconds) || 0);
+
+  // Keep it short and simple, just the hour with AM/PM
+  const formattedTime = dateObj.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    hour12: true
+  });
+
+  return formattedTime;
+}
+
+function getRelativeStartAndEndDate(cls: IKarateClass) {
+  const dayNumberToOffset = (targetDay: number, fromDay: number) =>
+    (targetDay - fromDay + 7) % 7 || 7; // || 7 ensures we never get 0 (always look forward)
+
+  // Use today as the reference point, not startDate
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayDay = today.getDay();
+
+  // Find the nearest upcoming target day from today
+  const nearestOffset = cls.recurrence_byDay
+    .map((d) => dayNumberToOffset(d, todayDay))
+    .sort((a, b) => a - b)[0];
+
+  const anchorDate = new Date(today);
+  anchorDate.setDate(today.getDate() + nearestOffset);
+
+  const [startHour, startMin] = cls.startTime.split(":").map(Number);
+  const [endHour, endMin] = cls.endTime.split(":").map(Number);
+
+  const startDT = new Date(anchorDate);
+  startDT.setHours(startHour, startMin, 0, 0);
+
+  const endDT = new Date(anchorDate);
+  endDT.setHours(endHour, endMin, 0, 0);
+
+  return { startDT, endDT };
+}
+
+const { startDT, endDT } = getRelativeStartAndEndDate(karateClass);
+
+function generateGoogleCalendarLink(cls: IKarateClass): string {
+  const dayNumberToRRule: Record<number, string> = {
+    0: "SU", 1: "MO", 2: "TU", 3: "WE", 4: "TH", 5: "FR", 6: "SA",
+  };
+
+  // Format as YYYYMMDDTHHmmss (floating/local time — no Z suffix)
+  const fmt = (d: Date): string =>
+    d.getFullYear().toString() +
+    String(d.getMonth() + 1).padStart(2, "0") +
+    String(d.getDate()).padStart(2, "0") +
+    "T" +
+    String(d.getHours()).padStart(2, "0") +
+    String(d.getMinutes()).padStart(2, "0") +
+    "00";
+
+  // Build RRULE from recurrence + recurrence_byDay
+  const byDay = cls.recurrence_byDay
+    .map((d) => dayNumberToRRule[d])
+    .join(",");
+  const rrule = `RRULE:FREQ=${cls.recurrence.toUpperCase()};BYDAY=${byDay}`;
+
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: `${cls.name} - Dean's Okinawan Martial Arts`,
+    details: cls.description,
+    location: cls.location,
+    dates: `${fmt(startDT)}/${fmt(endDT)}`,
+    recur: rrule,
+  });
+
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
+function generateICSContent(cls: IKarateClass): string {
+  const dayNumberToRRule: Record<number, string> = {
+    0: "SU", 1: "MO", 2: "TU", 3: "WE", 4: "TH", 5: "FR", 6: "SA",
+  };
+
+  const { startDT, endDT } = getRelativeStartAndEndDate(cls);
+
+  // Format as YYYYMMDDTHHmmss
+  const fmt = (d: Date): string =>
+    d.getFullYear().toString() +
+    String(d.getMonth() + 1).padStart(2, "0") +
+    String(d.getDate()).padStart(2, "0") +
+    "T" +
+    String(d.getHours()).padStart(2, "0") +
+    String(d.getMinutes()).padStart(2, "0") +
+    "00";
+
+  // Unique event ID
+  const uid = `${id}-${fmt(startDT)}@deans-okinawan-martial-arts`;
+
+  // Timestamp for when this ICS was generated (UTC)
+  const now = new Date();
+  const dtstamp =
+    now.getUTCFullYear().toString() +
+    String(now.getUTCMonth() + 1).padStart(2, "0") +
+    String(now.getUTCDate()).padStart(2, "0") +
+    "T" +
+    String(now.getUTCHours()).padStart(2, "0") +
+    String(now.getUTCMinutes()).padStart(2, "0") +
+    String(now.getUTCSeconds()).padStart(2, "0") +
+    "Z";
+
+  const byDay = cls.recurrence_byDay.map((d) => dayNumberToRRule[d]).join(",");
+
+  // Fold long lines at 75 chars per RFC 5545
+  const foldLine = (line: string): string => {
+    if (line.length <= 75) return line;
+    const chunks: string[] = [];
+    chunks.push(line.slice(0, 75));
+    let i = 75;
+    while (i < line.length) {
+      chunks.push(" " + line.slice(i, i + 74));
+      i += 74;
+    }
+    return chunks.join("\r\n");
+  };
+
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Deans Okinawan Martial Arts//EN",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "BEGIN:VEVENT",
+    `UID:${uid}`,
+    `DTSTAMP:${dtstamp}`,
+    `DTSTART;TZID=${cls.timeZone}:${fmt(startDT)}`,
+    `DTEND;TZID=${cls.timeZone}:${fmt(endDT)}`,
+    `RRULE:FREQ=${cls.recurrence.toUpperCase()};BYDAY=${byDay}`,
+    `SUMMARY:${cls.name} - Dean's Okinawan Martial Arts`,
+    `DESCRIPTION:${cls.description.replace(/,/g, "\\,")}`,
+    `LOCATION:${cls.location.replace(/,/g, "\\,")}`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ];
+
+  return lines.map(foldLine).join("\r\n");
+}
+
 ---
 
-<CalendarAddButton client:only="react"
-  name={`${karateClass.name} - Dean's Okinawan Martial Arts`}
-  recurrence="weekly"
-  recurrence_interval="1"
-  recurrence_byDay={karateClass.recurrence_byDay}
-  startDate={karateClass?.startDate}
-  startTime={karateClass.startTime}
-  endTime={karateClass.endTime}
-  location="Deans Okinawan Martial Arts, 23725 Three Notch Rd, Hollywood, MD 20636"
-  data-category="Karate Class"
-  data-utm-campaign="class_schedule"
-  buttonStyle="date"
-/>
+<div 
+  class="calendar" 
+  data-component="CalendarAddKarateClass"
+  data-component="CalendarAddKarateClass"
+  data-ics-content={generateICSContent(karateClass)}
+  data-ics-name={karateClass.name}
+>
+  <div>
+    <div class="calendar--date">
+      <span class="calendar--date-next">Next class:</span>
+      <span class="calendar--date-day">{getRelativeStartAndEndDate(karateClass).startDT.getDate()}</span>
+      <span class="calendar--date-month">{getRelativeStartAndEndDate(karateClass).startDT.toLocaleString('default', { month: 'short' })}</span>
+    </div>
+    <div class="calendar--event-details">
+      <div class="calendar--event-title"><span>{karateClass.name}</span></div>
+      <div class="calendar--event-location"><Icon name="location" size={16} /> <span>{karateClass.location}</span></div>
+      <div class="calendar--recurrence">
+        <Icon name="calendar-week" size={14} /> <span>{karateClass.recurrence}: {karateClass.schedule}</span>
+      </div>
+      <div class="calendar--event-time">
+        <Icon name="clock" size={14} /> <span>{formatMilitaryToStandard(karateClass.startTime)} - {formatMilitaryToStandard(karateClass.endTime)}</span>
+      </div>
+    </div>
+    <div class="calendar--controls">
+      <button 
+        type="button" 
+        aria-label={`Add ${karateClass.name} to calendar`} 
+        title={`Add ${karateClass.name} to calendar`} 
+        class="calendar--add"
+        data-toggle="calendar-dropdown"
+        aria-expanded="false"
+        aria-controls={`calendarDropdownMenu-${id}`}
+        id={`calendarToggleDropdown-${id}`}
+      >
+        <Icon name="calendar-plus" color="var(--paper)" size={22} />
+      </button>
+      <div class="calendar--dropdown" role="menu" id={`calendarDropdownMenu-${id}`} data-component="dropdown">
+        <a 
+          href={generateGoogleCalendarLink({ ...karateClass })} 
+          target="_blank" 
+          class="calendar--dropdown-item" 
+          role="menuitem"
+        >
+          <Icon name="google-calendar" size={18} /> Add to Google Calendar
+        </a>
+        <button
+          type="button"
+          class="calendar--dropdown-item"
+          role="menuitem"
+          data-action="download-ics"
+          data-ics-id={id}
+        >
+          <Icon name="apple" size={18} /> Add to Apple Calendar
+        </button>
+        <button
+          type="button"
+          class="calendar--dropdown-item"
+          role="menuitem"
+          data-action="download-ics"
+          data-ics-id={id}
+        >
+          <Icon name="download" size={18} /> Download .ICS
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .calendar {
+    container: calendar / inline-size;
+  }
+  .calendar > div {
+    position: relative;
+    display: grid;
+    align-content: center;
+    line-height: 1.4;
+    @container (width >= 250px) {
+      grid-template-columns: minmax(100px, 0.25fr) 1fr;
+    }
+  }
+  .calendar--date {
+    display: grid;
+    place-content: center;
+    text-align: center;
+    text-align: center;
+    background-color: var(--deep-red);
+    font-family: var(--ff-heading);
+    padding: 0.5rem;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    line-height: 1;
+  }
+  .calendar--date-next {
+    font-weight: 300;
+    font-size: 0.8rem;
+  }
+  .calendar--date-day {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  .calendar--date-month {
+    text-transform: uppercase;
+    font-size: 1rem;
+  }
+  .calendar--event-details {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    block-size: 100%;
+    background-color: var(--stone);
+    padding: 0.5rem;
+    box-sizing: border-box;
+  }
+  .calendar--event-title {
+    font-family: var(--ff-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+    margin-block-end: 0.25em;
+  }
+  :where(.calendar--event-location, .calendar--event-time, .calendar--recurrence) {
+    color: var(--silver);
+    font-size: 0.95rem;
+  }
+  .calendar--controls {
+    position: absolute;
+    inset: 0;
+  }
+  .calendar--dropdown {
+    --anim-speed: 250ms;
+    inline-size: 100%;
+    display: none;
+    opacity: 0;
+    position: absolute;
+    z-index: 99;
+    background-color: var(--stone);
+    border-radius: 4px;
+    transition-duration: var(--anim-speed);
+    transition-property: display, opacity;
+    transition-behavior: allow-discrete;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid rgba(194,189,181,0.3);
+    border-inline-start: 0;
+  }
+  .calendar--dropdown [role="menuitem"] {
+    appearance: none;
+    margin: 0;
+    border: 0;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    font-family: var(--ff-heading);
+    font-size: 0.9rem;
+    color: var(--paper);
+    text-decoration: none;
+    border-inline-start: 3px solid var(--deep-red);
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .calendar--dropdown [role="menuitem"]:hover {
+    text-decoration: underline;
+  }
+  .calendar--dropdown [role="menuitem"]:not(:last-child) {
+    border-block-end: 1px solid rgba(194,189,181,0.3);
+  }
+  .calendar--dropdown.is-expanded {
+    display: grid;
+    opacity: 1;
+    @starting-style {
+      opacity: 0;
+    }
+  }
+  .calendar--add {
+    background: none;
+    appearance: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+  .calendar--add svg {
+    position: absolute;
+    inset: auto 2px 2px auto;
+    pointer-events: none;
+  }
+  .calendar--event-details > div:has(svg) {
+    display: grid;
+    gap: 0.1rem;
+    align-items: center;
+    grid-template-columns: 20px 1fr;
+  }
+  .calendar--event-details span {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const downloadButtons = document.querySelectorAll('[data-action="download-ics"]');
+    const toggleButtons = document.querySelectorAll(`button[data-toggle="calendar-dropdown"]`) as NodeListOf<HTMLButtonElement>;
+    const dropdownMenus = document.querySelectorAll(`div[data-component="dropdown"]`) as NodeListOf<HTMLDivElement>;
+
+    toggleButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const targetDropdown = button.getAttribute('aria-controls');
+        const dropdown = document.getElementById(targetDropdown || '') as HTMLDivElement;
+        
+        if (dropdown) {
+          const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+          button.setAttribute('aria-expanded', String(!isExpanded));
+          dropdown.classList.toggle('is-expanded', !isExpanded);
+        }
+      });
+    });
+
+    dropdownMenus.forEach(dropdown => {
+      dropdown.addEventListener('click', (e) => {
+        if (e.target instanceof HTMLAnchorElement) {
+          const toggleButton = document.querySelector(`[aria-controls="${dropdown.id}"]`) as HTMLButtonElement;
+          
+          if (toggleButton) {
+            toggleButton.setAttribute('aria-expanded', 'false');
+          }
+          dropdown.classList.remove('is-expanded');
+        }
+      });
+    });
+
+    downloadButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const card = button.closest('[data-component="CalendarAddKarateClass"]') as HTMLElement;
+        const icsContent = card.dataset.icsContent ?? '';
+        const icsName = card.dataset.icsName ?? 'event';
+
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${icsName}.ics`;
+        a.click();
+
+        URL.revokeObjectURL(url); // clean up
+      });
+    });
+
+  });
+</script>
