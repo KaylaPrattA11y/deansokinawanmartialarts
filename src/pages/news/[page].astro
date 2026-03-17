@@ -37,7 +37,7 @@ const pageDesc = "Dojo news, belt promotions, seminar announcements, and trainin
 ---
 
 
-<Layout title={pageTitle} description={pageDesc}>
+<Layout title={pageTitle} description={pageDesc} robots={{ noarchive: true }}>
   <InteriorPage heading={pageTitle}>
     <Cards>
       {posts.map((post) => (

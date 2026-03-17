@@ -13,10 +13,17 @@ interface Props {
   title?: string;
   description?: string;
   schema?: Record<string, unknown> | Array<Record<string, unknown>>;
+  robots?: {
+    index?: boolean;
+    follow?: boolean;
+    noarchive?: boolean;
+    nosnippet?: boolean;
+    maxSnippet?: number;
+  };
 }
 
 const ogImageUrl = `${Astro.site}og-image.jpg`;
-const { title, description = SITE_SEO.description, schema } = Astro.props;
+const { title, description = SITE_SEO.description, schema, robots } = Astro.props;
 const pageTitle = title ? `${title} | ${SITE_SEO.name.short}` : SITE_SEO.name.long;
 const siteOrigin = Astro.site?.toString();
 
@@ -91,11 +98,11 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
         description: description
       }}
       robots={{
-        index: false,
-        follow: true,
-        noarchive: true,
-        nosnippet: true,
-        maxSnippet: 150,
+        index: robots?.index ?? true, // If true, allows search engines to index this page (include it in search results).
+        follow: robots?.follow ?? true, // If true, tells search engines to follow links on this page and crawl them.
+        noarchive: robots?.noarchive ?? false, // If true, prevents search engines from showing a cached version of this page.
+        nosnippet: robots?.nosnippet ?? false, // If true, stops search engines from displaying a text snippet or preview from this page in search results.
+        maxSnippet: robots?.maxSnippet ?? 150, // Limits the maximum length of any snippet (if allowed) to 150 characters.
       }}
       additionalLinkTags={[
         { rel: "canonical", href: "#" },
