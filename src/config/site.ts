@@ -51,6 +51,7 @@ export const ROUTES = {
   admin: 'admin/',
   faqs: 'faqs/',
   gallery: 'gallery/',
+  dictionary: 'dictionary/',
 };
 
 export const FLAGS = {

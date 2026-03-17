@@ -10,14 +10,13 @@ const latestPhotos = await getCollection("gallery");
 
 const currentPath = Astro.url.pathname;
 let navItems = [
-  { label: 'About', href: BASE_URL + ROUTES.about, class: 'hide-for-sm hide-for-md' },
-	{ label: 'Classes', href: BASE_URL + '#classes', class: 'hide-for-sm hide-for-md' },
-	{ label: 'Free Trial', href: BASE_URL + '#trial', class: 'hide-for-sm hide-for-md' },
-	{ label: 'Instructors', href: BASE_URL + ROUTES.instructors, class: 'hide-for-sm hide-for-md' },
-  { label: 'Gallery', href: BASE_URL + ROUTES.gallery, class: 'hide-for-sm' },
-  { label: 'News', href: BASE_URL + ROUTES.news, class: 'hide-for-sm' },
-	{ label: 'FAQs', href: BASE_URL + ROUTES.faqs, class: 'hide-for-sm' },
-	{ label: 'Contact', href: '#contact-desktop', class: 'hide-for-sm' },
+  { label: 'About', href: BASE_URL + ROUTES.about, class: 'd-none d-md-block' },
+	{ label: 'Classes', href: BASE_URL + '#classes', class: 'd-none d-md-block' },
+	{ label: 'Free Trial', href: BASE_URL + '#trial', class: 'd-none d-sm-block' },
+	{ label: 'Instructors', href: BASE_URL + ROUTES.instructors, class: 'd-none d-lg-block' },
+  { label: 'Gallery', href: BASE_URL + ROUTES.gallery, class: 'd-none d-lg-block' },
+  { label: 'News', href: BASE_URL + ROUTES.news, class: 'd-none d-sm-block' },
+	{ label: 'FAQs', href: BASE_URL + ROUTES.faqs, class: 'd-none d-lg-block' },
 ];
 
 navItems = navItems.filter(item => {
@@ -37,10 +36,20 @@ navItems = navItems.filter(item => {
 			</a>
 		</div>
 		<nav aria-label="Site navigation" class="nav-large">
-			<a class="show-for-sm" aria-label="Contact" href="#contact-mobile"><Icon name="phone" size="24px" /></a>
+			{navItems.map(item => (
+			<a 
+				href={item.href}
+				aria-current={currentPath.startsWith(item.href) ? 'page' : undefined}
+				class={item.class}
+				>
+				{item.label}
+			</a>
+			))}
+			<a class="d-md-none" aria-label="Contact" href="#contact-mobile"><Icon name="phone" size="24px" /></a>
+			<a class="d-none d-md-block" aria-label="Contact" href="#contact-desktop"><Icon name="phone" size="24px" /></a>
 			<button 
 				type="button" 
-				class="show-for-sm" 
+				class="d-lg-none" 
 				aria-label="Toggle main menu" 
 				aria-haspopup="dialog"
 				aria-controls="sm-nav"
@@ -48,15 +57,6 @@ navItems = navItems.filter(item => {
 			>
 				<Icon name="menu" size="28px" />
 			</button>
-			{navItems.map(item => (
-			<a 
-				href={item.href}
-				aria-current={currentPath.startsWith(item.href) ? 'page' : undefined}
-				class={item.class}
-			>
-				{item.label}
-			</a>
-			))}
 		</nav>
 	</div>
 </header>

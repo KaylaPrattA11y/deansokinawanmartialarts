@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import InteriorPage from "../../components/InteriorPage.astro";
+import { DEFINITIONS } from '../../constants.ts';
+
+const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides training in both Shorin Ryu Matsumura Seito and Kobudo.";
+---
+
+<Layout title="Dictionary" description={pageDesc}>
+	<InteriorPage 
+    heading={`Dictionary`} 
+  >
+    <dl>
+      {Object.entries(DEFINITIONS).map(([term, definition]) => (
+        <>
+          <dt id={term.toLowerCase().replace(/\s+/g, '-')}>{term}</dt>
+          <dd set:html={definition}></dd>
+        </>
+      ))}
+    </dl>
+  </InteriorPage>
+</Layout>

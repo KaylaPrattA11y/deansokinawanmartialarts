@@ -117,40 +117,58 @@
     outline-offset: 2px;
     z-index: 1000;
   }
+  dt {
+    font-family: var(--ff-heading);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: var(--glow-red);
+    text-transform: uppercase;
+    margin-block: 1em 0.5em;
+  }
+  dd {
+    margin-inline-start: 1em;
+    max-inline-size: 80ch;
+    font-size: 1.1rem;
+  }
+  dd :where(a:link, a:visited) {
+    color: var(--paper);
+    text-decoration-color: var(--bright-red);
+  }
+  dd a:link:hover {
+    text-decoration: none;
+  }
 }
 @layer utilities {
-  .show-for-sm {
-    display: none;
-    @container (width < 600px) {
-      display: block;
-    }
+  // Display utilities for 600 (sm), 900 (md), 1200 (lg)
+  // Usage: .d-none, .d-sm-none, .d-md-none, .d-lg-none, .d-block, .d-sm-block, etc.
+  .d-none { display: none !important; }
+  .d-block { display: block !important; }
+  .d-inline { display: inline !important; }
+  .d-inline-block { display: inline-block !important; }
+
+  // Small (≥600px)
+  @media (min-width: 600px) {
+    .d-sm-none { display: none !important; }
+    .d-sm-block { display: block !important; }
+    .d-sm-inline { display: inline !important; }
+    .d-sm-inline-block { display: inline-block !important; }
   }
-  .show-for-md {
-    display: none;
-    @container (width < 900px) {
-      display: block;
-    }
+
+  // Medium (≥900px)
+  @media (min-width: 900px) {
+    .d-md-none { display: none !important; }
+    .d-md-block { display: block !important; }
+    .d-md-inline { display: inline !important; }
+    .d-md-inline-block { display: inline-block !important; }
   }
-  .show-for-lg {
-    display: none;
-    @container (width < 900px) {
-      display: block;
-    }
-  }
-  .hide-for-sm {
-    @container (width < 600px) {
-      display: none;
-    }
-  }
-  .hide-for-md {
-    @container (width < 900px) {
-      display: none;
-    }
-  }
-  .hide-for-lg {
-    @container (width < 1200px) {
-      display: none;
-    }
+
+  // Large (≥1200px)
+  @media (min-width: 1200px) {
+    .d-lg-none { display: none !important; }
+    .d-lg-block { display: block !important; }
+    .d-lg-inline { display: inline !important; }
+    .d-lg-inline-block { display: inline-block !important; }
   }
   .d-none {
     display: none;

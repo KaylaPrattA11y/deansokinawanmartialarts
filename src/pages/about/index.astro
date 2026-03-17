@@ -28,12 +28,12 @@ const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides train
       <section class="content" aria-labelledby="section-1-heading">
         <h2 id="section-1-heading">Dojo Philosophy and Credentials</h2>
         <p>We are a traditional martial arts school dedicated to preserving the principles and traditions of these ancient arts. Under the direction of <a href={BASE_URL + ROUTES.instructors + '#kyoshi-wayne-dean'}>Kyoshi Wayne Dean</a>, 8th Dan, we emphasize character, sincerity, effort, etiquette, and self-control — developing each student physically and mentally.</p>
-        <p>Each class covers the fundamental techniques, kata, and their practical applications alongside the rich history of Okinawa and the origins of these arts. Students also learn self-defense techniques drawn from everyday situations, preparing them to respond confidently to unexpected encounters.</p>
+        <p>Each class covers the fundamental techniques, <a href={BASE_URL + ROUTES.dictionary + '#kata'}>Kata</a>, and their practical applications alongside the rich history of Okinawa and the origins of these arts. Students also learn self-defense techniques drawn from everyday situations, preparing them to respond confidently to unexpected encounters.</p>
       </section>
       <section class="content" aria-labelledby="section-2-heading">
         <h2 id="section-2-heading">Family-Oriented Classes</h2>
         <p>The dojo offers children's and adult classes in a welcoming, family-oriented atmosphere, and parents are encouraged to observe and participate in their child's training.</p> 
-        <p>Kyoshi Wayne Dean holds an 8th Dan and has studied Shorin Ryu Matsumura Orthodox Karate since 1971. Both his original and current instructors trained under <a href=`${BASE_URL + ROUTES.news}hohan-soken-the-last-guardian-of-the-old-ways/`>Master Hohan Soken</a> while stationed in Okinawa. He holds a teaching license and dojo charter issued by the Okinawa Konanryu Kohokan Karate-Kobudo-Hakutsuru Kyokai Association, and has operated his Southern Maryland dojo since September 2002, offering classes in Karate, Kobudo, and Self-Defense for children and adults.</p>
+        <p>Kyoshi Wayne Dean holds an 8th Dan and has studied <a href={BASE_URL + ROUTES.dictionary + '#shorin-ryu-matsumura-seito'}>Shorin Ryu Matsumura Orthodox Karate</a> since 1971. Both his original and current instructors trained under <a href=`${BASE_URL + ROUTES.news}hohan-soken-the-last-guardian-of-the-old-ways/`>Master Hohan Soken</a> while stationed in Okinawa. He holds a teaching license and dojo charter issued by the Okinawa Konanryu Kohokan Karate-Kobudo-Hakutsuru Kyokai Association, and has operated his Southern Maryland dojo since September 2002, offering classes in Karate, <a href={BASE_URL + ROUTES.dictionary + '#kobudo'}>Kobudo</a>, and Self-Defense for children and adults.</p>
         <div class="cta">
           <Button variant="primary" href={BASE_URL + ROUTES.instructors}>
             Meet our Instructors
@@ -46,7 +46,7 @@ const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides train
     </div>
     <div class="short-divider"></div>
     <section aria-labelledby="symbology-heading">
-      <h2 class="symbology-heading" id="symbology-heading">Symbology and Definitions</h2>
+      <h2 class="symbology-heading" id="symbology-heading">Dojo Symbology</h2>
       <div class="grid grid-defs">
         <figure>
           <div>
@@ -96,6 +96,11 @@ const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides train
             </figcaption>
           </div>
         </figure>
+      </div>
+      <div class="cta">
+        <Button variant="secondary" href={BASE_URL + ROUTES.dictionary}>
+          Go to Dictionary
+        </Button>
       </div>
     </section>
   </InteriorPage>
@@ -203,17 +208,6 @@ const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides train
       inline-size: 100%;
       margin-inline: auto;
       text-align: center;
-    }
-    dt {
-      font-family: var(--ff-heading);
-      font-size: 0.9rem;
-      letter-spacing: 0.2em;
-      color: var(--glow-red);
-      text-transform: uppercase;
-      margin-block: 1em 0.5em;
-    }
-    dd {
-      margin-inline-start: 1em;
     }
   }
 </style>
