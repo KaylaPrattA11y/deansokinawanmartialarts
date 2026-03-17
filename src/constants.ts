@@ -21,6 +21,8 @@ export interface IKarateClass extends IBaseClass {
   recurrence: string;
   recurrence_byDay: number[]; // e.g. [1,3] for Monday and Wednesday
   schedule: string;
+  tuition: number[], // e.g. [100, 200] $100 one day per ${recurrence}, $200 two days per ${recurrence}
+  tuition_recurrence: string;
 }
 
 export const YOUTH_CLASS: IKarateClass = {
@@ -34,7 +36,9 @@ export const YOUTH_CLASS: IKarateClass = {
   location: "Deans Okinawan Martial Arts, 23725 Three Notch Rd, Hollywood, MD 20636",
   recurrence: "Weekly",
   recurrence_byDay: [1,3], // Monday and Wednesday
-  schedule: "Mon & Wed"
+  schedule: "Mon & Wed",
+  tuition: [35, 40],
+  tuition_recurrence: "Monthly",
 }
 
 export const ADULT_CLASS: IKarateClass = {
@@ -48,7 +52,9 @@ export const ADULT_CLASS: IKarateClass = {
   location: "Deans Okinawan Martial Arts, 23725 Three Notch Rd, Hollywood, MD 20636",
   recurrence: "Weekly",
   recurrence_byDay: [2,4], // Tuesday and Thursday
-  schedule: "Tue & Thu"
+  schedule: "Tue & Thu",
+  tuition: [45, 60],
+  tuition_recurrence: "Monthly",
 }
 
 export const CPR_CLASS: IBaseClass = {

@@ -174,7 +174,7 @@ function generateICSContent(cls: IKarateClass): string {
       <span class="calendar--date-month">{getRelativeStartAndEndDate(karateClass).startDT.toLocaleString('default', { month: 'short' })}</span>
     </div>
     <div class="calendar--event-details">
-      <div class="calendar--event-title"><span>{karateClass.name}</span></div>
+      <h3 class="calendar--event-title"><span>{karateClass.name}</span></h3>
       <div class="calendar--event-location"><Icon name="location" size={16} /> <span>{karateClass.location}</span></div>
       <div class="calendar--recurrence">
         <Icon name="calendar-week" size={14} /> <span>{karateClass.recurrence}: {karateClass.schedule}</span>
@@ -280,7 +280,7 @@ function generateICSContent(cls: IKarateClass): string {
     font-family: var(--ff-heading);
     font-size: 1.25rem;
     font-weight: 700;
-    margin-bottom: 0.75rem;
+    margin-block: 0 0.75rem;
     line-height: 1.2;
     margin-block-end: 0.25em;
   }

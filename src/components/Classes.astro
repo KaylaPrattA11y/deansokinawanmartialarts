@@ -16,33 +16,55 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
       <Card kanji="子">
         <div class="class-entry">
           <div class="class-age">Ages {YOUTH_CLASS.ages}</div>
-          <h3 class="class-name visually-hidden">{YOUTH_CLASS.name}</h3>
-          <CalendarAddKarateClass id="yc-classes" karateClass={YOUTH_CLASS} />
-          <p class="class-desc">
-            {YOUTH_CLASS.description}
-          </p>
-          <Button 
-            type="button"
-            data-interest={YOUTH_CLASS.name}
-            data-anchor="contact-form"
-          >
-            Join {YOUTH_CLASS.name}
-          </Button>
+          <div class="class-entry-grid">
+            <div>
+              <h3 class="class-name visually-hidden">{YOUTH_CLASS.name}</h3>
+              <CalendarAddKarateClass id="yc-classes" karateClass={YOUTH_CLASS} />
+              <p class="class-desc">
+                {YOUTH_CLASS.description}
+              </p>
+            </div>
+            <div>
+              <h4>{YOUTH_CLASS.tuition_recurrence} Tuition:</h4>
+              <ul>
+                <li>1 day per week: <strong>${YOUTH_CLASS.tuition[0]}</strong></li>
+                <li>2 days per week: <strong>${YOUTH_CLASS.tuition[1]}</strong></li>
+              </ul>
+              <Button 
+                type="button"
+                data-interest={YOUTH_CLASS.name}
+                data-anchor="contact-form"
+              >
+                Join {YOUTH_CLASS.name}
+              </Button>
+            </div>
+          </div>
         </div>
       </Card>
       <Card kanji="武">
         <div class="class-entry">
           <div class="class-age">Ages {ADULT_CLASS.ages}</div>
-          <h3 class="class-name visually-hidden">{ADULT_CLASS.name}</h3>
-          <CalendarAddKarateClass id="ac-classes" karateClass={ADULT_CLASS} />
-          <p class="class-desc">{ADULT_CLASS.description}</p>
-          <Button 
-            type="button" 
-            data-interest={ADULT_CLASS.name}
-            data-anchor="contact-form"
-          >
-            Join {ADULT_CLASS.name}
-          </Button>
+          <div class="class-entry-grid">
+            <div>
+              <h3 class="class-name visually-hidden">{ADULT_CLASS.name}</h3>
+              <CalendarAddKarateClass id="ac-classes" karateClass={ADULT_CLASS} />
+              <p class="class-desc">{ADULT_CLASS.description}</p>
+            </div>
+            <div>
+              <h4>{ADULT_CLASS.tuition_recurrence} Tuition:</h4>
+              <ul>
+                <li>1 day per week: <strong>${ADULT_CLASS.tuition[0]}</strong></li>
+                <li>2 days per week: <strong>${ADULT_CLASS.tuition[1]}</strong></li>
+              </ul>
+              <Button 
+                type="button" 
+                data-interest={ADULT_CLASS.name}
+                data-anchor="contact-form"
+              >
+                Join {ADULT_CLASS.name}
+              </Button>
+            </div>
+          </div>
         </div>
       </Card>
       <Card kanji="道">
@@ -94,8 +116,8 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
 <style>
   @layer components {
     .classes {
-      --padding-x: 1rem;
-      padding: 2rem var(--padding-x);
+      --padding-x: 0;
+      padding: 2rem var(--padding-x) 0;
       background: var(--stone);
       @container (width >= 900px) {
         --padding-x: 3rem;
@@ -107,10 +129,20 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
       max-width: 1200px;
       margin: 0 auto;
     }
+    .classes-inner > div {
+      @container (width < 900px) {
+        padding-inline: 1rem;
+      }
+    }
     .class-entry {
-      padding: var(--padding-x) 2.5rem;
-      @container (width < 600px) {
-        padding: 2rem 1.5rem;
+      container: class-entry / inline-size;
+      padding: 2rem 1.5rem;
+    }
+    .class-entry-grid {
+      display: grid;
+      gap: 0 2rem;
+      @container class-entry (width >= 500px) {
+        grid-template-columns: 1fr 1fr;
       }
     }
     .section-label {
@@ -161,6 +193,27 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
       color: var(--glow-red);
       text-transform: uppercase;
       margin-block: 1em;
+    }
+    h4 {
+      font-family: var(--ff-body);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-block: 0.25em;
+      line-height: normal;
+    }
+    ul {
+      margin: 1em 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      gap: 0 0.5rem;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      line-height: normal;
+    }
+    li {
+      font-family: var(--ff-heading);
+      font-size: 0.875rem;
     }
   }
 </style>
