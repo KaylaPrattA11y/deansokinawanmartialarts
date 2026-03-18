@@ -1,0 +1,85 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import InteriorPage from '../../components/InteriorPage.astro';
+import Button from '../../components/Button.astro';
+import { BASE_URL, ROUTES } from '../../config/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('dictionary');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout 
+  title="Dictionary"
+  description="Dictionary entries for Dean's Okinawan Karate, including terms, definitions, and explanations."
+>
+  <InteriorPage heading={post.data.word}>
+    <div class="content">
+      <Content />
+    </div>
+    <Button variant="secondary" href={BASE_URL + ROUTES.dictionary}>Back to Dictionary</Button>
+  </InteriorPage>
+</Layout>
+
+<style>
+  @layer components {
+    .content :global(h1,h2,h3,h4,h6,h6,p,ul,ol) {
+      max-inline-size: 80ch;
+    }
+    .content :global(h1,h2,h3,h4,h6,h6) {
+      font-family: var(--ff-heading);
+    }
+    .content :global(h1,h2,h3,h4,h6,h6,p,ul,ol) {
+      margin-block: 1em;
+    }
+    .content :global(li) {
+      margin-block: 0.5em;
+    }
+    .content :global(p, ul, ol),
+    .content :global(p:where(strong, em, b, i)) {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--silver);
+    }
+    .content :global(li::marker) {
+      color: var(--bright-red);
+    }
+    .content :global(img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .content :global(a:link, a:visited) {
+      color: var(--paper);
+      text-decoration-color: var(--bright-red);
+    }
+    .content :global(a:link):hover {
+      text-decoration: none;
+    }
+    .content :global(blockquote p) {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--paper);
+    }
+    .content :global(blockquote) {
+      margin: 0 4rem;
+      padding: 0;
+      text-align: center;
+    }
+    .content :global(blockquote::before, blockquote::after) {
+      content: "";
+      display: block;
+      width: 100px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--silver), transparent);
+      margin: 2rem auto;
+    }
+  }
+</style>

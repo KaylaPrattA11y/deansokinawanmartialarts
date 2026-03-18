@@ -45,4 +45,11 @@ const faqs = defineCollection({
   }),
 });
 
-export const collections = { blog, gallery, faqs };
+const dictionary = defineCollection({
+  type: 'content',
+  schema: z.object({
+    word: z.string(),
+  }),
+});
+
+export const collections = { blog, gallery, faqs, dictionary };

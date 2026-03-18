@@ -1,0 +1,58 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import Layout from "../../layouts/Layout.astro";
+import InteriorPage from "../../components/InteriorPage.astro";
+import { DICTIONARY_PAGE_SIZE } from "../../constants";
+import Pagination from "../../components/articles/Pagination.astro";
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const posts = await getCollection("dictionary");
+  return paginate(posts, { pageSize: DICTIONARY_PAGE_SIZE });
+};
+
+const { page } = Astro.props as {
+  page: {
+    data: CollectionEntry<"dictionary">[];
+    currentPage: number;
+    lastPage: number;
+    url: {
+      prev?: string | null;
+      next?: string | null;
+    };
+  };
+};
+const posts = page.data;
+const pageTitle = "Dictionary";
+const pageDesc = "Dictionary entries for Dean's Okinawan Karate, including terms, definitions, and explanations.";
+---
+
+<Layout title={pageTitle} description={pageDesc} robots={{ noarchive: true }}>
+  <InteriorPage heading={pageTitle}>
+    <dl>
+      {posts.map(async (post) => {
+        const { Content } = await post.render();
+        return (
+          <div>
+            <dt>{post.data.word}</dt>
+            <dd><Content /></dd>
+          </div>
+        );
+      })}
+    </dl>
+    <Pagination page={page} />
+  </InteriorPage>
+</Layout>
+
+<style>
+  @layer components {
+    dl {
+      display: grid;
+      gap: 0 1rem;
+      align-items: start;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-auto-rows: minmax(60px, auto);
+    }
+  }
+</style>

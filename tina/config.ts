@@ -248,6 +248,28 @@ export default defineConfig({
           },
         ],
       },
+      {
+        label: "Dictionary",
+        name: "dictionary",
+        path: "src/content/dictionary",
+        format: "md",
+        fields: [
+          {
+            type: "string",
+            label: "Word",
+            name: "word",
+            isTitle: true,
+            required: true,
+          },
+          {
+            type: "rich-text",
+            label: "Definition",
+            name: "definition",
+            isBody: true,
+          },
+        ],
+
+      }
     ],
   },
 });

@@ -81,7 +81,6 @@
     inline-size: 100%;
     block-size: 100%;
     box-sizing: border-box;
-    overflow: hidden;
     scale: .9;
     opacity: 0;
     transition-duration: var(--anim-speed);
@@ -117,6 +116,9 @@
     outline-offset: 2px;
     z-index: 1000;
   }
+  dl {
+    container: dl / inline-size;
+  }
   dt {
     font-family: var(--ff-heading);
     font-size: 0.9rem;
@@ -130,6 +132,9 @@
     margin-inline-start: 1em;
     max-inline-size: 80ch;
     font-size: 1.1rem;
+    @container (width < 520px) {
+      margin-inline-start: 0;
+    }
   }
   dd :where(a:link, a:visited) {
     color: var(--paper);

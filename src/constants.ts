@@ -6,6 +6,8 @@ export const HOME_NEWS_PAGE_SIZE = 3;
 
 export const GALLERY_PAGE_SIZE = 28;
 
+export const DICTIONARY_PAGE_SIZE = 12;
+
 export interface IBaseClass {
   name: string;
   description: string;
@@ -60,19 +62,4 @@ export const ADULT_CLASS: IKarateClass = {
 export const CPR_CLASS: IBaseClass = {
   name: "CPR & First Aid",
   description: "Learn life-saving CPR and first aid skills in a hands-on, practical course. Certification included.",
-}
-
-export const DEFINITIONS = {
-  Bunkai: "The application or analysis of the movements in a kata, demonstrating their practical use in self-defense.",
-  Dojo: "A place where martial arts are practiced.",
-  Karate: "A martial art developed in Okinawa, focusing on striking techniques.",
-  Kata: "A sequence of movements and techniques in martial arts.",
-  "Kiotsuke rei": "A phrase used in martial arts to show respect when assuming a ready stance, typically meaning 'bow to attention.'",
-  Kobudo: "The Okinawan martial art of weapons.",
-  Kyoshi: "A title given to a senior martial arts instructor, often indicating a high level of expertise.",
-  Okinawa: "An island in Japan known for its martial arts traditions.",
-  Sensei: "A teacher or instructor in martial arts.",
-  "Sensei ni rei": "A phrase used in martial arts to show respect to the instructor, typically meaning 'bow to the teacher.'",
-  "Shomen ni rei": "A phrase used in martial arts to show respect to the front of the dojo, typically meaning 'bow to the front.'",
-  "Shorin-Ryu Matsumura Seito": `An Okinawan martial art based on the teachings of <a href="http://localhost:4321/news/sokon-matsumura-warrior-diplomat-and-father-of-shorin-ryu/">Bushi Matsumura Sokon</a> (1798–1890), traditionally preserved by <a href="http://localhost:4321/news/hohan-soken-the-last-guardian-of-the-old-ways/">Hohan Soken</a> (1889-1982). "Seito" translates to "orthodox" or "original method," emphasizing the preservation of old-school Matsusoden Kobukan Koryu Uchina Di techniques.`,
 }

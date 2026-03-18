@@ -1,22 +1,15 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import InteriorPage from "../../components/InteriorPage.astro";
-import { DEFINITIONS } from '../../constants.ts';
+import Layout from "../../layouts/Layout.astro";
+import { BASE_URL, ROUTES } from "../../config/site";
 
-const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides training in both Shorin Ryu Matsumura Seito and Kobudo.";
+const redirectTarget = `${BASE_URL}${ROUTES.dictionary}1/`;
+
+const pageTitle = "Dictionary";
+const pageDesc = "Dictionary entries for Dean's Okinawan Karate, including terms, definitions, and explanations.";
 ---
 
-<Layout title="Dictionary" description={pageDesc}>
-	<InteriorPage 
-    heading={`Dictionary`} 
-  >
-    <dl>
-      {Object.entries(DEFINITIONS).map(([term, definition]) => (
-        <>
-          <dt id={term.toLowerCase().replace(/\s+/g, '-')}>{term}</dt>
-          <dd set:html={definition}></dd>
-        </>
-      ))}
-    </dl>
-  </InteriorPage>
+<Layout title={pageTitle} description={pageDesc}>
+  <script is:inline define:vars={{ redirectTarget }}>
+    window.location.replace(redirectTarget);
+  </script>
 </Layout>

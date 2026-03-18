@@ -5,18 +5,27 @@ import logo from "../assets/logo.svg";
 import { Icon } from 'astro-icon/components';
 import { BASE_URL, ROUTES } from "../config/site";
 
+interface INavItem {
+	label: string;
+	href: string;
+	class?: string;
+}
+
 const latestNews = await getCollection("blog");
 const latestPhotos = await getCollection("gallery");
 
 const currentPath = Astro.url.pathname;
-let navItems = [
+let navItems: INavItem[] = [
   { label: 'About', href: BASE_URL + ROUTES.about, class: 'd-none d-md-block' },
 	{ label: 'Classes', href: BASE_URL + '#classes', class: 'd-none d-md-block' },
-	{ label: 'Free Trial', href: BASE_URL + '#trial', class: 'd-none d-sm-block' },
 	{ label: 'Instructors', href: BASE_URL + ROUTES.instructors, class: 'd-none d-lg-block' },
-  { label: 'Gallery', href: BASE_URL + ROUTES.gallery, class: 'd-none d-lg-block' },
-  { label: 'News', href: BASE_URL + ROUTES.news, class: 'd-none d-sm-block' },
-	{ label: 'FAQs', href: BASE_URL + ROUTES.faqs, class: 'd-none d-lg-block' },
+  { label: 'Gallery', href: BASE_URL + ROUTES.gallery + "1/", class: 'd-none d-lg-block' },
+  { label: 'News', href: BASE_URL + ROUTES.news + "1/", class: 'd-none d-sm-block' },
+	{ label: 'FAQs', href: BASE_URL + ROUTES.faqs + "1/", class: 'd-none d-lg-block' },
+	{ label: 'Dictionary', href: BASE_URL + ROUTES.dictionary, class: "d-none" },
+	{ label: "Our Lineage", href: BASE_URL + ROUTES.news + "the-lineage-of-matsumura-seito-a-direct-line-to-the-source/", class: "d-none" },
+	{ label: 'Free Trial', href: BASE_URL + '#trial', class: 'site-nav-cta d-none d-sm-block' },
+	{ label: 'Contact', href: BASE_URL + "#contact", class: "d-none" },
 ];
 
 navItems = navItems.filter(item => {
@@ -39,17 +48,15 @@ navItems = navItems.filter(item => {
 			{navItems.map(item => (
 			<a 
 				href={item.href}
-				aria-current={currentPath.startsWith(item.href) ? 'page' : undefined}
+				aria-current={currentPath === item.href ? 'page' : undefined}
 				class={item.class}
 				>
 				{item.label}
 			</a>
 			))}
-			<a class="d-md-none" aria-label="Contact" href="#contact-mobile"><Icon name="phone" size="24px" /></a>
-			<a class="d-none d-md-block" aria-label="Contact" href="#contact-desktop"><Icon name="phone" size="24px" /></a>
+			<a aria-label="Contact" href="#contact"><Icon name="phone" size="24px" /></a>
 			<button 
 				type="button" 
-				class="d-lg-none" 
 				aria-label="Toggle main menu" 
 				aria-haspopup="dialog"
 				aria-controls="sm-nav"
@@ -74,7 +81,7 @@ navItems = navItems.filter(item => {
 		{navItems.map(item => (
 		<a 
 			href={item.href}
-			aria-current={currentPath.startsWith(item.href) ? 'page' : undefined}
+			aria-current={currentPath === item.href ? 'page' : undefined}
 		>
 			{item.label}
 		</a>
@@ -128,6 +135,22 @@ navItems = navItems.filter(item => {
 				padding: 0.9rem 3rem;
 			}
 		}
+		.site-nav-cta {
+			position: relative;
+			background: var(--deep-red);
+			font-family: var(--ff-heading);
+    	font-weight: 700;
+			padding: 0.5rem 0.75rem;
+			box-sizing: border-box;
+			text-align: center;
+		}
+		.site-nav-cta::after {
+			content: "";
+			position: absolute;
+			inset: 2px;
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			pointer-events: none;
+		}
 		.site-logo {
 			position: relative;
 			display: grid;
@@ -142,7 +165,7 @@ navItems = navItems.filter(item => {
 			display: flex;
 			align-items: center;
 			gap: 1rem;
-			@container (width >= 600px) {
+			@container (width >= 900px) {
 				gap: 2rem;
 			}
 		}
@@ -163,6 +186,7 @@ navItems = navItems.filter(item => {
 			background: none;
 			border: none;
 			padding: 0;
+			cursor: pointer;
 		}
 		a, button {
 			font-family: var(--ff-heading);
@@ -177,6 +201,7 @@ navItems = navItems.filter(item => {
 			text-decoration: underline;
 			text-decoration-color: var(--bright-red);
 			text-decoration-thickness: 2px;
+			font-weight: 500;
 		}
 		dialog a {
 			font-size: 1.25rem;
