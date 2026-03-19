@@ -1,38 +1,8 @@
 ---
-import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
-import logo from "../assets/logo.svg";
 import { Icon } from 'astro-icon/components';
-import { BASE_URL, ROUTES } from "../config/site";
-
-interface INavItem {
-	label: string;
-	href: string;
-	class?: string;
-}
-
-const latestNews = await getCollection("blog");
-const latestPhotos = await getCollection("gallery");
-
-const currentPath = Astro.url.pathname;
-let navItems: INavItem[] = [
-  { label: 'About', href: BASE_URL + ROUTES.about, class: 'd-none d-md-block' },
-	{ label: 'Classes', href: BASE_URL + '#classes', class: 'd-none d-md-block' },
-	{ label: 'Instructors', href: BASE_URL + ROUTES.instructors, class: 'd-none d-lg-block' },
-  { label: 'Gallery', href: BASE_URL + ROUTES.gallery + "1/", class: 'd-none d-lg-block' },
-  { label: 'News', href: BASE_URL + ROUTES.news + "1/", class: 'd-none d-sm-block' },
-	{ label: 'FAQs', href: BASE_URL + ROUTES.faqs + "1/", class: 'd-none d-lg-block' },
-	{ label: 'Dictionary', href: BASE_URL + ROUTES.dictionary, class: "d-none" },
-	{ label: "Our Lineage", href: BASE_URL + ROUTES.news + "the-lineage-of-matsumura-seito-a-direct-line-to-the-source/", class: "d-none" },
-	{ label: 'Free Trial', href: BASE_URL + '#trial', class: 'site-nav-cta d-none d-sm-block' },
-	{ label: 'Contact', href: BASE_URL + "#contact", class: "d-none" },
-];
-
-navItems = navItems.filter(item => {
-  if (item.label === 'News' && latestNews && latestNews.length === 0) return false;
-  if (item.label === 'Gallery' && latestPhotos && latestPhotos.length === 0) return false;
-  return true;
-});	
+import logo from "../assets/logo.svg";
+import MenuItems from "./MenuItems.astro";
 
 ---
 
@@ -40,20 +10,12 @@ navItems = navItems.filter(item => {
 	<div>
 		<div class="site-logo">
 			<Image src={logo} alt="Dojo seal" width={50} height={50} fetchpriority="high" />
-			<a href={BASE_URL}>
+			<a href="/">
 				Dean's Okinawan <br aria-hidden="true" /> Martial Arts
 			</a>
 		</div>
-		<nav aria-label="Site navigation" class="nav-large">
-			{navItems.map(item => (
-			<a 
-				href={item.href}
-				aria-current={currentPath === item.href ? 'page' : undefined}
-				class={item.class}
-				>
-				{item.label}
-			</a>
-			))}
+		<div class="nav-wrapper">
+			<MenuItems currentView="default" />
 			<a aria-label="Contact" href="#contact"><Icon name="phone" size="24px" /></a>
 			<button 
 				type="button" 
@@ -64,29 +26,14 @@ navItems = navItems.filter(item => {
 			>
 				<Icon name="menu" size="28px" />
 			</button>
-		</nav>
+		</div>
 	</div>
 </header>
 <dialog id="nav-menu">
 	<button type="button" aria-label="Close menu" data-toggle="nav-menu" aria-controls="nav-menu">
 		<Icon name="close" size="28px" />
 	</button>
-	<nav aria-label="Site navigation"  class="nav-dialog">
-		<a 
-			href={BASE_URL + ROUTES.home}
-			aria-current={currentPath === BASE_URL + ROUTES.home ? 'page' : undefined}
-		>
-			Home
-		</a>
-		{navItems.map(item => (
-		<a 
-			href={item.href}
-			aria-current={currentPath === item.href ? 'page' : undefined}
-		>
-			{item.label}
-		</a>
-		))}
-	</nav>
+	<MenuItems currentView="dialog" />
 </dialog>
 
 <script>
@@ -135,21 +82,10 @@ navItems = navItems.filter(item => {
 				padding: 0.9rem 3rem;
 			}
 		}
-		.site-nav-cta {
-			position: relative;
-			background: var(--deep-red);
-			font-family: var(--ff-heading);
-    	font-weight: 700;
-			padding: 0.5rem 0.75rem;
-			box-sizing: border-box;
-			text-align: center;
-		}
-		.site-nav-cta::after {
-			content: "";
-			position: absolute;
-			inset: 2px;
-			border: 1px solid rgba(255, 255, 255, 0.1);
-			pointer-events: none;
+		.nav-wrapper {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
 		}
 		.site-logo {
 			position: relative;
@@ -158,24 +94,14 @@ navItems = navItems.filter(item => {
 			align-items: center;
 			grid-template-columns: 50px auto;
 		}
-		.site-logo a {
+		:where(a, button) {
 			font-weight: 700;
-		}
-		.nav-large {
-			display: flex;
-			align-items: center;
-			gap: 1rem;
-			@container (width >= 900px) {
-				gap: 2rem;
-			}
-		}
-		.nav-dialog {
-			display: grid;
-			justify-items: center;
-			gap: 1rem;
-			@container (width >= 600px) {
-				grid-template-columns: repeat(3, 1fr);
-			}
+			font-family: var(--ff-heading);
+			display: block;
+			text-decoration: none;
+			font-size: 0.85rem;
+			color: var(--silver);
+			text-transform: uppercase;
 		}
 		dialog button {
 			justify-self: end;
@@ -187,27 +113,6 @@ navItems = navItems.filter(item => {
 			border: none;
 			padding: 0;
 			cursor: pointer;
-		}
-		a, button {
-			font-family: var(--ff-heading);
-			display: block;
-			text-decoration: none;
-			font-size: 0.85rem;
-			letter-spacing: 0.2em;
-			color: var(--silver);
-			text-transform: uppercase;
-		}
-		a[aria-current='page'] {
-			text-decoration: underline;
-			text-decoration-color: var(--bright-red);
-			text-decoration-thickness: 2px;
-			font-weight: 500;
-		}
-		dialog a {
-			font-size: 1.25rem;
-		}
-		nav a:hover {
-			text-decoration: underline;
 		}
 		.site-logo a::after {
 			inline-size: 100%;

@@ -33,7 +33,9 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
               <Button 
                 type="button"
                 data-interest={YOUTH_CLASS.name}
-                data-anchor="contact-form"
+                aria-haspopup="dialog"
+                aria-controls="free-trial-dialog"
+                data-toggle="free-trial-dialog"
               >
                 Join {YOUTH_CLASS.name}
               </Button>
@@ -59,7 +61,9 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
               <Button 
                 type="button" 
                 data-interest={ADULT_CLASS.name}
-                data-anchor="contact-form"
+                aria-haspopup="dialog"
+                aria-controls="free-trial-dialog"
+                data-toggle="free-trial-dialog"
               >
                 Join {ADULT_CLASS.name}
               </Button>
@@ -90,22 +94,27 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
 
   classesSection?.addEventListener('click', event => {
     if (event.target instanceof HTMLButtonElement) {
-      const contactForm = document.forms.namedItem('contact-form') as HTMLFormElement;
-      const interest = contactForm.elements.namedItem('interest') as HTMLSelectElement;
-      const messageTextarea = document.getElementById('message') as HTMLTextAreaElement;
-
       const dataInterest = (event.target as HTMLButtonElement).getAttribute('data-interest');
-      
+      const karateInterest = dataInterest && ['Youth Karate', 'Adult Karate'].includes(dataInterest);
+      let contactForm = document.forms.namedItem('contact-form') as HTMLFormElement;
+
+      if (karateInterest) {
+        contactForm = document.forms.namedItem('free-trial-form') as HTMLFormElement;
+      }
+
+      const interest = contactForm.elements.namedItem('interest') as HTMLSelectElement;
+      const messageTextarea = contactForm.elements.namedItem('message') as HTMLTextAreaElement;
+
       contactForm.reset();
       if (interest && dataInterest) {
         interest.value = dataInterest;
         interest.dispatchEvent(new Event('change', { bubbles: true }));
       }
       if (messageTextarea && dataInterest) {
-        if (['Youth Karate', 'Adult Karate'].includes(dataInterest)) {
+        if (karateInterest) {
           messageTextarea.value = `I am interested in starting my free 7-day trial for ${dataInterest}.`;
         } else {
-          messageTextarea.value = `I am interested in ${dataInterest}.`;
+          messageTextarea.value = `I am interested in ${dataInterest} training.`;
         }
       }
       contactForm.dispatchEvent(new Event('change', { bubbles: true }));

@@ -9,7 +9,14 @@ import Button from "./Button.astro"
   <p>
     Come train with us. Experience the tradition firsthand.
   </p>
-  <Button type="button" data-anchor="contact-form">Claim Your Trial</Button>
+  <Button 
+    type="button" 
+    aria-haspopup="dialog" 
+    aria-controls="free-trial-dialog" 
+    data-toggle="free-trial-dialog"
+  >
+    Claim Your Trial
+  </Button>
 </section>
 
 <script>

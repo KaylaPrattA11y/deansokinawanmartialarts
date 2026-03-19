@@ -5,6 +5,7 @@ import '@fontsource-variable/eb-garamond';
 import { AstroSEO } from 'astro-seo-plugin';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import FreeTrialDialog from '../components/FreeTrialDialog.astro';
 import '../scss/site.scss';
 import { BASE_URL, ROUTES, SITE_SEO, SITE_SCHEMA } from '../config/site';
 import logo from '../assets/logo.svg';
@@ -126,6 +127,7 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
 			<slot />
 		</main>
 		<Footer />
+    <FreeTrialDialog />
 	</body>
 </html>
 
@@ -235,4 +237,7 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
 			margin-block-start: var(--header-height);
 		}
 	}
+  @layer components {
+
+  }
 </style>
