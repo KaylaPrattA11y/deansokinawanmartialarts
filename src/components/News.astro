@@ -19,9 +19,9 @@ const featuredImage = featuredPost?.data.image;
       </div>
       <div>
       {posts.length > 1 && (
-      <div class="read-all d-none d-md-block">
+      <div class="read-all d-none d-sm-block">
         <Button href={BASE_URL + ROUTES.news} variant="secondary">
-          View All <span class="visually-hidden">News & Updates</span>
+          View All News<span class="visually-hidden"> & Updates</span>
         </Button>
       </div>
       )}
@@ -46,7 +46,7 @@ const featuredImage = featuredPost?.data.image;
     ))}
     </div>
     {posts.length > 1 && (
-    <div class="read-all d-md-none">
+    <div class="read-all d-sm-none">
       <Button href={BASE_URL + ROUTES.news} variant="primary" width="full">
         View All News<span class="visually-hidden"> & Updates</span>
       </Button>
