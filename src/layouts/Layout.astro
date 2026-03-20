@@ -6,6 +6,7 @@ import { AstroSEO } from 'astro-seo-plugin';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FreeTrialDialog from '../components/FreeTrialDialog.astro';
+import PagefindDialog from '../components/PagefindDialog.astro';
 import '../scss/site.scss';
 import { BASE_URL, ROUTES, SITE_SEO, SITE_SCHEMA } from '../config/site';
 import logo from '../assets/logo.svg';
@@ -128,6 +129,7 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
 		</main>
 		<Footer />
     <FreeTrialDialog />
+    <PagefindDialog />
 	</body>
 </html>
 
@@ -151,6 +153,7 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
   dialogs.forEach(dialog => {
     // Share buttons within a dialog
     const shareButtons = dialog.querySelectorAll('[data-share="true"]');
+    const closeButtons = dialog.querySelectorAll(`button[aria-controls="${dialog.id}"]`);
 
     shareButtons.forEach(shareButton => {
       shareButton?.classList.toggle('d-none', !navigator.share);
@@ -171,6 +174,12 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
     // Listen for dialog toggle events
     dialog.addEventListener('toggle', () => {
       document.body.classList.toggle('overflow-y-hidden', dialog.open);
+    });
+    // Listen for close button clicks within the dialog
+    closeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        dialog.close();
+      });
     });
   });
 

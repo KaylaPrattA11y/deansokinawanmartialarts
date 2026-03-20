@@ -1,13 +1,13 @@
 ---
 import { Icon } from 'astro-icon/components';
-import ContactForm from "./ContactForm.astro"
+import ContactForm from "./ContactForm.astro";
 ---
 
 <dialog id="free-trial-dialog">
+  <button type="button" aria-label="Close menu" aria-controls="free-trial-dialog">
+    <Icon name="close" size="28px" />
+  </button>
   <div class="free-trial-form-wrapper">
-    <button type="button" aria-label="Close menu" data-toggle="free-trial-dialog" aria-controls="free-trial-dialog">
-      <Icon name="close" size="28px" />
-    </button>
     <ContactForm formHeading="Start Your Free Trial" id="free-trial-form" />
   </div>
 </dialog>

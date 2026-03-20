@@ -14,13 +14,12 @@ const currentPath = Astro.url.pathname;
 const { currentView = 'default' } = Astro.props as MenuItemsProps;
 ---
 
-<nav aria-label="Site navigation" class={`nav-${currentView}`}>
+<nav aria-label="Site navigation" class={`nav-${currentView}`} id={`nav-${currentView}`}>
 {currentView === 'default' && (
   <>
     <a href="/about/" class="d-none d-md-block" aria-current={currentPath === '/about/' ? 'page' : undefined}>About</a>
     <a href="/#classes" class="d-none d-md-block" aria-current={currentPath === '/#classes' ? 'page' : undefined}>Classes</a>
     <a href="/instructors/" class="d-none d-lg-block" aria-current={currentPath === '/instructors/' ? 'page' : undefined}>Instructors</a>
-    <a href="/gallery/1/" class="d-none d-lg-block" aria-current={currentPath === '/gallery/1/' ? 'page' : undefined}>Gallery</a>
     {newsCollection && newsCollection.length > 0 && (
       <a href="/news/1/" class="d-none d-sm-block" aria-current={currentPath === '/news/1/' ? 'page' : undefined}>News</a>
     )}
@@ -61,7 +60,6 @@ const { currentView = 'default' } = Astro.props as MenuItemsProps;
     <a href="/about/" aria-current={currentPath === '/about/' ? 'page' : undefined}>About</a>
     <a href="/#classes" aria-current={currentPath === '/#classes' ? 'page' : undefined}>Classes</a>
     <a href="/instructors/" aria-current={currentPath === '/instructors/' ? 'page' : undefined}>Instructors</a>
-    <a href="/gallery/1/" aria-current={currentPath === '/gallery/1/' ? 'page' : undefined}>Gallery</a>
     {newsCollection && newsCollection.length > 0 && (
       <a href="/news/1/" aria-current={currentPath === '/news/1/' ? 'page' : undefined}>News</a>
     )}
@@ -83,19 +81,20 @@ const { currentView = 'default' } = Astro.props as MenuItemsProps;
 </nav>
 
 <script>
-	const freeTrialDialogToggles = document.querySelectorAll('[aria-controls="free-trial-dialog"]');
-	const freeTrialDialog = document.getElementById('free-trial-dialog') as HTMLDialogElement;
-	
-	freeTrialDialogToggles.forEach(button => {
-		button?.addEventListener('click', () => {
-			const isOpen = freeTrialDialog instanceof HTMLDialogElement && freeTrialDialog.open;
-			if (isOpen) {
-				freeTrialDialog?.close();
-			} else {
-				freeTrialDialog?.showModal();
-			}
-		});
-	});
+  const dialogNav = document.getElementById("nav-dialog");
+  if (dialogNav) {
+    const freeTrialDialogToggle = dialogNav.querySelector('button[aria-controls="free-trial-dialog"]');
+    const freeTrialDialog = document.getElementById('free-trial-dialog') as HTMLDialogElement;
+    
+    freeTrialDialogToggle?.addEventListener('click', () => {
+      const isOpen = freeTrialDialog instanceof HTMLDialogElement && freeTrialDialog.open;
+      if (isOpen) {
+      // freeTrialDialog?.close();
+      } else {
+        freeTrialDialog?.showModal();
+      }
+    });
+  }
 </script>
 
 <style>

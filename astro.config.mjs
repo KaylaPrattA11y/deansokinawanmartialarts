@@ -5,6 +5,8 @@ import icon from 'astro-icon';
 
 import sitemap from '@astrojs/sitemap';
 
+import pagefind from "astro-pagefind";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://deansokinawanmartialarts.netlify.app",
@@ -13,6 +15,7 @@ export default defineConfig({
     sitemap({
       filter: page => page !== "https://deansokinawanmartialarts.netlify.app/admin/",
     }),
+    pagefind()
   ],
   output: 'static',
   trailingSlash: 'always',

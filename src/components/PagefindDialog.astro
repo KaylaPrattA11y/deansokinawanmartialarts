@@ -1,0 +1,51 @@
+---
+import { Icon } from 'astro-icon/components';
+import Search from "astro-pagefind/components/Search";
+---
+
+<dialog id="pagefind-dialog">
+  <button type="button" aria-label="Close menu" aria-controls="pagefind-dialog">
+    <Icon name="close" size="28px" />
+  </button>
+  <div class="pagefind-form-wrapper">
+    <Search id="search" className="pagefind-ui" uiOptions={{ showImages: false }} />
+  </div>
+</dialog>
+
+<style>
+  @layer components {
+    .pagefind-form-wrapper {
+      background-color: #2e26228a;
+      position: relative;
+      margin: 3rem auto;
+      max-inline-size: 675px;
+      padding: 1rem;
+    }
+		button {
+      color: var(--paper);
+      position: absolute;
+      inset: 0 0 auto auto;
+      padding: 0.75rem;
+			appearance: none;
+			background: none;
+			border: none;
+			cursor: pointer;
+		}
+  }
+</style>
+
+<script>
+  const dialog = document.getElementById('pagefind-dialog') as HTMLDialogElement | null;
+  const searchClearButton = dialog?.querySelector('.pagefind-ui__search-clear') as HTMLButtonElement | null;
+  const searchField = dialog?.querySelector('.pagefind-ui__search-input') as HTMLInputElement | null;
+  
+  if (dialog) {
+    dialog.addEventListener('toggle', () => {
+      if (dialog.open) {
+        searchField?.focus();
+      } else {
+        searchClearButton?.click();
+      }
+    });
+  }
+</script>
