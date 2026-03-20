@@ -6,9 +6,10 @@ interface ArticleMetaProps {
   post: Post;
   isStub?: boolean;
   useShareButton?: boolean;
+  isHomepage?: boolean;
 }
 
-const { post, isStub = false, useShareButton = false } = Astro.props as ArticleMetaProps;
+const { post, isStub = false, useShareButton = false, isHomepage = false } = Astro.props as ArticleMetaProps;
 ---
 
 <header class="post-meta">
@@ -23,7 +24,7 @@ const { post, isStub = false, useShareButton = false } = Astro.props as ArticleM
   </time>
   {isStub ? (
     <>
-      <h2>{post.data.title}</h2>
+      {isHomepage ? <h3 class="post-meta-stub-heading">{post.data.title}</h3> : <h2 class="post-meta-stub-heading">{post.data.title}</h2>}
       {post.data.description && <p class="desc">{post.data.description}</p>}
       {post.data.tags && (
       <div class="tags">
@@ -48,7 +49,7 @@ const { post, isStub = false, useShareButton = false } = Astro.props as ArticleM
   ) : (
     <div class="post-meta-full">
       <div>
-        <h1 id="main-content-anchor">{post.data.title}</h1>
+        {isHomepage ? <h3 class="post-meta-full-heading">{post.data.title}</h3> : <h1 id="main-content-anchor" class="post-meta-full-heading">{post.data.title}</h1>}
       </div>
       <div class="post-meta-full-info">
         <div>
@@ -82,17 +83,20 @@ const { post, isStub = false, useShareButton = false } = Astro.props as ArticleM
 
 <style>
   @layer components {
-    :is(h1, h2) {
+    :is(h1, h2, h3.post-meta-full-heading, h3.post-meta-stub-heading) {
       font-family: var(--ff-heading);
       font-weight: 700;
       color: var(--paper);
       margin-block: 0.5em;
       line-height: 1.2;
     }
-    h1 {
+    h1{
       font-size: clamp(2rem, 5vw, 3rem);
     }
-    h2 {
+    h3.post-meta-full-heading {
+      font-size: clamp(1.25rem, 4vw, 2.5rem);
+    }
+    h2, h3.post-meta-stub-heading {
       font-size: 1.25rem;
     }
     time {
@@ -141,7 +145,7 @@ const { post, isStub = false, useShareButton = false } = Astro.props as ArticleM
       overflow: hidden;
     }
     .lead {
-      font-size: 1.35rem;
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
     }
     .tags {
       display: flex;

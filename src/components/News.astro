@@ -36,7 +36,7 @@ const featuredImage = featuredPost?.data.image;
             <img src={featuredImage} alt={post.data.title} loading="eager" />
           </figure>
           )}
-          <ArticleMeta post={post} isStub={index !== 0} useShareButton={false}>
+          <ArticleMeta post={post} isStub={index !== 0} useShareButton={false} isHomepage={true}>
             <div class="read-more">
               <Button href={BASE_URL + ROUTES.news + post.slug + "/"} variant="secondary">Read more <span class="visually-hidden">about ${post.data.title}</span></Button>
             </div>
