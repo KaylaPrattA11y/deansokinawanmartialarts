@@ -86,11 +86,14 @@ const featuredImage = post.data.image;
       border-radius: 8px;
     }
     .wrapper {
-      --padding-x: 2rem;
+      --padding-x: 1rem;
       max-inline-size: 800px;
       margin: 0 auto;
       padding: 2rem var(--padding-x);
       box-sizing: border-box;
+      @container (width >= 600px) {
+        --padding-x: 2rem;
+      }
     }
     .content :global(> p:first-of-type::first-letter) {
       font-family: var(--ff-heading);

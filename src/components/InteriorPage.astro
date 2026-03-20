@@ -21,11 +21,14 @@ const { heading, lead } = Astro.props as InteriorPageProps;
     height: 100%;
   }
   .interior-page-inner {
-    --padding-x: 2rem;
+    --padding-x: 1rem;
     container: interior-page / inline-size;
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem var(--padding-x);
+    @container interior-page (width >= 600px) {
+      --padding-x: 2rem;
+    }
   }
   h1 {
     font-family: var(--ff-heading);
