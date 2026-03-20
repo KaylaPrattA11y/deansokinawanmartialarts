@@ -9,13 +9,13 @@ import Trial from '../components/Trial.astro';
 import { HOME_NEWS_PAGE_SIZE } from '../constants';
 
 const posts = (await getCollection("blog"))
-  .sort((a: { data: { pubDate: string } }, b: { data: { pubDate: string } }) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
   .slice(0, HOME_NEWS_PAGE_SIZE);
 ---
 
 <Layout>
 	<Hero />
-  <News posts={posts} />
+  <News posts={posts} data-pagefind-ignore="true" />
   <Dojo />
   <Classes />
   <Trial />
