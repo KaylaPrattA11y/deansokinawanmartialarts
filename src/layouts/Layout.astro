@@ -24,7 +24,7 @@ interface Props {
   };
 }
 
-const ogImageUrl = `${Astro.site}og-image.jpg`;
+const ogImageUrl = `${Astro.site}og-image.jpeg`;
 const { title, description = SITE_SEO.description, schema, robots } = Astro.props;
 const pageTitle = title ? `${title} | ${SITE_SEO.name.short}` : SITE_SEO.name.long;
 const siteOrigin = Astro.site?.toString();

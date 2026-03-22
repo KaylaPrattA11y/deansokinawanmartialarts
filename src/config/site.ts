@@ -1,9 +1,9 @@
 export const SITE_SEO = {
   name: {
-    long: "Dean's Okinawan Karate | Shorin-Ryu Matsumura Seito",
-    short: "Dean's Okinawan Karate"
+    long: "Dean's Okinawan Martial Arts | Southern Maryland Shorinryu Karate",
+    short: "Dean's Okinawan Martial Arts"
   },
-  description: "Shorin-Ryu Matsumura Seito karate in Hollywood, MD. Traditional Okinawan martial arts training for youth and adults. Self-defense, kobudo, and kata instruction.",
+  description: "Shorin-Ryu Matsumura Seito karate in Southern Maryland. Traditional Okinawan martial arts for youth & adults. Self-defense, kobudo, and kata.",
   keywords: [
     "Okinawan karate",
     "Shorin-Ryu",
