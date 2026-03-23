@@ -2,7 +2,7 @@
 question: How do I count to 10 in Japanese?
 ---
 
-We count in old-style Japanese when doing warm ups and other training. Some numbers may be different from what you might have learned in a Japanese language course.
+We count in old-style Japanese when doing warm ups and other training. Some numbers may be different from what you might have learned in a modern Japanese language course.
 
 1. Ichi
 2. Ni

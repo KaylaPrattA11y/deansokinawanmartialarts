@@ -3,7 +3,7 @@ question: When will I get my next belt?
 sortPriority: 3
 ---
 
-Asking a sensei or instructor when you will receive a new belt is considered disrespectful because it shifts the focus from learning and self-improvement to entitlement and rank chasing.
+We are glad you are eager to progress, but please take note: asking a sensei or instructor when you will receive a new belt is considered disrespectful because it shifts the focus from learning and self-improvement to entitlement and rank chasing.
 
 **Why is this disrespectful?**
 
