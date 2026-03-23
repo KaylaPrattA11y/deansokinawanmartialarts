@@ -82,11 +82,13 @@ const { name, title, rank, img, imgAspectRatio, featured = false, id } = Astro.p
       line-height: 1.2;
     }
     .img-wrapper {
-      float: left;
-      clear: both;
       margin: 0 1rem 1rem 0;
-      max-inline-size: 125px;
       box-sizing: border-box;
+      @container (width >= 300px) {
+        max-inline-size: 125px;
+        float: left;
+        clear: both;
+      }
       @container (width >= 600px) {
         max-inline-size: 235px;
       }
