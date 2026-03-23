@@ -3,15 +3,16 @@ import { Image } from "astro:assets";
 import patch from "../assets/patch.png";
 import Button from "./Button.astro";
 import { BASE_URL, ROUTES } from "../config/site";
+import DictionaryTerm from "./DictionaryTerm.astro";
 ---
 
 <section class="dojo" aria-labelledby="dojo-heading" id="dojo">
   <div>
     <div>
-      <h2 class="section-title">A Dojo Rooted in Ancient Tradition</h2>
+      <h2 class="section-title">A <DictionaryTerm term="dojo" /> Rooted in Ancient Tradition</h2>
       <div class="section-body">
         <p>
-          Dean's Okinawan Martial Arts teaches Shorin-Ryu Matsumura Seito - one of the oldest and most respected lineages of Okinawan karate, tracing directly to the great Master Matsumura Sōkon.
+          Dean's Okinawan Martial Arts teaches <DictionaryTerm term="shorin-ryu-matsumura-seito" /> - one of the oldest and most respected lineages of Okinawan karate, tracing directly to the great Master Matsumura Sōkon.
         </p>
         <p>
           We train the whole person. Discipline, focus, and physical strength are built together. Students leave not just as skilled martial artists, but as grounded, honorable individuals.

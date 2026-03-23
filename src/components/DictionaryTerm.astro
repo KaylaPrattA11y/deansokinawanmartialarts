@@ -1,0 +1,135 @@
+---
+import { getCollection } from "astro:content";
+
+interface DictionaryTermProps {
+  term: string;
+}
+
+const { term } = Astro.props as DictionaryTermProps;
+const uniqueId = `tt-desc-${crypto.randomUUID()}`;
+const terms = await getCollection("dictionary");
+const thisTerm = terms.find(t => t.slug === term.toLowerCase());
+// remove HTML tags from the tooltip text
+const tooltipText = (thisTerm?.body?.trim() ?? '').replace(/<[^>]*>/g, '');
+
+---
+{thisTerm && tooltipText && (
+  <span class="term" data-tooltip-wrapper>
+    <span
+      class="term-trigger"
+      tabindex="0"
+      aria-describedby={uniqueId}
+    >
+      {term.replaceAll("-", " ")}
+    </span>
+    <span id={uniqueId} role="tooltip" class="term-tooltip">
+      {tooltipText}
+    </span>
+  </span>
+)}
+
+<style>
+  @layer components {
+    .term {
+      display: inline-block;
+      position: relative;
+    }
+    .term-trigger {
+      text-transform: capitalize;
+      text-decoration: underline dotted;
+      text-decoration-color: var(--deep-red);
+      text-underline-offset: 3px;
+      cursor: help;
+    }
+    .term-tooltip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      translate: -50% 0;
+      inline-size: max-content;
+      max-inline-size: 260px;
+      padding: 0.5rem 0.75rem;
+      background-color: var(--stone);
+      border: 1px solid var(--ash);
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
+      z-index: 100;
+      font-size: 0.96rem;
+      font-family: var(--ff-body);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--silver);
+      margin: 0;
+    }
+    .term-trigger:hover + .term-tooltip,
+    .term-trigger:focus + .term-tooltip {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  function initTooltips() {
+    document.querySelectorAll<HTMLElement>('[data-tooltip-wrapper]:not([data-tooltip-init])').forEach(wrapper => {
+      wrapper.setAttribute('data-tooltip-init', '');
+      const trigger = wrapper.querySelector<HTMLElement>('.term-trigger');
+      const tooltip = wrapper.querySelector<HTMLElement>('.term-tooltip');
+      if (!trigger || !tooltip) return;
+
+      function show() {
+        tooltip!.style.display = 'block';
+        clampToViewport(wrapper, tooltip!);
+      }
+
+      function hide() {
+        tooltip!.style.display = '';
+        tooltip!.style.left = '';
+        tooltip!.style.translate = '';
+      }
+
+      trigger.addEventListener('mouseenter', show);
+      trigger.addEventListener('focusin', show);
+      trigger.addEventListener('mouseleave', hide);
+      trigger.addEventListener('focusout', hide);
+      trigger.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          hide();
+          trigger.blur();
+        }
+      });
+    });
+  }
+
+  function clampToViewport(wrapper: HTMLElement, tooltip: HTMLElement) {
+    // Reset to centered position for measurement
+    tooltip.style.left = '50%';
+    tooltip.style.translate = '-50% 0';
+
+    const rect = tooltip.getBoundingClientRect();
+    const pad = 8;
+
+    if (rect.left < pad) {
+      // Overflowing left edge
+      const wrapperRect = wrapper.getBoundingClientRect();
+      const shift = pad - rect.left;
+      tooltip.style.left = `${shift + wrapperRect.width / 2}px`;
+      tooltip.style.translate = '-50% 0';
+    } else if (rect.right > window.innerWidth - pad) {
+      // Overflowing right edge
+      const wrapperRect = wrapper.getBoundingClientRect();
+      const shift = rect.right - (window.innerWidth - pad);
+      tooltip.style.left = `${wrapperRect.width / 2 - shift}px`;
+      tooltip.style.translate = '-50% 0';
+    }
+
+    // If tooltip goes above viewport, flip to below
+    if (rect.top < pad) {
+      tooltip.style.bottom = 'auto';
+      tooltip.style.top = 'calc(100% + 8px)';
+    }
+  }
+
+  initTooltips();
+  document.addEventListener('astro:page-load', initTooltips);
+</script>

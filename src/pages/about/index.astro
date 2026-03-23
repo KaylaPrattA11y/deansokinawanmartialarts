@@ -6,6 +6,7 @@ import Layout from '../../layouts/Layout.astro';
 import InteriorPage from "../../components/InteriorPage.astro";
 import { BASE_URL, ROUTES } from '../../config/site';
 import Button from '../../components/Button.astro';
+import DictionaryTerm from '../../components/DictionaryTerm.astro';
 
 const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides training in both Shorin Ryu Matsumura Seito and Kobudo.";
 ---
@@ -26,14 +27,14 @@ const pageDesc = "Dean’s Okinawan Martial Arts and Self Defense provides train
     <div class="short-divider" aria-hidden="true"></div>
     <div class="grid grid-intro">
       <section class="content" aria-labelledby="section-1-heading">
-        <h2 id="section-1-heading">Dojo Philosophy and Credentials</h2>
-        <p>We are a traditional martial arts school dedicated to preserving the principles and traditions of these ancient arts. Under the direction of <a href={BASE_URL + ROUTES.instructors + '#kyoshi-wayne-dean'}>Kyoshi Wayne Dean</a>, 8th Dan, we emphasize character, sincerity, effort, etiquette, and self-control — developing each student physically and mentally.</p>
-        <p>Each class covers the fundamental techniques, <a href={BASE_URL + ROUTES.dictionary + '#kata'}>Kata</a>, and their practical applications alongside the rich history of Okinawa and the origins of these arts. Students also learn self-defense techniques drawn from everyday situations, preparing them to respond confidently to unexpected encounters.</p>
+        <h2 id="section-1-heading"><DictionaryTerm term="dojo" /> Philosophy and Credentials</h2>
+        <p>We are a traditional martial arts school dedicated to preserving the principles and traditions of these ancient arts. Under the direction of <DictionaryTerm term="kyoshi" /> <a href={BASE_URL + ROUTES.instructors + '#kyoshi-wayne-dean'}>Wayne Dean</a>, 8th Dan, we emphasize character, sincerity, effort, etiquette, and self-control — developing each student physically and mentally.</p>
+        <p>Each class covers the fundamental techniques, <DictionaryTerm term="kata" />, and their practical applications alongside the rich history of <DictionaryTerm term="okinawa" /> and the origins of these arts. Students also learn self-defense techniques drawn from everyday situations, preparing them to respond confidently to unexpected encounters.</p>
       </section>
       <section class="content" aria-labelledby="section-2-heading">
         <h2 id="section-2-heading">Family-Oriented Classes</h2>
         <p>The dojo offers children's and adult classes in a welcoming, family-oriented atmosphere, and parents are encouraged to observe and participate in their child's training.</p> 
-        <p>Kyoshi Wayne Dean holds an 8th Dan and has studied <a href={BASE_URL + ROUTES.dictionary + '#shorin-ryu-matsumura-seito'}>Shorin Ryu Matsumura Orthodox Karate</a> since 1971. Both his original and current instructors trained under <a href=`${BASE_URL + ROUTES.news}hohan-soken-the-last-guardian-of-the-old-ways/`>Master Hohan Soken</a> while stationed in Okinawa. He holds a teaching license and dojo charter issued by the Okinawa Konanryu Kohokan Karate-Kobudo-Hakutsuru Kyokai Association, and has operated his Southern Maryland dojo since September 2002, offering classes in Karate, <a href={BASE_URL + ROUTES.dictionary + '#kobudo'}>Kobudo</a>, and Self-Defense for children and adults.</p>
+        <p>Kyoshi Wayne Dean holds an 8th Dan and has studied <DictionaryTerm term="shorin-ryu-matsumura-seito" /> Orthodox <DictionaryTerm term="karate" /> since 1971. Both his original and current instructors trained under <a href=`${BASE_URL + ROUTES.news}hohan-soken-the-last-guardian-of-the-old-ways/`>Master Hohan Soken</a> while stationed in Okinawa. He holds a teaching license and dojo charter issued by the Okinawa Konanryu Kohokan Karate-Kobudo-Hakutsuru Kyokai Association, and has operated his Southern Maryland dojo since September 2002, offering classes in Karate, <DictionaryTerm term="kobudo" />, and Self-Defense for children and adults.</p>
         <div class="cta">
           <Button variant="primary" href={BASE_URL + ROUTES.instructors}>
             Meet our Instructors
