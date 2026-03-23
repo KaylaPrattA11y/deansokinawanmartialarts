@@ -55,6 +55,5 @@ export const ROUTES = {
 };
 
 export const FLAGS = {
-  usePagefind: false,
   useLightboxControls: false,
 }
