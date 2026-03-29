@@ -13,7 +13,6 @@ import Button from "./Button.astro"
     type="button" 
     aria-haspopup="dialog" 
     aria-controls="free-trial-dialog" 
-    data-toggle="free-trial-dialog"
   >
     Claim Your Trial
   </Button>
@@ -24,10 +23,12 @@ import Button from "./Button.astro"
 
   trialSection?.addEventListener('click', event => {
     if (event.target instanceof HTMLButtonElement) {
-      const contactForm = document.forms.namedItem('contact-form') as HTMLFormElement;
-      const messageTextarea = document.getElementById('message') as HTMLTextAreaElement;
+      const dialog = document.getElementById('free-trial-dialog') as HTMLDialogElement;
+      const contactForm = document.forms.namedItem('free-trial-form') as HTMLFormElement;
+      const messageTextarea = contactForm.elements.namedItem('message') as HTMLTextAreaElement;
 
       contactForm.reset();
+      dialog.showModal();
       if (messageTextarea) {
         messageTextarea.value = 'I am interested in the 7-Day Free Trial.';
       }

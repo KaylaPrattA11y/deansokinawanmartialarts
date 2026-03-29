@@ -82,16 +82,27 @@ const { currentView = 'default' } = Astro.props as MenuItemsProps;
 
 <script>
   const dialogNav = document.getElementById("nav-dialog");
+  
   if (dialogNav) {
-    const freeTrialDialogToggle = dialogNav.querySelector('button[aria-controls="free-trial-dialog"]');
     const freeTrialDialog = document.getElementById('free-trial-dialog') as HTMLDialogElement;
-    
-    freeTrialDialogToggle?.addEventListener('click', () => {
-      const isOpen = freeTrialDialog instanceof HTMLDialogElement && freeTrialDialog.open;
-      if (isOpen) {
-      // freeTrialDialog?.close();
-      } else {
-        freeTrialDialog?.showModal();
+    const contactForm = document.forms.namedItem('free-trial-form') as HTMLFormElement;
+    const messageTextarea = contactForm.elements.namedItem('message') as HTMLTextAreaElement;
+
+    dialogNav.addEventListener('click', event => {
+      console.log(event)
+      const isDialogTrigger = event.target instanceof HTMLButtonElement && event.target.getAttribute('aria-controls') === 'free-trial-dialog';
+      
+      if (isDialogTrigger) {
+        const isOpen = freeTrialDialog instanceof HTMLDialogElement && freeTrialDialog.open;
+        
+        if (!isOpen) {
+          freeTrialDialog?.showModal();
+          console.log('Opening Free Trial Dialog', messageTextarea);
+          if (messageTextarea) {
+            messageTextarea.value = 'I am interested in the 7-Day Free Trial.';
+          }
+          contactForm.dispatchEvent(new Event('change', { bubbles: true }));
+        }
       }
     });
   }

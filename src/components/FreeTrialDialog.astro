@@ -46,7 +46,7 @@ import ContactForm from "./ContactForm.astro";
     const submitButton = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
   
     dialog?.addEventListener('close', () => {
-      dialog.querySelector('form')?.reset();
+      form.reset();
       classSchedule?.classList.add('d-none');
       calendarAddYouth?.classList.add('d-none');
       calendarAddAdult?.classList.add('d-none');

@@ -22,7 +22,14 @@ import Button from "./Button.astro";
         <span>Self-Control</span>
       </div>
       <div role="group" class="hero-buttons">
-        <Button type="button" variant="primary" aria-haspopup="dialog" aria-controls="free-trial-dialog" data-toggle="free-trial-dialog">Start Free Trial</Button>
+        <Button 
+          type="button" 
+          variant="primary" 
+          aria-haspopup="dialog" 
+          aria-controls="free-trial-dialog"
+        >
+          Start Free Trial
+        </Button>
         <Button type="button" variant="secondary" data-anchor="classes">View Schedule</Button>
       </div>
     </div>
@@ -33,13 +40,15 @@ import Button from "./Button.astro";
   const heroSection = document.getElementById('hero');
 
   heroSection?.addEventListener('click', event => {
-    if (event.target instanceof HTMLButtonElement && event.target.getAttribute('data-anchor') === 'contact-form') {
+    if (event.target instanceof HTMLButtonElement && event.target.getAttribute('aria-controls') === 'free-trial-dialog') {
+      const dialog = document.getElementById('free-trial-dialog') as HTMLDialogElement;
       const contactForm = document.forms.namedItem('contact-form') as HTMLFormElement;
       const messageTextarea = document.getElementById('message') as HTMLTextAreaElement;
 
       contactForm.reset();
+      dialog?.showModal();
       if (messageTextarea) {
-        messageTextarea.value = 'I am interested in beginning my training with the 7-Day Free Trial.';
+        messageTextarea.value = 'I am interested in the 7-Day Free Trial.';
       }
       contactForm.dispatchEvent(new Event('change', { bubbles: true }));
     }
