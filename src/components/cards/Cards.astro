@@ -1,4 +1,12 @@
-<ul class="cards">
+---
+interface CardsProps {
+  cols?: number;
+}
+
+const { cols = 3 } = Astro.props as CardsProps;
+---
+
+<ul class="cards" style={{ '--cols': cols }}>
   <slot />
 </ul>
 
@@ -10,7 +18,8 @@
       display: grid;
       margin: 0;
       @container (width >= 900px) {
-        grid-template-columns: repeat(3, 1fr);
+        justify-content: center;
+        grid-template-columns: repeat(var(--cols), 1fr);
       }
     }
   }
