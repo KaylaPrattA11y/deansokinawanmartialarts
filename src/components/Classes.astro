@@ -2,7 +2,7 @@
 import Cards from "./cards/Cards.astro";
 import Card from "./cards/Card.astro";
 import Button from "./Button.astro";
-import { YOUTH_CLASS, ADULT_CLASS, CPR_CLASS } from '../constants';
+import { YOUTH_CLASS, ADULT_CLASS } from '../constants';
 import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
 ---
 
@@ -12,13 +12,13 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
       <div class="section-label">Training</div>
       <h2 class="section-title">Classes &amp; Schedule</h2>
     </div>
-    <Cards>
+    <Cards cols={2}>
       <Card kanji="子">
         <div class="class-entry">
           <div class="class-age">Ages {YOUTH_CLASS.ages}</div>
+          <CalendarAddKarateClass id="yc-classes" karateClass={YOUTH_CLASS} />
           <div class="class-entry-grid">
             <div>
-              <CalendarAddKarateClass id="yc-classes" karateClass={YOUTH_CLASS} />
               <p class="class-desc">
                 {YOUTH_CLASS.description}
               </p>
@@ -29,25 +29,26 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
                 <li>1 day per week: <strong>${YOUTH_CLASS.tuition[0]}</strong></li>
                 <li>2 days per week: <strong>${YOUTH_CLASS.tuition[1]}</strong></li>
               </ul>
-              <Button 
-                type="button"
-                data-interest={YOUTH_CLASS.name}
-                aria-haspopup="dialog"
-                aria-controls="free-trial-dialog"
-                data-toggle="free-trial-dialog"
-              >
-                Join {YOUTH_CLASS.name}
-              </Button>
             </div>
+          </div>
+          <div class="class-cta">
+            <Button 
+              type="button"
+              data-interest={YOUTH_CLASS.name}
+              aria-haspopup="dialog"
+              aria-controls="free-trial-dialog"
+            >
+              Join {YOUTH_CLASS.name}
+            </Button>
           </div>
         </div>
       </Card>
       <Card kanji="武">
         <div class="class-entry">
           <div class="class-age">Ages {ADULT_CLASS.ages}</div>
+          <CalendarAddKarateClass id="ac-classes" karateClass={ADULT_CLASS} />
           <div class="class-entry-grid">
             <div>
-              <CalendarAddKarateClass id="ac-classes" karateClass={ADULT_CLASS} />
               <p class="class-desc">{ADULT_CLASS.description}</p>
             </div>
             <div>
@@ -56,31 +57,18 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
                 <li>1 day per week: <strong>${ADULT_CLASS.tuition[0]}</strong></li>
                 <li>2 days per week: <strong>${ADULT_CLASS.tuition[1]}</strong></li>
               </ul>
-              <Button 
-                type="button" 
-                data-interest={ADULT_CLASS.name}
-                aria-haspopup="dialog"
-                aria-controls="free-trial-dialog"
-                data-toggle="free-trial-dialog"
-              >
-                Join {ADULT_CLASS.name}
-              </Button>
             </div>
           </div>
-        </div>
-      </Card>
-      <Card kanji="道">
-        <div class="class-entry">
-          <div class="class-age">Certified Instruction</div>
-          <h3 class="class-name">{CPR_CLASS.name}</h3>
-          <p class="class-desc">{CPR_CLASS.description}</p>
-          <Button 
-            type="button"
-            data-interest={CPR_CLASS.name}
-            data-anchor="contact-form"
-          >
-            Schedule {CPR_CLASS.name}
-          </Button>
+          <div class="class-cta">
+            <Button 
+              type="button" 
+              data-interest={ADULT_CLASS.name}
+              aria-haspopup="dialog"
+              aria-controls="free-trial-dialog"
+            >
+              Join {ADULT_CLASS.name}
+            </Button>
+          </div>
         </div>
       </Card>
     </Cards>
@@ -92,28 +80,20 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
 
   classesSection?.addEventListener('click', event => {
     if (event.target instanceof HTMLButtonElement) {
+      const dialog = document.getElementById('free-trial-dialog') as HTMLDialogElement;
       const dataInterest = (event.target as HTMLButtonElement).getAttribute('data-interest');
-      const karateInterest = dataInterest && ['Youth Karate', 'Adult Karate'].includes(dataInterest);
-      let contactForm = document.forms.namedItem('contact-form') as HTMLFormElement;
-
-      if (karateInterest) {
-        contactForm = document.forms.namedItem('free-trial-form') as HTMLFormElement;
-      }
-
+      const contactForm = document.forms.namedItem('free-trial-form') as HTMLFormElement;
       const interest = contactForm.elements.namedItem('interest') as HTMLSelectElement;
       const messageTextarea = contactForm.elements.namedItem('message') as HTMLTextAreaElement;
 
       contactForm.reset();
+      dialog.showModal();
       if (interest && dataInterest) {
         interest.value = dataInterest;
         interest.dispatchEvent(new Event('change', { bubbles: true }));
       }
-      if (messageTextarea && dataInterest) {
-        if (karateInterest) {
-          messageTextarea.value = `I am interested in starting my free 7-day trial for ${dataInterest}.`;
-        } else {
-          messageTextarea.value = `I am interested in ${dataInterest} training.`;
-        }
+      if (messageTextarea) {
+        messageTextarea.value = `I am interested in starting my free 7-day trial for ${dataInterest}.`;
       }
       contactForm.dispatchEvent(new Event('change', { bubbles: true }));
     }
@@ -151,6 +131,17 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
       @container class-entry (width >= 500px) {
         grid-template-columns: 1.35fr 1fr;
       }
+    }
+    .class-entry-grid :where(p,ul,h4) {
+      margin-block: 0;
+    }
+    .class-entry-grid > div {
+      margin-block-start: 1em;
+    }
+    .class-cta {
+      margin-block-start: 2em;
+      display: grid;
+      justify-content: center;
     }
     .section-label {
       font-family: var(--ff-heading);
@@ -205,22 +196,20 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
       font-family: var(--ff-body);
       font-size: 1rem;
       font-weight: 700;
-      margin-block: 0.25em;
       line-height: normal;
     }
     ul {
-      margin: 1em 0;
       padding: 0;
-      list-style: none;
-      display: flex;
-      gap: 0 0.5rem;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
+      list-style: disc;
       line-height: normal;
+      margin-inline-start: 1em;
     }
     li {
       font-family: var(--ff-heading);
       font-size: 0.875rem;
+    }
+    li::marker {
+      color: var(--deep-red);
     }
   }
 </style>

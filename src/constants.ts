@@ -58,8 +58,3 @@ export const ADULT_CLASS: IKarateClass = {
   tuition: [45, 60],
   tuition_recurrence: "Monthly",
 }
-
-export const CPR_CLASS: IBaseClass = {
-  name: "CPR & First Aid",
-  description: "Learn life-saving CPR and first aid skills in a hands-on, practical course. Certification included.",
-}
