@@ -13,6 +13,7 @@ interface InstructorProps {
 }
 
 const { name, title, rank, img, imgAspectRatio, featured = false, id } = Astro.props as InstructorProps;
+const hasTitle = title || Astro.slots.has('title');
 ---
 
 <li id={id} class={featured ? 'featured' : ''}>
@@ -27,7 +28,7 @@ const { name, title, rank, img, imgAspectRatio, featured = false, id } = Astro.p
   </div>
   )}
   <div>
-    {(title || rank) && <p><span>{title}</span><span>{rank}</span></p>}
+    {(hasTitle || rank) && <p><span><slot name="title">{title}</slot></span><span>{rank}</span></p>}
     <h2>{name}</h2>
     <div class="content">
       <slot></slot>
