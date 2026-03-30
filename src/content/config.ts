@@ -48,7 +48,7 @@ const faqs = defineCollection({
 const dictionary = defineCollection({
   type: 'content',
   schema: z.object({
-    word: z.string(),
+    term: z.string(),
   }),
 });
 

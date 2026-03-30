@@ -18,14 +18,16 @@ const { Content } = await post.render();
 ---
 
 <Layout 
-  title="Dictionary"
-  description="Dictionary entries for Dean's Okinawan Karate, including terms, definitions, and explanations."
+  title={`Dictionary - ${post.data.term}`}
+  description={`Definition of ${post.data.term} in Dean's Okinawan Karate dictionary.`}
 >
-  <InteriorPage heading={post.data.word}>
+  <InteriorPage heading={post.data.term}>
     <div class="content">
       <Content />
     </div>
-    <Button variant="secondary" href={BASE_URL + ROUTES.dictionary}>Back to Dictionary</Button>
+    <div class="footer">
+      <Button variant="secondary" href={BASE_URL + ROUTES.dictionary}>Back to Dictionary</Button>
+    </div>
   </InteriorPage>
 </Layout>
 
@@ -80,6 +82,11 @@ const { Content } = await post.render();
       height: 1px;
       background: linear-gradient(to right, transparent, var(--silver), transparent);
       margin: 2rem auto;
+    }
+    .footer {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
   }
 </style>

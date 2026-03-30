@@ -256,8 +256,8 @@ export default defineConfig({
         fields: [
           {
             type: "string",
-            label: "Word",
-            name: "word",
+            label: "Term",
+            name: "term",
             isTitle: true,
             required: true,
           },
