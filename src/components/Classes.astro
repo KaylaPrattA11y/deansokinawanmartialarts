@@ -16,12 +16,10 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
       <Card kanji="子">
         <div class="class-entry">
           <div class="class-age">Ages {YOUTH_CLASS.ages}</div>
-          <CalendarAddKarateClass id="yc-classes" karateClass={YOUTH_CLASS} />
           <div class="class-entry-grid">
             <div>
-              <p class="class-desc">
-                {YOUTH_CLASS.description}
-              </p>
+              <CalendarAddKarateClass id="yc-classes" karateClass={YOUTH_CLASS} />
+              <p class="class-desc">{YOUTH_CLASS.description}</p>
             </div>
             <div>
               <h4>{YOUTH_CLASS.tuition_recurrence} Tuition:</h4>
@@ -46,9 +44,9 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
       <Card kanji="武">
         <div class="class-entry">
           <div class="class-age">Ages {ADULT_CLASS.ages}</div>
-          <CalendarAddKarateClass id="ac-classes" karateClass={ADULT_CLASS} />
           <div class="class-entry-grid">
             <div>
+              <CalendarAddKarateClass id="ac-classes" karateClass={ADULT_CLASS} />
               <p class="class-desc">{ADULT_CLASS.description}</p>
             </div>
             <div>
@@ -79,7 +77,11 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
   const classesSection = document.getElementById('classes');
 
   classesSection?.addEventListener('click', event => {
-    if (event.target instanceof HTMLButtonElement) {
+    const isDialogTrigger = 
+      event.target instanceof HTMLButtonElement 
+      && event.target.hasAttribute('aria-haspopup') 
+      && event.target.getAttribute('aria-haspopup') === 'dialog';
+    if (isDialogTrigger) {
       const dialog = document.getElementById('free-trial-dialog') as HTMLDialogElement;
       const dataInterest = (event.target as HTMLButtonElement).getAttribute('data-interest');
       const contactForm = document.forms.namedItem('free-trial-form') as HTMLFormElement;
@@ -129,17 +131,16 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
       display: grid;
       gap: 0 2rem;
       @container class-entry (width >= 500px) {
-        grid-template-columns: 1.35fr 1fr;
+        grid-template-columns: 1.75fr 1fr;
       }
     }
     .class-entry-grid :where(p,ul,h4) {
-      margin-block: 0;
+      margin-block: 1em;
     }
-    .class-entry-grid > div {
-      margin-block-start: 1em;
+    .class-entry-grid h4 {
+      margin-block-start: 0;
     }
     .class-cta {
-      margin-block-start: 2em;
       display: grid;
       justify-content: center;
     }

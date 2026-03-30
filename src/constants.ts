@@ -30,7 +30,7 @@ export interface IKarateClass extends IBaseClass {
 export const YOUTH_CLASS: IKarateClass = {
   ages: "4 – 15",
   name: "Youth Karate",
-  description: "Foundational karate, kata, and kobudo instruction. Children develop discipline, confidence, and respect alongside physical skill.",
+  description: "Foundational karate, self-defense, and kata instruction. Children develop discipline, confidence, and respect alongside physical skill.",
   startDate: "2025-01-06", // (YYYY-MM-DD)
   startTime: "18:00",
   endTime: "19:00",
@@ -46,7 +46,7 @@ export const YOUTH_CLASS: IKarateClass = {
 export const ADULT_CLASS: IKarateClass = {
   name: "Adult Karate",
   ages: "16 & Up",
-  description: "Comprehensive Shorin-Ryu training including empty-hand kata, bunkai, and traditional Okinawan self-defense applications.",
+  description: "Comprehensive Shorin-Ryu training including empty-hand kata, bunkai, kobudo (weapons) training, and traditional Okinawan self-defense applications.",
   startDate: "2025-01-06", // (YYYY-MM-DD)
   startTime: "18:00",
   endTime: "20:00",
