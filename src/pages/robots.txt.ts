@@ -4,7 +4,7 @@ const getRobotsTxt = (sitemapURL: URL) => `\
 User-agent: *
 Allow: /
 Disallow: /admin/
-Sitemap: https://deansokinawanmartialarts.netlify.app/${sitemapURL}
+Sitemap: ${sitemapURL}
 `;
 
 export const GET: APIRoute = ({ site }) => {

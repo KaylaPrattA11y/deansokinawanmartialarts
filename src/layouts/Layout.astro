@@ -107,10 +107,7 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
         maxSnippet: robots?.maxSnippet ?? 150, // Limits the maximum length of any snippet (if allowed) to 150 characters.
       }}
       additionalLinkTags={[
-        { rel: "canonical", href: "#" },
-        { rel: "prev", href: Astro.url },
-        { rel: "next", href: Astro.url },
-        { rel: "alternate", href: Astro.url }
+        { rel: "canonical", href: pageUrl || Astro.url.href },
       ]}
       additionalMetaTags={[
         {
