@@ -19,20 +19,6 @@ export const SITE_SEO = {
   ],
 }
 
-export const SITE_SCHEMA = {
-  type: "SportsActivityLocation",
-  name: SITE_SEO.name.short,
-  imagePath: "/logo.png",
-  address: {
-    locality: "Hollywood",
-    region: "MD",
-    country: "US",
-  },
-  telephone: "(301) 373-5031",
-  priceRange: "$$",
-  sameAs: [] as string[],
-}
-
 export const BASE_URL = import.meta.env.BASE_URL;
 
 export const IS_DEV = import.meta.env.DEV;

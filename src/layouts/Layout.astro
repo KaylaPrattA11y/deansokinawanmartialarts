@@ -8,7 +8,7 @@ import Footer from '../components/Footer.astro';
 import FreeTrialDialog from '../components/FreeTrialDialog.astro';
 import PagefindDialog from '../components/PagefindDialog.astro';
 import '../scss/site.scss';
-import { BASE_URL, ROUTES, SITE_SEO, SITE_SCHEMA } from '../config/site';
+import { BASE_URL, ROUTES, SITE_SEO } from '../config/site';
 import logo from '../assets/logo.svg';
 
 interface Props {
@@ -35,23 +35,40 @@ const toAbsoluteUrl = (path: string) => {
 };
 
 const websiteUrl = toAbsoluteUrl(BASE_URL);
-const logoUrl = toAbsoluteUrl(SITE_SCHEMA.imagePath);
+const logoUrl = toAbsoluteUrl("/logo.png");
 const pageUrl = siteOrigin ? new URL(Astro.url.pathname, siteOrigin).toString() : undefined;
 
 const organizationSchema: Record<string, unknown> = {
   "@context": "https://schema.org",
-  "@type": SITE_SCHEMA.type,
-  name: SITE_SCHEMA.name,
+  "@type": "SportsActivityLocation",
+  name: SITE_SEO.name.short,
   description,
   ...(websiteUrl ? { url: websiteUrl } : {}),
   ...(logoUrl ? { image: logoUrl } : {}),
-  ...(SITE_SCHEMA.sameAs.length ? { sameAs: SITE_SCHEMA.sameAs } : {}),
+  telephone: "(301) 373-5031",
+  priceRange: "$$",
   address: {
     "@type": "PostalAddress",
-    addressLocality: SITE_SCHEMA.address.locality,
-    addressRegion: SITE_SCHEMA.address.region,
-    addressCountry: SITE_SCHEMA.address.country,
+    streetAddress: "23725 Three Notch Rd",
+    addressLocality: "Hollywood",
+    addressRegion: "MD",
+    postalCode: "20636",
+    addressCountry: "US",
   },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 38.319478,
+    longitude: -76.5436977,
+  },
+  openingHoursSpecification: [
+    { "@type": "OpeningHoursSpecification", dayOfWeek: "Monday", opens: "18:00", closes: "19:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: "Tuesday", opens: "18:00", closes: "20:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: "Wednesday", opens: "18:00", closes: "19:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: "Thursday", opens: "18:00", closes: "20:00" },
+  ],
+  sameAs: [
+    "https://www.facebook.com/DeansOkinawanMartialArts",
+  ],
 };
 
 const webPageSchema: Record<string, unknown> = {
@@ -64,7 +81,7 @@ const webPageSchema: Record<string, unknown> = {
     ? {
         isPartOf: {
           "@type": "WebSite",
-          name: SITE_SCHEMA.name,
+          name: SITE_SEO.name.short,
           url: websiteUrl,
         },
       }
