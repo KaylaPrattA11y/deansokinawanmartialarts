@@ -1,5 +1,6 @@
 ---
 import Button from "./Button.astro"
+import { FREE_TRIAL_MESSAGE } from "../constants";
 ---
 
 <section class="trial-banner" id="trial">
@@ -18,21 +19,22 @@ import Button from "./Button.astro"
   </Button>
 </section>
 
-<script>
+<script is:inline define:vars={{FREE_TRIAL_MESSAGE}}>
+
   const trialSection = document.getElementById('trial');
 
   trialSection?.addEventListener('click', event => {
     if (event.target instanceof HTMLButtonElement) {
-      const dialog = document.getElementById('free-trial-dialog') as HTMLDialogElement;
-      const contactForm = document.forms.namedItem('free-trial-form') as HTMLFormElement;
-      const messageTextarea = contactForm.elements.namedItem('message') as HTMLTextAreaElement;
+      const dialog = document.getElementById('free-trial-dialog');
+      const form = document.forms.namedItem('free-trial-form');
+      const messageTextarea = form.elements.namedItem('message');
 
-      contactForm.reset();
+      form.reset();
       dialog.showModal();
       if (messageTextarea) {
-        messageTextarea.value = 'I am interested in the 7-Day Free Trial.';
+        messageTextarea.value = FREE_TRIAL_MESSAGE;
       }
-      contactForm.dispatchEvent(new Event('change', { bubbles: true }));
+      form.dispatchEvent(new Event('change', { bubbles: true }));
     }
   });
 </script>

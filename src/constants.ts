@@ -58,3 +58,6 @@ export const ADULT_CLASS: IKarateClass = {
   tuition: [45, 60],
   tuition_recurrence: "Monthly",
 }
+
+export const FREE_TRIAL_NAME = "7-Day Free Trial";
+export const FREE_TRIAL_MESSAGE = `I am interested in starting my ${FREE_TRIAL_NAME}.`;

@@ -1,6 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { YOUTH_CLASS, ADULT_CLASS } from '../constants';
+import { YOUTH_CLASS, ADULT_CLASS, FREE_TRIAL_NAME } from '../constants';
 import CalendarAddKarateClass from './CalendarAddKarateClass.astro';
 
 const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
@@ -77,7 +77,7 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
   <p class="privacy"><small>We respect your privacy. Your information will never be shared.</small></p>
 </form>
 
-<script is:inline define:vars={{ id }}>
+<script is:inline define:vars={{ id, FREE_TRIAL_NAME }}>
   const form = document.forms.namedItem(id);
   const interestSelect = form.elements.namedItem('interest');
   const classSchedule = form.querySelector('[data-calendar="class-schedule"]');
@@ -100,6 +100,7 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
   const handleInterestChange = () => {
     const value = interestSelect?.value;
     const karateInterest = value && ['Youth Karate', 'Adult Karate'].includes(value);
+    const messageTextarea = form.elements.namedItem('message');
     
     if (karateInterest) {
       frequencyFieldset.disabled = false;
@@ -107,7 +108,10 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
       classSchedule.classList.remove('d-none');
       calendarAddYouth.classList.toggle('d-none', value !== 'Youth Karate');
       calendarAddAdult.classList.toggle('d-none', value !== 'Adult Karate');
-
+      if (messageTextarea && (messageTextarea.value === '' || messageTextarea.value.startsWith('I am interested in starting my'))) {
+        messageTextarea.value = `I am interested in starting my ${FREE_TRIAL_NAME} for ${value}.`;
+        form.dispatchEvent(new Event('change', { bubbles: true }));
+      }
     } else {  
       frequencyFieldset.disabled = true;
       frequencyFieldset.classList.add('d-none');
