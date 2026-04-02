@@ -262,6 +262,11 @@ export default defineConfig({
             required: true,
           },
           {
+            type: "string",
+            label: "Pronunciation",
+            name: "pronunciation",
+          },
+          {
             type: "rich-text",
             label: "Definition",
             name: "definition",

@@ -49,6 +49,7 @@ const dictionary = defineCollection({
   type: 'content',
   schema: z.object({
     term: z.string(),
+    pronunciation: z.string().optional(),
   }),
 });
 

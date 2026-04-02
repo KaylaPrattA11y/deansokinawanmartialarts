@@ -11,6 +11,7 @@ const terms = await getCollection("dictionary");
 const thisTerm = terms.find(t => t.slug === term.toLowerCase());
 // remove HTML tags from the tooltip text
 const tooltipText = (thisTerm?.body?.trim() ?? '').replace(/<[^>]*>/g, '');
+const termPronunciation = thisTerm?.data.pronunciation;
 
 ---
 {thisTerm && tooltipText && (
@@ -23,6 +24,7 @@ const tooltipText = (thisTerm?.body?.trim() ?? '').replace(/<[^>]*>/g, '');
       {term.replaceAll("-", " ")}
     </span>
     <span id={uniqueId} role="tooltip" class="term-tooltip">
+      {termPronunciation && <em>({termPronunciation})</em>}{' '}
       {tooltipText}
     </span>
   </span>

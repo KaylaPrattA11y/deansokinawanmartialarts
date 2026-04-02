@@ -37,7 +37,12 @@ const pageDesc = "Dictionary entries for Dean's Okinawan Karate, including terms
         return (
           <div>
             <dt>{post.data.term}</dt>
-            <dd><Content /></dd>
+            <dd>
+              <em>{post.data.pronunciation}</em> 
+              <div class="content">
+                <Content />
+              </div>
+            </dd>
           </div>
         );
       })}
@@ -54,6 +59,14 @@ const pageDesc = "Dictionary entries for Dean's Okinawan Karate, including terms
       align-items: start;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       grid-auto-rows: minmax(60px, auto);
+    }
+    em {
+      color: var(--silver);
+      font-size: 0.9rem;
+      margin-inline-start: -1rem;
+    }
+    .content :global(> *) {
+      margin-block-start: 0.5em;
     }
   }
 </style>
