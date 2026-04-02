@@ -41,5 +41,5 @@ export const ROUTES = {
 };
 
 export const FLAGS = {
-  useLightboxControls: false,
+  useLightboxControls: true,
 }
