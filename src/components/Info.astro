@@ -5,9 +5,9 @@ import ContactForm from "./ContactForm.astro";
 
 <section class="contact" id="contact">
   <div class="info-inner">
-    <div>
+    <div class="info-inner--details">
       <div class="info-block">
-        <div class="info-block-title">Contact</div>
+        <h2 class="info-block-title" id="contact-phone">Contact</h2>
         <p>
           <a href="tel:+13013735031"><Icon name="phone" /> (301) 373-5031 — Home Office</a>
         </p>
@@ -19,7 +19,7 @@ import ContactForm from "./ContactForm.astro";
         </p>
       </div>
       <div class="info-block">
-        <div class="info-block-title">Location</div>
+        <h2 class="info-block-title">Location</h2>
         <address>
           23725 Three Notch Road<br />
           Hollywood, Maryland 20636
@@ -29,28 +29,17 @@ import ContactForm from "./ContactForm.astro";
             title="Dean's Okinawan Martial Arts & Self Defense on Google Maps"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3130.2741358575695!2d-76.54627262354384!3d38.31948218059545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89b76611b2f388b3%3A0x4db9fe7421e464a9!2sDeans%20Okinawan%20Martial%20Arts!5e0!3m2!1sen!2sus!4v1771960121663!5m2!1sen!2sus" 
             width="100%" 
-            height="225" 
+            height="100%" 
             style="border:0;" 
             allowfullscreen="" 
             loading="lazy" 
             referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
-      <div class="info-block">
-        <div class="info-block-title">Hours</div>
-        <p>
-          <strong>Youth Classes</strong
-          ><br />
-          Monday &amp; Wednesday<br />
-          6:00 – 7:00 PM<br /><br />
-          <strong>Adult Classes</strong
-          ><br />
-          Tuesday &amp; Thursday<br />
-          6:00 – 8:00 PM
-        </p>
-      </div>
     </div>
-    <ContactForm />
+    <div class="info-inner--form">
+      <ContactForm />
+    </div>
   </div>
 </section>
 
@@ -61,7 +50,7 @@ import ContactForm from "./ContactForm.astro";
     }
     a:link, a:visited {
       font-family: var(--ff-heading);
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: var(--paper);
     }
     a:link {
@@ -86,20 +75,26 @@ import ContactForm from "./ContactForm.astro";
       display: grid;
       gap: 1rem 2rem;
       align-items: start;
+      grid-template-areas: 
+        "form"
+        "details";
       @container contact (width >= 600px) {
-        grid-template-columns: 1fr 1.25fr;
+        grid-template-areas: 
+        "details"
+        "form";
+        /* grid-template-columns: 1fr 1.25fr; */
       }
       @container contact (width >= 900px) {
         grid-template-columns: 1fr 1.5fr;
         gap: 1rem 4rem;
       }
     }
-    .info-inner > div {
-      display: grid;
-      gap: 1.5rem 2rem;
-      @container (width < 900px) {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      }
+    .info-inner--details {
+      grid-area: details;
+    }
+    .info--form {
+      grid-area: form;
+      margin-block-end: 1em;
     }
     .info-block-title {
       font-family: var(--ff-heading);
@@ -107,14 +102,16 @@ import ContactForm from "./ContactForm.astro";
       letter-spacing: 0.4em;
       text-transform: uppercase;
       color: var(--cream);
-      margin-block-end: 0.5rem;
-      padding-block-end: 0.75rem;
+      margin-block: 0.5rem;
       border-block-end: 1px solid rgba(194, 189, 181, 0.15);
+    }
+    .info-block:not(:first-of-type) {
+      margin-block-start: 2rem;
     }
     .info-block p,
     .info-block address {
       font-style: normal;
-      font-size: 1.25rem;
+      font-size: 1rem;
       line-height: 1.9;
       color: var(--silver);
     }
@@ -125,19 +122,20 @@ import ContactForm from "./ContactForm.astro";
     }
     .iframe-wrapper {
       margin-block-start: 1rem;
-      @container (width >= 600px) {
-        position: relative;
-        overflow: hidden;
-        aspect-ratio: 4 / 3;
-        max-inline-size: 300px;
-      }
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
       @container (width < 600px) {
         margin-left: calc(var(--padding-x) * -1);
+        inline-size: calc(100% + var(--padding-x) * 2);
+      }
+      @container (width >= 600px) {
+        aspect-ratio: 16 / 9;
       }
     }
     iframe {
       width: calc(100% + var(--padding-x));
-      height: 225px;
     }
+    
   }
 </style>

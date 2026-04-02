@@ -221,22 +221,33 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
       display: grid;
       gap: 0.15rem;
     }
-    form {
-      container: form / inline-size;
-      display: grid;
+    form#free-trial-form {
       background-color: #2e26228a;
-      border-inline-start: 3px solid var(--bright-red);
-      padding: 2rem 1rem;
-      box-sizing: border-box;
-      align-content: start;
+      @container (width >= 600px) {
+        border-radius: 10px;
+        border: 2px solid rgba(194,189,181,0.3);
+      }
+    }
+    form#contact-form {
+      background-color: #2e26228a;
       @container (width < 600px) {
-        inline-size: calc(100% + calc(var(--padding-x) * 2));
         margin-inline-start: calc(var(--padding-x) * -1);
+        inline-size: calc(100% + calc(var(--padding-x) * 2));
       }
       @container (width >= 600px) {
+        border-inline-start: 3px solid var(--bright-red);
         margin-block-start: 2rem;
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
+      }
+    }
+    form {
+      container: form / inline-size;
+      display: grid;
+      align-content: start;
+      box-sizing: border-box;
+      padding: 2rem 0.5rem;
+      @container (width >= 600px) {
         padding: 2rem;
       }
     }

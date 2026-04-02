@@ -14,14 +14,24 @@ import ContactForm from "./ContactForm.astro";
 
 <style>
   @layer components {
+    dialog {
+      overflow-x: hidden;
+    }
     .free-trial-form-wrapper {
       position: relative;
-      margin: 2rem auto;
-      max-inline-size: 675px;
+      max-inline-size: 600px;
+      @container (width < 600px) {
+        block-size: 100vh;
+        block-size: 100dvh;
+      }
+      @container (width >= 600px) {
+        margin: 2rem auto;
+      }
     }
 		button {
       color: var(--paper);
       position: absolute;
+      z-index: 1;
       inset: 0 0 auto auto;
       padding: 0.75rem;
 			appearance: none;
