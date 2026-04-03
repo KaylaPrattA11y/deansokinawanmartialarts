@@ -9,11 +9,11 @@ import pagefind from "astro-pagefind";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://deansokinawanmartialarts.netlify.app",
+  site: "https://deansokinawanmartialarts.com",
   integrations: [
     icon(), 
     sitemap({
-      filter: page => page !== "https://deansokinawanmartialarts.netlify.app/admin/",
+      filter: page => page !== "https://deansokinawanmartialarts.com/admin/",
     }),
     pagefind()
   ],
