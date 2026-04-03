@@ -138,7 +138,7 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
         }
       ]}
     />
-		<script type="application/ld+json" set:html={JSON.stringify(schemaGraph)}></script>
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(schemaGraph)}></script>
 	</head>
 	<body>
     <a href="#main-content-anchor" class="skip-link">Skip to main content</a>
