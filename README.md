@@ -52,11 +52,9 @@ A static website for Dean's Okinawan Karate (Shorin-Ryu Matsumura Seito) dojo in
 Create a `.env` file in the project root. The variables below are **only needed for production / cloud CMS mode** — local development works out of the box without them.
 
 ```env
-
 NEXT_PUBLIC_TINA_CLIENT_ID=<token>
 TINA_SEARCH_TOKEN=<token>
 TINA_TOKEN=<token>
-GITHUB_BRANCH=<token>
 
 ---
 
@@ -87,7 +85,7 @@ Content changes made through the admin UI in local mode are written directly to 
 | `npm run build` | Build TinaCMS assets then build the Astro site to `dist/` |
 | `npm run preview` | Preview the production build locally |
 | `npm run astro` | Run Astro CLI commands directly (e.g. `npm run astro -- --help`) |
-| `npx netlify deploy --prod` | Deploys the current build to Netlify. Costs 15 credits. |
+| `npx netlify deploy --prod` | Deploys the current build to Netlify |
 
 ---
 
@@ -100,7 +98,7 @@ Clear cache: `rm -rf .astro node_modules/.vite node_modules/.cache dist && npm r
 ## Project Structure
 
 ```
-├── astro.config.mjs          # Astro configuration (integrations, site URL, Vite proxy)
+├── astro.config.mjs          # Astro configuration (integrations, site URL, Vite settings)
 ├── eslint.config.ts          # ESLint config (TypeScript, React, Astro, JSX-a11y)
 ├── netlify.toml              # Netlify build, headers, redirects, functions config
 ├── package.json
@@ -131,6 +129,7 @@ Clear cache: `rm -rf .astro node_modules/.vite node_modules/.cache dist && npm r
 │   ├── content/              # Astro Content Collections
 │   │   ├── config.ts         # Collection schemas (blog, gallery, faqs)
 │   │   ├── blog/             # News & updates (Markdown)
+│   │   ├── dictionary/        # Karate dictionary terms (Markdown)
 │   │   ├── faqs/             # FAQ entries (Markdown)
 │   │   └── gallery/          # Photo/video gallery items (Markdown)
 │   ├── icons/                # Local SVG icons
@@ -139,11 +138,11 @@ Clear cache: `rm -rf .astro node_modules/.vite node_modules/.cache dist && npm r
 │   ├── pages/                # File-based routing
 │   │   ├── index.astro       # Home page
 │   │   ├── about/            # About page
+│   │   ├── dictionary/       # Karate dictionary
 │   │   ├── faqs/             # FAQs (paginated)
 │   │   ├── gallery/          # Gallery (paginated w/ detail pages)
 │   │   ├── instructors/      # Instructors page
-│   │   ├── news/             # News listing (paginated w/ detail pages)
-│   │   └── submit/           # Form submission handler
+│   │   └── news/             # News listing (paginated w/ detail pages)
 │   ├── scss/
 │   │   ├── site.scss         # Main stylesheet entry
 │   │   └── _global.scss      # Global styles & variables
@@ -177,12 +176,6 @@ npm run dev
 - Content is read from and written to local markdown files in `src/content/`.
 - The GraphQL API runs on `http://localhost:4001` and Vite proxies `/api/tina` requests to it.
 
-### Production Mode
-
-```bash
-npm run dev:prod
-```
-
 ### Admin UI
 
 The TinaCMS admin UI is served from `/admin/`. Build output goes to `public/admin/`. The admin UI is generated during `tinacms build`.
@@ -213,6 +206,12 @@ Content lives in `src/content/` and is defined by both Astro's content config (`
 - **Format:** Markdown with YAML frontmatter
 - **Fields:** `question` (required), `sortPriority` (optional number for ordering), `body` (rich text)
 
+### Dictionary (`dictionary`)
+
+- **Path:** `src/content/dictionary/`
+- **Format:** Markdown with YAML frontmatter
+- **Fields:** Karate terminology entries with Japanese terms and definitions
+
 ---
 
 ## Adding Pages & Components
@@ -231,8 +230,7 @@ Trailing slashes are enforced (`trailingSlash: 'always'` in `astro.config.mjs`).
 
 ### Components
 
-- **Astro components** (`.astro`) are the default — use for static/server-rendered UI.
-- **React components** (`.tsx`) are used via Astro's React integration for interactive islands.
+- **Astro components** (`.astro`) handle all UI — static and server-rendered.
 - Shared site constants (routes, class schedules, SEO, breakpoints) live in `src/config/site.ts`.
 
 ---
@@ -266,12 +264,7 @@ Local SVG icons can also be placed in `src/icons/`.
 
 ## SEO & Canonical URL
 
-`astro.config.mjs` sets Astro's `site` value from environment variables in this order:
-
-1. `SITE_URL` (preferred override)
-2. Netlify's `URL` (fallback)
-
-Set `SITE_URL` in Netlify's environment settings to force a specific canonical domain (e.g., during a domain migration or to enforce `www` vs apex). If neither variable is set, canonical URLs are omitted.
+`astro.config.mjs` sets the `site` value to `https://deansokinawanmartialarts.com`, which Astro uses for canonical URLs, sitemaps, and other absolute URL generation.
 
 Site-level SEO metadata and structured data (JSON-LD) are configured in `src/config/site.ts`.
 
@@ -283,9 +276,8 @@ The site is configured for Netlify via `netlify.toml`:
 
 - **Build command:** `npm run build` (runs `tinacms build && astro build`)
 - **Publish directory:** `dist/`
-- **Serverless functions:** `netlify/functions/` (esbuild bundler)
 - **Headers:** Long-term caching for `/_astro/*` and `/images/*`
-- **Redirects:** `/api/tina/*` → serverless TinaCMS function; `/*` → `/index.html` (SPA fallback)
+- **Redirects:** `/sitemap.xml` → `/sitemap-index.xml`
 
 ### Deploy
 
@@ -303,10 +295,9 @@ Or push to the configured branch and Netlify will build automatically.
 
 Set these in the Netlify dashboard under **Site settings > Environment variables**:
 
-- `NEXT_PUBLIC_TINA_CLIENT_ID`
-- `TINA_SEARCH_TOKEN`
-- `TINA_TOKEN`
-- `GITHUB_BRANCH`
+- `NEXT_PUBLIC_TINA_CLIENT_ID` — TinaCloud Client ID — identifies the project
+- `TINA_TOKEN` — Content API token — authenticates read/write access to your content
+- `TINA_SEARCH_TOKEN` — Search indexer token — powers TinaCMS search
 
 ---
 
