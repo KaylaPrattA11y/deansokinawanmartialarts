@@ -85,6 +85,7 @@ Content changes made through the admin UI in local mode are written directly to 
 | `npm run build` | Build TinaCMS assets then build the Astro site to `dist/` |
 | `npm run preview` | Preview the production build locally |
 | `npm run astro` | Run Astro CLI commands directly (e.g. `npm run astro -- --help`) |
+| `npm run clean:content` | Clear Astro's content store cache and re-sync (fixes stale/deleted content showing up in builds) |
 | `npx netlify deploy --prod` | Deploys the current build to Netlify |
 
 ---
