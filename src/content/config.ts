@@ -53,4 +53,15 @@ const dictionary = defineCollection({
   }),
 });
 
-export const collections = { blog, gallery, faqs, dictionary };
+const announcements = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    className: z.enum(['Youth Karate', 'Adult Karate']),
+    date: z.coerce.date(),
+    cancelled: z.boolean().default(false),
+    message: z.string().max(100).optional(),
+  }),
+});
+
+export const collections = { blog, gallery, faqs, dictionary, announcements };

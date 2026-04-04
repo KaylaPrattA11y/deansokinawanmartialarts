@@ -4,13 +4,60 @@ import Card from "./cards/Card.astro";
 import Button from "./Button.astro";
 import { YOUTH_CLASS, ADULT_CLASS, FREE_TRIAL_NAME } from '../constants';
 import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
+import { getCollection } from 'astro:content';
+
+const allAnnouncements = await getCollection('announcements');
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+// Filter to future cancelled dates and group by class name
+const youthCancelled = allAnnouncements
+  .filter((a) => a.data.className === YOUTH_CLASS.name && a.data.cancelled && new Date(a.data.date) >= today)
+  .map((a) => {
+    const d = new Date(a.data.date);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  });
+
+const adultCancelled = allAnnouncements
+  .filter((a) => a.data.className === ADULT_CLASS.name && a.data.cancelled && new Date(a.data.date) >= today)
+  .map((a) => {
+    const d = new Date(a.data.date);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  });
+
+// Filter to announcements in the next 2 weeks and sort by date. Also include cancelled classes with messages, but exclude cancelled classes without messages since those are already reflected in the calendar component.
+const upcomingAnnouncements = allAnnouncements
+  .filter((a) => {
+    const d = new Date(a.data.date);
+    const twoWeeksOut = new Date(today);
+    twoWeeksOut.setDate(today.getDate() + 14);
+    return d >= today && d <= twoWeeksOut;
+  })
+  .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
 ---
 
 <section class="classes" id="classes">
   <div class="classes-inner">
-    <div>
-      <div class="section-label">Training</div>
-      <h2 class="section-title">Classes &amp; Schedule</h2>
+    <div class="classes-header">
+      <div>
+        <div class="section-label">Training</div>
+        <h2 class="section-title">Classes &amp; Schedule</h2>
+      </div>
+      <div>
+        {upcomingAnnouncements.length > 0 && (
+          <div class="class-announcements">
+            <h3>Announcements</h3>
+            <ul>
+              {upcomingAnnouncements.map((a) => (
+                <li>
+                  <strong>{a.data.className}: {a.data.cancelled && <> Class Cancelled</>} {new Date(a.data.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</strong>
+                  {a.data.message && <span>- {a.data.message}</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
     <Cards cols={2}>
       <Card kanji="子">
@@ -18,11 +65,11 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
           <div class="class-age">Ages {YOUTH_CLASS.ages}</div>
           <div class="class-entry-grid">
             <div>
-              <CalendarAddKarateClass id="yc-classes" karateClass={YOUTH_CLASS} />
+              <CalendarAddKarateClass id="yc-classes" karateClass={YOUTH_CLASS} cancelledDates={youthCancelled} />
               <p class="class-desc">{YOUTH_CLASS.description}</p>
             </div>
             <div>
-              <h4>{YOUTH_CLASS.tuition_recurrence} Tuition:</h4>
+              <div class="class-tuition">{YOUTH_CLASS.tuition_recurrence} Tuition:</div>
               <ul>
                 <li>1 day per week: <strong>${YOUTH_CLASS.tuition[0]}</strong></li>
                 <li>2 days per week: <strong>${YOUTH_CLASS.tuition[1]}</strong></li>
@@ -46,11 +93,11 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
           <div class="class-age">Ages {ADULT_CLASS.ages}</div>
           <div class="class-entry-grid">
             <div>
-              <CalendarAddKarateClass id="ac-classes" karateClass={ADULT_CLASS} />
+              <CalendarAddKarateClass id="ac-classes" karateClass={ADULT_CLASS} cancelledDates={adultCancelled} />
               <p class="class-desc">{ADULT_CLASS.description}</p>
             </div>
             <div>
-              <h4>{ADULT_CLASS.tuition_recurrence} Tuition:</h4>
+              <div class="class-tuition">{ADULT_CLASS.tuition_recurrence} Tuition:</div>
               <ul>
                 <li>1 day per week: <strong>${ADULT_CLASS.tuition[0]}</strong></li>
                 <li>2 days per week: <strong>${ADULT_CLASS.tuition[1]}</strong></li>
@@ -137,9 +184,6 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
     .class-entry-grid :where(p,ul,h4) {
       margin-block: 1em;
     }
-    .class-entry-grid h4 {
-      margin-block-start: 0;
-    }
     .class-cta {
       display: grid;
       justify-content: center;
@@ -162,6 +206,25 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
       line-height: 1.1;
       color: var(--paper);
       margin-bottom: 2rem;
+    }
+    .classes-header {
+      display: grid;
+      @container (width >= 900px) {
+        grid-template-columns: 1.5fr 1fr;
+      }
+      > div:last-child {
+        align-self: end;
+      }
+    }
+    .class-announcements h3 {
+      font-family: var(--ff-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-block: 0 0.25em;
+    }
+    .class-announcements ul {
+      font-family: var(--ff-body);
     }
     .class-age {
       font-family: var(--ff-heading);
@@ -193,7 +256,7 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
       text-transform: uppercase;
       margin-block: 1em;
     }
-    h4 {
+    .class-tuition {
       font-family: var(--ff-body);
       font-size: 1rem;
       font-weight: 700;
@@ -205,12 +268,12 @@ import CalendarAddKarateClass from "./CalendarAddKarateClass.astro";
       line-height: normal;
       margin-inline-start: 1em;
     }
-    li {
-      font-family: var(--ff-heading);
-      font-size: 0.875rem;
-    }
     li::marker {
       color: var(--deep-red);
+    }
+    .class-entry li {
+      font-family: var(--ff-heading);
+      font-size: 0.875rem;
     }
   }
 </style>

@@ -5,9 +5,10 @@ import { type IKarateClass } from '../constants';
 interface IKarateClassProps {
   karateClass: IKarateClass;
   id: string; // unique ID for this instance (e.g. "youth-class-1")
+  cancelledDates?: string[]; // array of YYYY-MM-DD strings for cancelled class dates
 }
 
-const { karateClass, id } = Astro.props as IKarateClassProps;
+const { karateClass, id, cancelledDates = [] } = Astro.props as IKarateClassProps;
 
 function formatMilitaryToStandard(militaryTime: string) {
   // Assumes militaryTime is a string like "HH:mm" or "HH:mm:ss"
@@ -25,20 +26,51 @@ function formatMilitaryToStandard(militaryTime: string) {
   return formattedTime;
 }
 
-function getRelativeStartAndEndDate(cls: IKarateClass) {
+function toDateString(d: Date): string {
+  return d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+}
+
+function getRelativeStartAndEndDate(cls: IKarateClass, cancelled: string[] = []) {
+  const cancelledSet = new Set(cancelled);
+
   const dayNumberToOffset = (targetDay: number, fromDay: number) =>
     (targetDay - fromDay + 7) % 7 || 7; // || 7 ensures we never get 0 (always look forward)
 
-  // Use today as the reference point, not startDate
+  // Use today as the reference point
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const todayDay = today.getDay();
 
-  // Find the nearest upcoming target day from today
-  const nearestOffset = cls.recurrence_byDay
+  // Build sorted list of day offsets from today for all recurring days
+  const dayOffsets = cls.recurrence_byDay
     .map((d) => dayNumberToOffset(d, todayDay))
-    .sort((a, b) => a - b)[0];
+    .sort((a, b) => a - b);
 
+  // Search forward through upcoming occurrences, skipping cancelled dates
+  // Check up to 52 weeks ahead to find a non-cancelled date
+  for (let weekOffset = 0; weekOffset < 52; weekOffset++) {
+    for (const offset of dayOffsets) {
+      const candidate = new Date(today);
+      candidate.setDate(today.getDate() + offset + weekOffset * 7);
+      if (!cancelledSet.has(toDateString(candidate))) {
+        const [startHour, startMin] = cls.startTime.split(":").map(Number);
+        const [endHour, endMin] = cls.endTime.split(":").map(Number);
+
+        const startDT = new Date(candidate);
+        startDT.setHours(startHour, startMin, 0, 0);
+
+        const endDT = new Date(candidate);
+        endDT.setHours(endHour, endMin, 0, 0);
+
+        return { startDT, endDT };
+      }
+    }
+  }
+
+  // Fallback: if all dates within a year are cancelled, use the nearest anyway
+  const nearestOffset = dayOffsets[0];
   const anchorDate = new Date(today);
   anchorDate.setDate(today.getDate() + nearestOffset);
 
@@ -54,7 +86,7 @@ function getRelativeStartAndEndDate(cls: IKarateClass) {
   return { startDT, endDT };
 }
 
-const { startDT, endDT } = getRelativeStartAndEndDate(karateClass);
+const { startDT, endDT } = getRelativeStartAndEndDate(karateClass, cancelledDates);
 
 function generateGoogleCalendarLink(cls: IKarateClass): string {
   const dayNumberToRRule: Record<number, string> = {
@@ -94,7 +126,7 @@ function generateICSContent(cls: IKarateClass): string {
     0: "SU", 1: "MO", 2: "TU", 3: "WE", 4: "TH", 5: "FR", 6: "SA",
   };
 
-  const { startDT, endDT } = getRelativeStartAndEndDate(cls);
+  const { startDT, endDT } = getRelativeStartAndEndDate(cls, cancelledDates);
 
   // Format as YYYYMMDDTHHmmss
   const fmt = (d: Date): string =>
@@ -163,15 +195,14 @@ function generateICSContent(cls: IKarateClass): string {
 <div 
   class="calendar" 
   data-component="CalendarAddKarateClass"
-  data-component="CalendarAddKarateClass"
   data-ics-content={generateICSContent(karateClass)}
   data-ics-name={karateClass.name}
 >
   <div>
     <div class="calendar--date">
       <span class="calendar--date-next">Next class:</span>
-      <span class="calendar--date-day">{getRelativeStartAndEndDate(karateClass).startDT.getDate()}</span>
-      <span class="calendar--date-month">{getRelativeStartAndEndDate(karateClass).startDT.toLocaleString('default', { month: 'short' })}</span>
+      <span class="calendar--date-day">{getRelativeStartAndEndDate(karateClass, cancelledDates).startDT.getDate()}</span>
+      <span class="calendar--date-month">{getRelativeStartAndEndDate(karateClass, cancelledDates).startDT.toLocaleString('default', { month: 'short' })}</span>
     </div>
     <div class="calendar--event-details">
       <h3 class="calendar--event-title"><span>{karateClass.name}</span></h3>

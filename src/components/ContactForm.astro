@@ -2,6 +2,25 @@
 import { Icon } from 'astro-icon/components';
 import { YOUTH_CLASS, ADULT_CLASS, FREE_TRIAL_NAME } from '../constants';
 import CalendarAddKarateClass from './CalendarAddKarateClass.astro';
+import { getCollection } from 'astro:content';
+
+const allAnnouncements = await getCollection('announcements');
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const youthCancelled = allAnnouncements
+  .filter((a) => a.data.className === YOUTH_CLASS.name && a.data.cancelled && new Date(a.data.date) >= today)
+  .map((a) => {
+    const d = new Date(a.data.date);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  });
+
+const adultCancelled = allAnnouncements
+  .filter((a) => a.data.className === ADULT_CLASS.name && a.data.cancelled && new Date(a.data.date) >= today)
+  .map((a) => {
+    const d = new Date(a.data.date);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  });
 
 const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
 ---
@@ -46,10 +65,10 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
       </div>
       <div class="d-none" data-calendar="class-schedule">
         <div class="d-none" data-calendar="add-youth">
-          <CalendarAddKarateClass id={`${id}-yc-contact`} karateClass={YOUTH_CLASS} />
+          <CalendarAddKarateClass id={`${id}-yc-contact`} karateClass={YOUTH_CLASS} cancelledDates={youthCancelled} />
         </div>
         <div class="d-none" data-calendar="add-adult">
-          <CalendarAddKarateClass id={`${id}-ac-contact`} karateClass={ADULT_CLASS} />
+          <CalendarAddKarateClass id={`${id}-ac-contact`} karateClass={ADULT_CLASS} cancelledDates={adultCancelled} />
         </div>
       </div>
       <fieldset class="field d-none" name="frequency" disabled>
