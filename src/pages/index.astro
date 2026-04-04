@@ -7,13 +7,17 @@ import Dojo from '../components/Dojo.astro';
 import Classes from '../components/Classes.astro';
 import Trial from '../components/Trial.astro';
 import { HOME_NEWS_PAGE_SIZE } from '../constants';
+import logo from '../assets/logo.svg';
+import { getImage } from 'astro:assets';
 
+const logoImage = await getImage({ src: logo, format: 'svg' });
 const posts = (await getCollection("blog"))
   .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
   .slice(0, HOME_NEWS_PAGE_SIZE);
 ---
 
 <Layout>
+  <img src={logoImage.src} alt="Dean's Okinawan Martial Arts logo" data-pagefind-meta="image[src], image_alt[alt]" hidden />
 	<Hero />
   <News posts={posts} data-pagefind-ignore="true" />
   <Dojo />
