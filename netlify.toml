@@ -8,6 +8,10 @@
   command = "npm run dev"
   targetPort = 4321
 
+# Mailgun plugin for custom email domain
+[[plugins]]
+  package = "@netlify/plugin-emails"
+
 # Redirect /sitemap.xml to /sitemap-index.xml (Astro's default sitemap name)
 # so bots looking for the common path still find it
 [[redirects]]

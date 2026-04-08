@@ -45,14 +45,14 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
         <p class="validation">Please enter your name.</p>
       </div>
       <div class="field">
-        <label for={`${id}-phone`}>Phone</label>
-        <input type="tel" id={`${id}-phone`} name="phone" autocomplete="tel" required />
-        <p class="validation">Please enter a valid phone number so we can contact you.</p>
+        <label for={`${id}-email`}>Email</label>
+        <input type="email" id={`${id}-email`} name="email" autocomplete="email" required />
+        <p class="validation">Please enter a valid email address so we can contact you.</p>
       </div>
       <div class="field">
-        <label for={`${id}-email`}>Email (optional)</label>
-        <input type="email" id={`${id}-email`} name="email" autocomplete="email" />
-        <p class="validation">Please enter a valid email address.</p>
+        <label for={`${id}-phone`}>Phone (optional)</label>
+        <input type="tel" id={`${id}-phone`} name="phone" autocomplete="tel" />
+        <p class="validation">Please enter a valid phone number.</p>
       </div>
       <div class="field">
         <label for={`${id}-interest`}>Interest (optional)</label>
@@ -182,6 +182,14 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
       });
       
       if (response.ok) {
+        const name = formData.get('name');
+        const email = formData.get('email');
+
+        fetch('/.netlify/functions/messageReceivedHandler', {
+          method: 'POST',
+          body: JSON.stringify({ name, email }),
+        }).catch((err) => console.error('Error sending confirmation email:', err));
+ 
         if (successMessage) {
           successMessage.classList.remove('d-none')
         }

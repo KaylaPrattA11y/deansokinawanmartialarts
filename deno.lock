@@ -11,29 +11,24 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
-        "npm:@astrojs/react@^4.4.2",
+        "npm:@astrojs/sitemap@^3.7.0",
         "npm:@fontsource-variable/cinzel@^5.2.8",
         "npm:@fontsource-variable/eb-garamond@^5.2.7",
         "npm:@fontsource-variable/noto-serif-jp@^5.2.9",
+        "npm:@netlify/emails@^1.1.0",
         "npm:@tinacms/cli@^2.1.9",
         "npm:@types/eslint-plugin-jsx-a11y@^6.10.1",
-        "npm:@types/react-dom@^19.2.3",
-        "npm:@types/react-syntax-highlighter@^15.5.13",
-        "npm:@types/react@^19.2.14",
+        "npm:@types/node@^25.3.5",
         "npm:astro-icon@^1.1.5",
-        "npm:astro-seo@^1.1.0",
-        "npm:astro@^5.17.1",
+        "npm:astro-pagefind@^1.8.5",
+        "npm:astro-seo-plugin@^1.3.5",
+        "npm:astro@^5.18.0",
         "npm:eslint-plugin-astro@^1.6.0",
-        "npm:eslint-plugin-jsx-a11y@^6.10.2",
-        "npm:eslint-plugin-react@^7.37.5",
-        "npm:react-dom@^19.2.4",
-        "npm:react-is@^19.2.4",
-        "npm:react@^19.2.4",
+        "npm:jiti@^2.6.1",
         "npm:sass-embedded@^1.97.3",
-        "npm:styled-components@^6.3.11",
         "npm:tinacms@^3.6.1",
-        "npm:typescript-eslint@8",
-        "npm:typescript@5"
+        "npm:typescript-eslint@^8.56.1",
+        "npm:typescript@^5.9.3"
       ]
     }
   }

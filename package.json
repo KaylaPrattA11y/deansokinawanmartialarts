@@ -14,6 +14,7 @@
     "@fontsource-variable/cinzel": "^5.2.8",
     "@fontsource-variable/eb-garamond": "^5.2.7",
     "@fontsource-variable/noto-serif-jp": "^5.2.9",
+    "@netlify/emails": "^1.1.0",
     "@tinacms/cli": "^2.1.9",
     "astro": "^5.18.0",
     "astro-icon": "^1.1.5",
