@@ -29,3 +29,4 @@ pnpm-debug.log*
 # TinaCMS admin build output (also covered by public/admin/.gitignore)
 public/admin/index.html
 public/admin/assets/
+tina/__generated__/
