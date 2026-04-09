@@ -182,14 +182,6 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
       });
       
       if (response.ok) {
-        const name = formData.get('name');
-        const email = formData.get('email');
-
-        fetch('/.netlify/functions/messageReceivedHandler', {
-          method: 'POST',
-          body: JSON.stringify({ name, email }),
-        }).catch((err) => console.error('Error sending confirmation email:', err));
- 
         if (successMessage) {
           successMessage.classList.remove('d-none')
         }
