@@ -28,6 +28,7 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
 <form 
   name="Contact" 
   data-netlify="true" 
+  netlify-honeypot="bot-field"
   method="POST"
   id={id}
 >
@@ -41,22 +42,53 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
     <div class="form-grid">
       <div class="field">
         <label for={`${id}-name`}>Name</label>
-        <input type="text" id={`${id}-name`} name="name" autocomplete="name" required />
+        <input 
+          type="text" 
+          id={`${id}-name`} 
+          name="name" 
+          autocomplete="name" 
+          maxlength="100" 
+          required 
+        />
         <p class="validation">Please enter your name.</p>
       </div>
+      <input 
+        type="text" 
+        name="bot-field" 
+        class="d-none" 
+        tabindex="-1" 
+        autocomplete="off" 
+        aria-hidden="true"
+      />
       <div class="field">
         <label for={`${id}-email`}>Email</label>
-        <input type="email" id={`${id}-email`} name="email" autocomplete="email" required />
+        <input 
+          type="email" 
+          id={`${id}-email`} 
+          name="email" 
+          autocomplete="email" 
+          maxlength="100" 
+          required 
+        />
         <p class="validation">Please enter a valid email address so we can contact you.</p>
       </div>
       <div class="field">
         <label for={`${id}-phone`}>Phone (optional)</label>
-        <input type="tel" id={`${id}-phone`} name="phone" autocomplete="tel" />
+        <input 
+          type="tel" 
+          id={`${id}-phone`} 
+          name="phone" 
+          autocomplete="tel" 
+          maxlength="20" 
+        />
         <p class="validation">Please enter a valid phone number.</p>
       </div>
       <div class="field">
         <label for={`${id}-interest`}>Interest (optional)</label>
-        <select id={`${id}-interest`} name="interest">
+        <select 
+          id={`${id}-interest`} 
+          name="interest"
+        >
           <option value="">Select an option...</option>
           <option value={YOUTH_CLASS.name}>{YOUTH_CLASS.name}</option>
           <option value={ADULT_CLASS.name}>{ADULT_CLASS.name}</option>
@@ -75,11 +107,21 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
         <legend>Frequency (optional)</legend>
         <div>
           <div class="radio">
-            <input type="radio" name="schedule" value="One day per week" id={`${id}-schedule-1`} />
+            <input 
+              type="radio" 
+              name="schedule" 
+              value="One day per week" 
+              id={`${id}-schedule-1`} 
+            />
             <label for={`${id}-schedule-1`}>One day per week</label>
           </div>
           <div class="radio">
-            <input type="radio" name="schedule" value="Two days per week" id={`${id}-schedule-2`} />
+            <input 
+              type="radio" 
+              name="schedule" 
+              value="Two days per week" 
+              id={`${id}-schedule-2`} 
+            />
             <label for={`${id}-schedule-2`}>Two days per week</label>
           </div>
         </div>
@@ -87,7 +129,13 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
     </div>
     <div class="field">
       <label for={`${id}-message`}>Message</label>
-      <textarea id={`${id}-message`} name="message" autocomplete="off" rows="5" required></textarea>
+      <textarea 
+        id={`${id}-message`} 
+        name="message" 
+        autocomplete="off" 
+        rows="5" 
+        maxlength="300" 
+        required></textarea>
       <p class="validation">Please enter a message.</p>
     </div>
   </fieldset>

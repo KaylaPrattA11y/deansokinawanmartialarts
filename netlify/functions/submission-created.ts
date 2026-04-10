@@ -26,11 +26,36 @@ const handler: Handler = async (event) => {
     return { statusCode: 200, body: "Not a contact form submission, skipping" };
   }
 
-  const email = data.email;
-  const name = data.name;
+  // Honeypot check - if the bot-field is filled out, it's likely a bot submission
+  if (data["bot-field"] && data["bot-field"].trim() !== "") {
+    console.warn("Bot submission detected via honeypot");
+    return { statusCode: 200, body: "Skipping bot submission" };
+  }
 
-  if (!email) {
-    return { statusCode: 200, body: "No email provided, skipping email send" };
+  const requiredFields = ["email", "name", "message"];
+
+  // Check for missing or empty fields
+  for (const field of requiredFields) {
+    if (!data[field] || data[field].trim() === "") {
+      console.warn(`Form submission missing required field: ${field}`, {
+        submittedData: Object.keys(data),
+        timestamp: new Date().toISOString()
+      });
+      return { 
+        statusCode: 200, 
+        body: `Skipping email send: missing ${field}` 
+      };
+    }
+  }
+
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(data.email.trim())) {
+    console.warn(`Invalid email format: ${data.email}`);
+    return {
+      statusCode: 200,
+      body: "Skipping email send: invalid email format"
+    };
   }
 
   if (!process.env.NETLIFY_EMAILS_SECRET) {
@@ -38,30 +63,56 @@ const handler: Handler = async (event) => {
     return { statusCode: 500, body: "Email service not configured" };
   }
 
-  // Strip HTML tags from name to prevent injection into the email template
-  const safeName = name ? name.replace(/<[^>]*>/g, "").trim() : "";
-
-  const response = await fetch(`${process.env.URL}/.netlify/functions/emails/message-received`, {
-    headers: {
-      "netlify-emails-secret": process.env.NETLIFY_EMAILS_SECRET,
-    },
-    method: "POST",
-    body: JSON.stringify({
-      from: "noreply@deansokinawanmartialarts.com",
-      to: email,
-      subject: "We received your message",
-      parameters: {
-        name: safeName,
-      },
-    }),
-  });
-
-  if (!response.ok) {
-    console.error("Email send failed:", response.status, await response.text());
-    return { statusCode: 500, body: "Failed to send email" };
+  if (!process.env.URL) {
+    console.error("URL environment variable not configured");
+    return { statusCode: 500, body: "Email service not configured" };
   }
 
-  return { statusCode: 200, body: "'Message received' email sent!" };
+  // Strip HTML tags and sanitize name to prevent injection
+  const safeName = data.name.replace(/<[^>]*>/g, "").trim();
+  
+  // Additional sanitization: limit length
+  const maxNameLength = 100;
+  const truncatedName = safeName.substring(0, maxNameLength);
+
+  try {
+    const response = await fetch(
+      `${process.env.URL}/.netlify/functions/emails/message-received`,
+      {
+        headers: {
+          "netlify-emails-secret": process.env.NETLIFY_EMAILS_SECRET,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          from: "noreply@deansokinawanmartialarts.com",
+          to: data.email.trim(),
+          subject: "We received your message",
+          parameters: {
+            name: truncatedName,
+          },
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Email send failed:", response.status, errorText);
+      return { 
+        statusCode: 500, 
+        body: "Failed to send confirmation email" 
+      };
+    }
+
+    console.log(`Confirmation email sent successfully to: ${data.email}`);
+    return { statusCode: 200, body: "'Message received' email sent!" };
+  } catch (error) {
+    console.error("Error sending email:", error);
+    return { 
+      statusCode: 500, 
+      body: "Failed to send confirmation email" 
+    };
+  }
 };
 
 export { handler };
