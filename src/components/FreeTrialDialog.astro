@@ -4,10 +4,10 @@ import ContactForm from "./ContactForm.astro";
 ---
 
 <dialog id="free-trial-dialog">
-  <button type="button" aria-label="Close menu" aria-controls="free-trial-dialog">
-    <Icon name="close" size="28px" />
-  </button>
   <div class="free-trial-form-wrapper">
+    <button type="button" aria-label="Close menu" aria-controls="free-trial-dialog">
+      <Icon name="close" size="28px" />
+    </button>
     <ContactForm formHeading="Start Your Free Trial" id="free-trial-form" />
   </div>
 </dialog>
@@ -69,6 +69,7 @@ import ContactForm from "./ContactForm.astro";
       }
       if (submitButton) {
         submitButton.disabled = false;
+        submitButton.textContent = 'Send Message';
       }
       successMessage?.classList.add('d-none');
     });

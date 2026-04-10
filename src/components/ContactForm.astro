@@ -231,17 +231,25 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
       
       if (response.ok) {
         if (successMessage) {
-          successMessage.classList.remove('d-none')
+          const dialog = form.closest('dialog');
+
+          successMessage.classList.remove('d-none');
+          submitButton.textContent = 'Message Sent';
+          if (dialog instanceof HTMLDialogElement) {
+            dialog.scrollTop = 0;
+            setTimeout(() => {
+              dialog.close();
+            }, 5000);
+          } else {
+            scrollToWithOffset(successMessage);
+          }
         }
-        scrollToWithOffset(form);
       } else {
         alert('Sorry, there was an error sending your message. Please try again.');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
       alert('Sorry, there was an error sending your message. Please try again.');
-    } finally {
-      submitButton.textContent = 'Message Sent';
     }
   });
 </script>
@@ -286,6 +294,7 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
     }
     .field {
       display: grid;
+      align-content: start;
       gap: 0.15rem;
     }
     form#free-trial-form {
