@@ -238,7 +238,10 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
           if (dialog instanceof HTMLDialogElement) {
             dialog.scrollTop = 0;
             setTimeout(() => {
-              dialog.close();
+              // Detect if the dialog form was reset and has not yet been closed by the user, and close it after 5 seconds
+              if (dialog.open && submitButton.textContent === 'Message Sent') {
+                dialog.close();
+              }
             }, 5000);
           } else {
             scrollToWithOffset(successMessage);
