@@ -6,9 +6,33 @@ interface IKarateClassProps {
   karateClass: IKarateClass;
   id: string; // unique ID for this instance (e.g. "youth-class-1")
   cancelledDates?: string[]; // array of YYYY-MM-DD strings for cancelled class dates
+  headingLevel?: number; // optional heading level for the class name (1-6). If not provided, defaults to no heading. Should be used to maintain proper document structure when this component is used within a page.
 }
 
-const { karateClass, id, cancelledDates = [] } = Astro.props as IKarateClassProps;
+const { karateClass, id, cancelledDates = [], headingLevel = 0 } = Astro.props as IKarateClassProps;
+
+
+// Returns a Date object representing midnight today in America/New_York (EST/EDT)
+function getTodayEST() {
+  const now = new Date();
+  // Get the current date/time in America/New_York
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+  const parts = formatter.formatToParts(now);
+  const year = Number(parts.find(p => p.type === 'year')?.value);
+  const month = Number(parts.find(p => p.type === 'month')?.value) - 1;
+  const day = Number(parts.find(p => p.type === 'day')?.value);
+  // Construct a Date object at midnight EST/EDT
+  const estMidnight = new Date(Date.UTC(year, month, day));
+  // Get the actual offset for this date
+  const actualOffset = -now.toLocaleString('en-US', { timeZone: 'America/New_York', timeZoneName: 'short' }).includes('EDT') ? 4 * 60 : 5 * 60;
+  estMidnight.setUTCMinutes(estMidnight.getUTCMinutes() + actualOffset * 1);
+  return estMidnight;
+}
 
 function formatMilitaryToStandard(militaryTime: string) {
   // Assumes militaryTime is a string like "HH:mm" or "HH:mm:ss"
@@ -36,11 +60,10 @@ function getRelativeStartAndEndDate(cls: IKarateClass, cancelled: string[] = [])
   const cancelledSet = new Set(cancelled);
 
   const dayNumberToOffset = (targetDay: number, fromDay: number) =>
-    (targetDay - fromDay + 7) % 7 || 7; // || 7 ensures we never get 0 (always look forward)
+    (targetDay - fromDay + 7) % 7;
 
-  // Use today as the reference point
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  // Use EST today as the reference point
+  const today = getTodayEST();
   const todayDay = today.getDay();
 
   // Build sorted list of day offsets from today for all recurring days
@@ -205,7 +228,19 @@ function generateICSContent(cls: IKarateClass): string {
       <span class="calendar--date-month">{getRelativeStartAndEndDate(karateClass, cancelledDates).startDT.toLocaleString('default', { month: 'short' })}</span>
     </div>
     <div class="calendar--event-details">
-      <h3 class="calendar--event-title"><span>{karateClass.name}</span></h3>
+      {headingLevel === 1 ? (
+        <h1 class="calendar--event-title"><span>{karateClass.name}</span></h1>
+      ) : headingLevel === 2 ? (
+        <h2 class="calendar--event-title"><span>{karateClass.name}</span></h2>
+      ) : headingLevel === 3 ? (
+        <h3 class="calendar--event-title"><span>{karateClass.name}</span></h3>
+      ) : headingLevel === 4 ? (
+        <h4 class="calendar--event-title"><span>{karateClass.name}</span></h4>
+      ) : headingLevel === 5 ? (
+        <h5 class="calendar--event-title"><span>{karateClass.name}</span></h5>
+      ) : headingLevel === 6 ? (
+        <h6 class="calendar--event-title"><span>{karateClass.name}</span></h6>
+      ) : null}
       <div class="calendar--event-location"><Icon name="location" size={16} /> <span>{karateClass.location}</span></div>
       <div class="calendar--recurrence">
         <Icon name="calendar-week" size={14} /> <span>{karateClass.recurrence}: {karateClass.schedule}</span>

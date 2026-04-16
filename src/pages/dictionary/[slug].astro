@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import InteriorPage from '../../components/InteriorPage.astro';
 import Button from '../../components/Button.astro';
@@ -8,13 +8,13 @@ import { BASE_URL, ROUTES } from '../../config/site';
 export async function getStaticPaths() {
   const posts = await getCollection('dictionary');
   return posts.map(post => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 ---
 
 <Layout 

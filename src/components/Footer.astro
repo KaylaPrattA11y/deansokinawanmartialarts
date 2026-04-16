@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import Info from './Info.astro';
 import logo from "../assets/logo.svg";
 import SocialLink from './SocialLink.astro';
@@ -10,7 +9,7 @@ import SocialLink from './SocialLink.astro';
   <div class="footer">
     <div>
       <div class="footer-logo">
-        <Image src={logo} alt="Dojo seal" width={50} height={50} />
+        <img src={logo.src} alt="Dojo seal" width={50} height={50} />
         <div>
           Dean's Okinawan <br aria-hidden="true" /> Martial Arts
         </div>

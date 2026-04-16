@@ -9,7 +9,7 @@ export interface GalleryImage {
   title?: string;
   caption?: string;
   credit?: string;
-  slug?: string;
+  id?: string;
 }
 
 interface PhotoGalleryProps {
@@ -53,7 +53,7 @@ const validImages = images.filter(img =>
               data-title={img.title}
               data-caption={img.caption}
               data-credit={img.credit}
-              data-slug={img.slug}
+              data-id={img.id}
               aria-label={`View ${img.title || 'image'}`}
               type="button"
             >
@@ -94,7 +94,7 @@ const validImages = images.filter(img =>
             data-title={img.title}
             data-caption={img.caption}
             data-credit={img.credit}
-            data-slug={img.slug}
+            data-id={img.id}
             aria-label={`View ${img.title || 'video'}`}
             type="button"
           >
@@ -183,7 +183,7 @@ const validImages = images.filter(img =>
   }
 
   function showItem(btn) {
-    const { mediaType, src, title, caption, credit, slug } = btn.dataset;
+    const { mediaType, src, title, caption, credit, id } = btn.dataset;
     if (!mediaType) return;
 
     const dialogMediaWrapper = dialog.querySelector('.media-wrapper');
@@ -203,7 +203,7 @@ const validImages = images.filter(img =>
     figcaption.classList.replace('v-visible', 'v-hidden');
     dialogImg.src = '';
     dialogImg.alt = '';
-    dialogImg.dataset.slug = '';
+    dialogImg.dataset.id = '';
     dialogTitle.textContent = '';
     dialogCaption.textContent = '';
     dialogCaption.hidden = true;
@@ -218,7 +218,7 @@ const validImages = images.filter(img =>
     // Reset shared metadata
     shareButton.dataset.title = '';
     shareButton.dataset.description = '';
-    shareButton.dataset.slug = '';
+    shareButton.dataset.id = '';
 
     photoWrapper.classList.toggle('d-none', mediaType !== 'photo');
     videoWrapper.classList.toggle('d-none', mediaType !== 'video');
@@ -231,7 +231,7 @@ const validImages = images.filter(img =>
       };
       dialogImg.src = src || '';
       dialogImg.alt = title || '';
-      dialogImg.dataset.slug = slug || '';
+      dialogImg.dataset.id = id || '';
     }
 
     if (mediaType === 'video') {
@@ -251,7 +251,7 @@ const validImages = images.filter(img =>
 
     shareButton.dataset.title = title || '';
     shareButton.dataset.description = caption || '';
-    shareButton.dataset.slug = slug || '';
+    shareButton.dataset.id = id || '';
 
     dialogMediaWrapper.classList.remove('v-hidden');
   }
@@ -277,7 +277,7 @@ const validImages = images.filter(img =>
     figcaption.classList.replace('v-visible', 'v-hidden');
     dialogImg.src = '';
     dialogImg.alt = '';
-    dialogImg.dataset.slug = '';
+    dialogImg.dataset.id = '';
     dialogTitle.textContent = '';
     dialogCaption.textContent = '';
     dialogCaption.hidden = true;
@@ -288,7 +288,7 @@ const validImages = images.filter(img =>
     dialogIframe.title = 'Embedded Content';
     shareButton.dataset.title = '';
     shareButton.dataset.description = '';
-    shareButton.dataset.slug = '';
+    shareButton.dataset.id = '';
     currentIndex = -1;
     dialog.close();
   }

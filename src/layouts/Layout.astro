@@ -2,7 +2,7 @@
 import '@fontsource-variable/cinzel';
 import '@fontsource-variable/noto-serif-jp';
 import '@fontsource-variable/eb-garamond';
-import { AstroSEO } from 'astro-seo-plugin';
+import { SEO } from 'astro-seo';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FreeTrialDialog from '../components/FreeTrialDialog.astro';
@@ -16,8 +16,8 @@ interface Props {
   description?: string;
   schema?: Record<string, unknown> | Array<Record<string, unknown>>;
   robots?: {
-    index?: boolean;
-    follow?: boolean;
+    noindex?: boolean;
+    nofollow?: boolean;
     noarchive?: boolean;
     nosnippet?: boolean;
     maxSnippet?: number;
@@ -35,7 +35,7 @@ const toAbsoluteUrl = (path: string) => {
 };
 
 const websiteUrl = toAbsoluteUrl(BASE_URL);
-const logoUrl = toAbsoluteUrl("/logo.png");
+const logoUrl = toAbsoluteUrl("/logo.svg");
 const pageUrl = siteOrigin ? new URL(Astro.url.pathname, siteOrigin).toString() : undefined;
 
 const organizationSchema: Record<string, unknown> = {
@@ -107,36 +107,29 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
 		<link rel="icon" href="/favicon.ico" />
 		<link rel="preload" as="image" href={logo.src} fetchpriority="high" />
 		<meta name="generator" content={Astro.generator} />
-    <AstroSEO
+    <SEO
+      titleDefault={SITE_SEO.name.long}
       title={pageTitle}
       description={description}
       openGraph={{
-        title: pageTitle,
-        description: description,
-        image: ogImageUrl,
-        type: "website"
-      }}
-      jsonLd={{
-        "@type": "WebPage",
-        name: pageTitle,
-        description: description
-      }}
-      robots={{
-        index: robots?.index ?? true, // If true, allows search engines to index this page (include it in search results).
-        follow: robots?.follow ?? true, // If true, tells search engines to follow links on this page and crawl them.
-        noarchive: robots?.noarchive ?? false, // If true, prevents search engines from showing a cached version of this page.
-        nosnippet: robots?.nosnippet ?? false, // If true, stops search engines from displaying a text snippet or preview from this page in search results.
-        maxSnippet: robots?.maxSnippet ?? 150, // Limits the maximum length of any snippet (if allowed) to 150 characters.
-      }}
-      additionalLinkTags={[
-        { rel: "canonical", href: pageUrl || Astro.url.href },
-      ]}
-      additionalMetaTags={[
-        {
-        name: "keywords",
-        content: SITE_SEO.keywords.join(", ")
+        basic: {
+          title: pageTitle,
+          type: "website",
+          image: ogImageUrl,
         }
-      ]}
+      }}
+      noindex={robots?.noindex ?? false}
+      nofollow={robots?.nofollow ?? false} 
+      noarchive={robots?.noarchive ?? false} 
+      canonical={pageUrl || Astro.url.href}
+      extend={{
+        meta: [
+          {
+            name: "keywords",
+            content: SITE_SEO.keywords.join(", ")
+          }
+        ]
+      }}
     />
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(schemaGraph)}></script>
 	</head>
@@ -183,7 +176,7 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
         const shareData = {
           title: title,
           text: description ? `${title}\n\n${description}` : title,
-          url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.slug}/`
+          url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.id}/`
         };
         navigator.share(shareData).catch((error) => {
           console.error('Error sharing:', error);
@@ -220,7 +213,7 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
         const shareData = {
           title: title,
           text: description ? `${title}\n\n${description}` : title,
-          url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.slug}/`
+          url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.id}/`
         };
         
         navigator.share(shareData).catch((error) => {

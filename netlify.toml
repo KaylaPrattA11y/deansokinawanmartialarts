@@ -2,6 +2,7 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  functions = "netlify/functions"
 
 # Local dev settings: runs the Astro dev server on port 4321
 [dev]

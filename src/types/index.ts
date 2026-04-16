@@ -7,7 +7,6 @@ export interface Post {
     image?: string;
     tags?: string[];
   };
-  slug: string;
   id: string;
   gallery?: { image: string; caption?: string }[];
 

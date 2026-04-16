@@ -1,6 +1,23 @@
 # Dean's Okinawan Martial Arts & Self Defense
 
-A static website for Dean's Okinawan Karate (Shorin-Ryu Matsumura Seito) dojo in Hollywood, MD. Built with **Astro**, content-managed via **TinaCMS**, and deployed to **Netlify**.
+A static website for Dean's Okinawan Karate (Shorin-Ryu Matsumura Seito) dojo in Hollywood, MD. Built with **Astro v6+**, content-managed via **TinaCMS**, and deployed to **Netlify**.
+
+---
+
+## Astro v6 Upgrade Notes
+
+This project has been upgraded to **Astro v6**. Key changes:
+
+- **Content Collections:**
+  - Content config has moved from `src/content/config.ts` to `src/content.config.ts` (root-level file).
+  - Uses the new `defineCollection` API and `glob` loader for content collections. See [Astro v6 migration guide](https://docs.astro.build/en/guides/upgrade-to/v6/#removed-legacy-content-collections).
+- **Astro Integrations:**
+  - All integrations and config are now compatible with Astro v6.
+- **TypeScript:**
+  - TypeScript config extends `astro/tsconfigs/strict` for v6 compatibility.
+- **Other breaking changes:**
+  - Legacy content collection APIs and config files are removed.
+  - See `src/content.config.ts` for the new content schema setup.
 
 ---
 
@@ -106,6 +123,7 @@ Clear cache: `rm -rf .astro node_modules/.vite node_modules/.cache dist && npm r
 ├── netlify.toml              # Netlify build, headers, redirects, functions config
 ├── package.json
 ├── tsconfig.json             # Strict Astro TypeScript config w/ React JSX
+├── src/content.config.ts     # Astro v6+ content collections config (NEW in v6)
 │
 ├── public/                   # Static assets (served as-is)
 │   ├── admin/                # TinaCMS admin UI build output
@@ -118,34 +136,14 @@ Clear cache: `rm -rf .astro node_modules/.vite node_modules/.cache dist && npm r
 │   │   ├── Header.astro
 │   │   ├── Footer.astro
 │   │   ├── Hero.astro
-│   │   ├── Classes.astro     # Class schedule section
-│   │   ├── ContactForm.astro
-│   │   ├── Faq.astro
-│   │   ├── News.astro
-│   │   ├── PhotoGallery.astro
-│   │   ├── Trial.astro
-│   │   ├── articles/         # Blog article components
-│   │   ├── cards/            # Card UI components
-│   │   └── instructors/      # Instructor profile components
+│   │   ├── ...
 │   ├── config/
 │   │   └── site.ts           # Site-wide constants (SEO, schema, routes, classes, breakpoints)
-│   ├── content/              # Astro Content Collections
-│   │   ├── config.ts         # Collection schemas (blog, gallery, faqs)
-│   │   ├── blog/             # News & updates (Markdown)
-│   │   ├── dictionary/        # Karate dictionary terms (Markdown)
-│   │   ├── faqs/             # FAQ entries (Markdown)
-│   │   └── gallery/          # Photo/video gallery items (Markdown)
+│   ├── content/              # Markdown content (blog, gallery, faqs, dictionary)
 │   ├── icons/                # Local SVG icons
 │   ├── layouts/
 │   │   └── Layout.astro      # Base HTML layout
 │   ├── pages/                # File-based routing
-│   │   ├── index.astro       # Home page
-│   │   ├── about/            # About page
-│   │   ├── dictionary/       # Karate dictionary
-│   │   ├── faqs/             # FAQs (paginated)
-│   │   ├── gallery/          # Gallery (paginated w/ detail pages)
-│   │   ├── instructors/      # Instructors page
-│   │   └── news/             # News listing (paginated w/ detail pages)
 │   ├── scss/
 │   │   ├── site.scss         # Main stylesheet entry
 │   │   └── _global.scss      # Global styles & variables
@@ -153,8 +151,8 @@ Clear cache: `rm -rf .astro node_modules/.vite node_modules/.cache dist && npm r
 │       └── index.ts          # Shared TypeScript types
 │
 └── tina/                     # TinaCMS configuration
-    ├── config.ts             # Schema definitions for all collections
-    └── __generated__/        # Auto-generated TinaCMS types & client (do not edit)
+  ├── config.ts             # Schema definitions for all collections
+  └── __generated__/        # Auto-generated TinaCMS types & client (do not edit)
 ```
 
 ---

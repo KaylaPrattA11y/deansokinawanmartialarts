@@ -4,7 +4,7 @@
     <mj-section background-color="#2e2622">
       <mj-column>
         <mj-navbar base-url="https://deansokinawanmartialarts.com/" hamburger="hamburger" ico-color="#ffffff">
-            <mj-navbar-link href="/#classes" color="#ffffff">Classes</mj-navbar-link>
+            <mj-navbar-link href="/classes/" color="#ffffff">Classes</mj-navbar-link>
             <mj-navbar-link href="/faqs/1/" color="#ffffff">FAQs</mj-navbar-link>
             <mj-navbar-link href="/news/1/" color="#ffffff">News &amp; Updates</mj-navbar-link>
         </mj-navbar>

@@ -1,0 +1,18 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import InteriorPage from "../../components/InteriorPage.astro";
+import ClassAnnouncements from '../../components/classes/ClassAnnouncements.astro';
+import ClassCards from '../../components/classes/ClassCards.astro';
+
+const pageDesc = "Dean’s Okinawan Martial Arts & Self Defense provides adult and youth karate classes in Shorin-Ryu Matsumura Seito and weapons training.";
+---
+
+<Layout title="Classes & Schedule" description={pageDesc}>
+	<InteriorPage 
+    heading={`Classes & Schedule`} 
+    lead={pageDesc}
+  >
+    <ClassAnnouncements headingLevel={2} />
+    <ClassCards headingLevel={2} />
+  </InteriorPage>
+</Layout>

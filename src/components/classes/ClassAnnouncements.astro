@@ -1,0 +1,73 @@
+---
+import { getCollection } from 'astro:content';
+
+const allAnnouncements = await getCollection('announcements');
+const today = new Date();
+
+today.setHours(0, 0, 0, 0);
+
+// Filter to announcements in the next 2 weeks and sort by date. Also include cancelled classes with messages, but exclude cancelled classes without messages since those are already reflected in the calendar component.
+const upcomingAnnouncements = allAnnouncements
+  .filter((a) => {
+    const d = new Date(a.data.date);
+    const twoWeeksOut = new Date(today);
+    twoWeeksOut.setDate(today.getDate() + 14);
+    return d >= today && d <= twoWeeksOut;
+  })
+  .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
+
+const { headingLevel = 0 } = Astro.props;
+---
+
+{upcomingAnnouncements.length > 0 && (
+  <div class="class-announcements">
+    {headingLevel === 1 ? (
+      <h1 class="class-announcements--heading">Announcements</h1>
+    ) : headingLevel === 2 ? (
+      <h2 class="class-announcements--heading">Announcements</h2>
+    ) : headingLevel === 3 ? (
+      <h3 class="class-announcements--heading">Announcements</h3>
+    ) : headingLevel === 4 ? (
+      <h4 class="class-announcements--heading">Announcements</h4>
+    ) : headingLevel === 5 ? (
+      <h5 class="class-announcements--heading">Announcements</h5>
+    ) : headingLevel === 6 ? (
+      <h6 class="class-announcements--heading">Announcements</h6>
+    ) : null}
+    <ul>
+      {upcomingAnnouncements.map((a) => (
+        <li>
+          <strong>
+            {a.data.className}: {a.data.cancelled ? <>Class Cancelled on </> : null}
+            {new Date(a.data.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+          </strong>
+          {a.data.message ? <span> - {a.data.message}</span> : null}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+    
+<style>
+  @layer components {
+    .class-announcements--heading {
+      font-family: var(--ff-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-block: 0 0.25em;
+    }
+    .class-announcements ul {
+      font-family: var(--ff-body);
+    }
+    ul {
+      padding: 0;
+      list-style: disc;
+      line-height: normal;
+      margin-inline-start: 1em;
+    }
+    li::marker {
+      color: var(--deep-red);
+    }
+  }
+</style>

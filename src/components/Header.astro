@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import { Icon } from 'astro-icon/components';
 import logo from "../assets/logo.svg";
 import MenuItems from "./MenuItems.astro";
@@ -8,7 +7,7 @@ import MenuItems from "./MenuItems.astro";
 <header aria-label="Site header" id="site-header" data-pagefind-ignore="true">
 	<div>
 		<div class="site-logo">
-			<Image src={logo} alt="Dojo seal" width={50} height={50} fetchpriority="high" />
+			<img src={logo.src} alt="Dojo seal" width={50} height={50} fetchpriority="high" />
 			<a href="/">
 				Dean's Okinawan <br aria-hidden="true" /> Martial Arts
 			</a>

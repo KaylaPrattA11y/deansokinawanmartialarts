@@ -3,10 +3,10 @@ interface CardsProps {
   cols?: number;
 }
 
-const { cols = 3 } = Astro.props as CardsProps;
+const { cols = 3, ...rest } = Astro.props as CardsProps;
 ---
 
-<ul class="cards" style={{ '--cols': cols }}>
+<ul class="cards" style={{ '--cols': cols }} {...rest}>
   <slot />
 </ul>
 

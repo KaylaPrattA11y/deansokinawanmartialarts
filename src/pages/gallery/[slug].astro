@@ -9,7 +9,7 @@ import { SITE_SEO, BASE_URL, ROUTES } from '../../config/site';
 export async function getStaticPaths() {
   const posts = await getCollection('gallery');
   return posts.map(post => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post },
   }));
 }

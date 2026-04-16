@@ -283,6 +283,11 @@ export default defineConfig({
               "The answer to the question. Use the toolbar to format text, add links, etc.",
           },
         ],
+        ui: {
+          allowedActions: {
+            createNestedFolder: false,
+          }
+        }
       },
       {
         label: "Dictionary",
@@ -315,7 +320,11 @@ export default defineConfig({
               "The meaning and context of the term.",
           },
         ],
-
+        ui: {
+          allowedActions: {
+            createNestedFolder: false,
+          }
+        }
       },
       {
         label: "Class Announcements",
@@ -375,6 +384,11 @@ export default defineConfig({
               "Announcement details, 100 characters max (e.g., 'Holiday — no class', 'Class moved to 7 PM')",
           },
         ],
+        ui: {
+          allowedActions: {
+            createNestedFolder: false,
+          },
+        }
       }
     ],
   },

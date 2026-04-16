@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import type { GetStaticPaths } from "astro";
 import Layout from "../../layouts/Layout.astro";
@@ -33,7 +33,7 @@ const pageDesc = "Dictionary entries for Dean's Okinawan Karate, including terms
   <InteriorPage heading={pageTitle}>
     <dl>
       {posts.map(async (post) => {
-        const { Content } = await post.render();
+        const { Content } = await render(post);
         return (
           <div>
             <dt>{post.data.term}</dt>

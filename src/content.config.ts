@@ -1,7 +1,12 @@
-import { defineCollection, z } from 'astro:content';
+// Migrated from src/content/config.ts for Astro v6+
+// See https://docs.astro.build/en/guides/upgrade-to/v6/#removed-legacy-content-collections
+
+import { defineCollection } from "astro:content";
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 const blog = defineCollection({
-  type: 'content',
+  loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
     title: z.string(),
     pubDate: z.coerce.date(),
@@ -25,7 +30,7 @@ const blog = defineCollection({
 });
 
 const gallery = defineCollection({
-  type: 'content',
+  loader: glob({ base: './src/content/gallery', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
     mediaType: z.enum(['photo', 'video']),
     image: z.string().optional(),
@@ -38,7 +43,7 @@ const gallery = defineCollection({
 });
 
 const faqs = defineCollection({
-  type: 'content',
+  loader: glob({ base: './src/content/faqs', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
     question: z.string(),
     sortPriority: z.number().optional(),
@@ -46,7 +51,7 @@ const faqs = defineCollection({
 });
 
 const dictionary = defineCollection({
-  type: 'content',
+  loader: glob({ base: './src/content/dictionary', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
     term: z.string(),
     pronunciation: z.string().optional(),
@@ -54,7 +59,7 @@ const dictionary = defineCollection({
 });
 
 const announcements = defineCollection({
-  type: 'content',
+  loader: glob({ base: './src/content/announcements', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
     title: z.string(),
     className: z.enum(['Youth Karate', 'Adult Karate']),

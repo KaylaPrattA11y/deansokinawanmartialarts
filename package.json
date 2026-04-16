@@ -10,25 +10,25 @@
     "clean:content": "rm -rf node_modules/.astro && astro sync"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/sitemap": "^3.7.2",
     "@fontsource-variable/cinzel": "^5.2.8",
     "@fontsource-variable/eb-garamond": "^5.2.7",
     "@fontsource-variable/noto-serif-jp": "^5.2.9",
     "@netlify/emails": "^1.1.0",
-    "@tinacms/cli": "^2.1.9",
-    "astro": "^5.18.0",
+    "@tinacms/cli": "^2.2.2",
+    "astro": "^6.1.5",
     "astro-icon": "^1.1.5",
-    "astro-pagefind": "^1.8.5",
-    "astro-seo-plugin": "^1.3.5",
-    "tinacms": "^3.6.1"
+    "astro-pagefind": "^1.8.6",
+    "astro-seo": "^1.1.0",
+    "tinacms": "^3.7.2"
   },
   "devDependencies": {
     "@types/eslint-plugin-jsx-a11y": "^6.10.1",
-    "@types/node": "^25.3.5",
-    "eslint-plugin-astro": "^1.6.0",
+    "@types/node": "^25.6.0",
+    "eslint-plugin-astro": "^1.7.0",
     "jiti": "^2.6.1",
-    "sass-embedded": "^1.97.3",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.56.1"
+    "sass-embedded": "^1.99.0",
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.58.1"
   }
 }

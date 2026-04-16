@@ -8,7 +8,7 @@ interface DictionaryTermProps {
 const { term } = Astro.props as DictionaryTermProps;
 const uniqueId = `tt-desc-${crypto.randomUUID()}`;
 const terms = await getCollection("dictionary");
-const thisTerm = terms.find(t => t.slug === term.toLowerCase());
+const thisTerm = terms.find(t => t.id === term.toLowerCase());
 // remove HTML tags from the tooltip text
 const tooltipText = (thisTerm?.body?.trim() ?? '').replace(/<[^>]*>/g, '');
 const termPronunciation = thisTerm?.data.pronunciation;

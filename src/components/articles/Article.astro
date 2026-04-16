@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import { BASE_URL, ROUTES } from "../../config/site";
 import ArticleMeta from "./ArticleMeta.astro";
 import Button from "../Button.astro";
@@ -8,13 +8,13 @@ import PhotoGallery from "../PhotoGallery.astro";
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 const featuredImage = post.data.image;
 ---
 
