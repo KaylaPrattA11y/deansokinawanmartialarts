@@ -39,6 +39,7 @@ This project has been upgraded to **Astro v6**. Key changes:
 - [Email Templates (Netlify + Mailgun)](#email-templates-netlify--mailgun)
 - [Linting](#linting)
 - [Mobile / Tablet Testing](#mobile--tablet-testing)
+- [Groupme Bot Notifier](#groupme-bot-notifier)
 
 ---
 
@@ -431,3 +432,13 @@ The config ignores `dist/`, `.astro/`, `public/`, and `tina/` directories.
 ## Mobile / Tablet Testing
 
 In VS Code, press `F1` and run **View: Toggle Ports**. In the Ports panel, click **Add Port** and enter the dev server port (`4321`) and the TinaCms dev server (`4001`). Use the **Forwarded Address** to access the site from your phone or tablet on the same network.
+
+## Groupme Bot Notifier
+
+Send a test message:
+
+```
+curl -X POST https://api.groupme.com/v3/bots/post \
+  -H "Content-Type: application/json" \
+  -d '{"bot_id": "2d9b7b87d6351a5e70310d22b0", "text": "test message"}'
+```
