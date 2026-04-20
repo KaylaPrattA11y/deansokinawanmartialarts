@@ -1,18 +1,22 @@
-# Build settings: runs the Astro build and deploys the "dist" output folder
+# BUILD SETTINGS ---------
+# Runs the Astro build and deploys the "dist" output folder
 [build]
   command = "npm run build"
   publish = "dist"
   functions = "netlify/functions"
 
-# Local dev settings: runs the Astro dev server on port 4321
+# LOCAL DEV SETTINGS ------
+# Runs the Astro dev server on port 4321
 [dev]
   command = "npm run dev"
   targetPort = 4321
 
+# PLUGINS -----------------
 # Mailgun plugin for custom email domain
 [[plugins]]
   package = "@netlify/plugin-emails"
 
+# REDIRECTS ---------------
 # Redirect /sitemap.xml to /sitemap-index.xml (Astro's default sitemap name)
 # so bots looking for the common path still find it
 [[redirects]]
@@ -20,6 +24,43 @@
   to = "/sitemap-index.xml"
   status = 301
 
+# Redirect from old Dojo page to About page
+[[redirects]]
+  from = "/dojo"
+  to = "/about/"
+  status = 301
+
+# Redirect from old Videos page to Gallery page
+[[redirects]]
+  from = "/videos"
+  to = "/gallery/1/"
+  status = 301
+
+# Redirect from old Blog page to News & Updates page
+[[redirects]]
+  from = "/blog"
+  to = "/news/1/"
+  status = 301
+
+# Redirect from old Salute to Service page to Home page
+[[redirects]]
+  from = "/dedication"
+  to = "/"
+  status = 301
+
+# Redirect from old CPR Training page to Classes page
+[[redirects]]
+  from = "/cpr-training"
+  to = "/classes/"
+  status = 301
+
+# Redirect from old Location page to the Home page's Contact > Location section
+[[redirects]]
+  from = "/location"
+  to = "/#location"
+  status = 301
+
+# HEADERS -----------------
 # Cache Astro's hashed static assets (JS, CSS, fonts) for 1 year
 # "immutable" tells browsers these files will never change (the hash changes instead)
 [[headers]]
