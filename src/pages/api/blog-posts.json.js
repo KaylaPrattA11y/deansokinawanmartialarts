@@ -6,13 +6,12 @@ export async function GET() {
 
   return new Response(
     JSON.stringify({
-      blog: blogPosts.map((p) => ({
-        id: p.id,
+      blog: blogPosts.map(p => ({
+        id: p.id.toLowerCase(),
         title: p.data.title,
-        description: p.data.description,
       })),
-      announcements: announcementPosts.map((p) => ({
-        id: p.id,
+      announcements: announcementPosts.map(p => ({
+        id: p.id.toLowerCase(),
         className: p.data.className,
         date: p.data.date,
         cancelled: p.data.cancelled,

@@ -17,3 +17,16 @@ export interface Post {
   // rendered?: RenderedContent;
   // filePath?: string;
 }
+
+export interface BlogPost {
+  id: string;
+  title: string;
+}
+
+export interface AnnouncementPost {
+  id: string;
+  className: string;
+  date: string;
+  cancelled: boolean;
+  message?: string;
+}

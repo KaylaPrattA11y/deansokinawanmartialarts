@@ -435,10 +435,9 @@ In VS Code, press `F1` and run **View: Toggle Ports**. In the Ports panel, click
 
 ## Groupme Bot Notifier
 
-Send a test message:
-
-```
-curl -X POST https://api.groupme.com/v3/bots/post \
-  -H "Content-Type: application/json" \
-  -d '{"bot_id": "2d9b7b87d6351a5e70310d22b0", "text": "test message"}'
-```
+### How It Works (Architecture Overview)
+1. New blog post committed to Git
+2. Netlify rebuilds site
+3. Netlify fires "deploy_succeeded" webhook → "blog-notifier" function
+4. Function compares new build's posts vs. previously known posts
+5. New post detected → POST to GroupMe Bot API
