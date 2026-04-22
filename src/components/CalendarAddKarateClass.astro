@@ -11,221 +11,45 @@ interface IKarateClassProps {
 
 const { karateClass, id, cancelledDates = [], headingLevel = 0 } = Astro.props as IKarateClassProps;
 
-
-// Returns a Date object representing midnight today in America/New_York (EST/EDT)
-function getTodayEST() {
-  const now = new Date();
-  // Get the current date/time in America/New_York
-  const formatter = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/New_York',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  });
-  const parts = formatter.formatToParts(now);
-  const year = Number(parts.find(p => p.type === 'year')?.value);
-  const month = Number(parts.find(p => p.type === 'month')?.value) - 1;
-  const day = Number(parts.find(p => p.type === 'day')?.value);
-  // Construct a Date object at midnight EST/EDT
-  const estMidnight = new Date(Date.UTC(year, month, day));
-  // Get the actual offset for this date
-  const actualOffset = -now.toLocaleString('en-US', { timeZone: 'America/New_York', timeZoneName: 'short' }).includes('EDT') ? 4 * 60 : 5 * 60;
-  estMidnight.setUTCMinutes(estMidnight.getUTCMinutes() + actualOffset * 1);
-  return estMidnight;
-}
-
-function formatMilitaryToStandard(militaryTime: string) {
-  // Assumes militaryTime is a string like "HH:mm" or "HH:mm:ss"
-  const [hours, minutes, seconds] = militaryTime.split(':');
-
-  const dateObj = new Date();
-  dateObj.setHours(Number(hours), Number(minutes), Number(seconds) || 0);
-
-  // Keep it short and simple, just the hour with AM/PM
-  const formattedTime = dateObj.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    hour12: true
-  });
-
-  return formattedTime;
-}
-
-function toDateString(d: Date): string {
-  return d.getFullYear() + '-' +
-    String(d.getMonth() + 1).padStart(2, '0') + '-' +
-    String(d.getDate()).padStart(2, '0');
-}
-
-function getRelativeStartAndEndDate(cls: IKarateClass, cancelled: string[] = []) {
-  const cancelledSet = new Set(cancelled);
-
-  const dayNumberToOffset = (targetDay: number, fromDay: number) =>
-    (targetDay - fromDay + 7) % 7;
-
-  // Use EST today as the reference point
-  const today = getTodayEST();
-  const todayDay = today.getDay();
-
-  // Build sorted list of day offsets from today for all recurring days
-  const dayOffsets = cls.recurrence_byDay
-    .map((d) => dayNumberToOffset(d, todayDay))
-    .sort((a, b) => a - b);
-
-  // Search forward through upcoming occurrences, skipping cancelled dates
-  // Check up to 52 weeks ahead to find a non-cancelled date
-  for (let weekOffset = 0; weekOffset < 52; weekOffset++) {
-    for (const offset of dayOffsets) {
-      const candidate = new Date(today);
-      candidate.setDate(today.getDate() + offset + weekOffset * 7);
-      if (!cancelledSet.has(toDateString(candidate))) {
-        const [startHour, startMin] = cls.startTime.split(":").map(Number);
-        const [endHour, endMin] = cls.endTime.split(":").map(Number);
-
-        const startDT = new Date(candidate);
-        startDT.setHours(startHour, startMin, 0, 0);
-
-        const endDT = new Date(candidate);
-        endDT.setHours(endHour, endMin, 0, 0);
-
-        return { startDT, endDT };
-      }
-    }
-  }
-
-  // Fallback: if all dates within a year are cancelled, use the nearest anyway
-  const nearestOffset = dayOffsets[0];
-  const anchorDate = new Date(today);
-  anchorDate.setDate(today.getDate() + nearestOffset);
-
-  const [startHour, startMin] = cls.startTime.split(":").map(Number);
-  const [endHour, endMin] = cls.endTime.split(":").map(Number);
-
-  const startDT = new Date(anchorDate);
-  startDT.setHours(startHour, startMin, 0, 0);
-
-  const endDT = new Date(anchorDate);
-  endDT.setHours(endHour, endMin, 0, 0);
-
-  return { startDT, endDT };
-}
-
-const { startDT, endDT } = getRelativeStartAndEndDate(karateClass, cancelledDates);
-
-function generateGoogleCalendarLink(cls: IKarateClass): string {
+function buildGoogleCalendarLinkTemplate(cls: IKarateClass): string {
   const dayNumberToRRule: Record<number, string> = {
     0: "SU", 1: "MO", 2: "TU", 3: "WE", 4: "TH", 5: "FR", 6: "SA",
   };
-
-  // Format as YYYYMMDDTHHmmss (floating/local time — no Z suffix)
-  const fmt = (d: Date): string =>
-    d.getFullYear().toString() +
-    String(d.getMonth() + 1).padStart(2, "0") +
-    String(d.getDate()).padStart(2, "0") +
-    "T" +
-    String(d.getHours()).padStart(2, "0") +
-    String(d.getMinutes()).padStart(2, "0") +
-    "00";
-
-  // Build RRULE from recurrence + recurrence_byDay
-  const byDay = cls.recurrence_byDay
-    .map((d) => dayNumberToRRule[d])
-    .join(",");
+  const byDay = cls.recurrence_byDay.map((d) => dayNumberToRRule[d]).join(",");
   const rrule = `RRULE:FREQ=${cls.recurrence.toUpperCase()};BYDAY=${byDay}`;
-
+  // Build params without dates — client appends &dates=... directly to avoid double-encoding
   const params = new URLSearchParams({
     action: "TEMPLATE",
     text: `${cls.name} - Dean's Okinawan Martial Arts`,
     details: cls.description,
     location: cls.location,
-    dates: `${fmt(startDT)}/${fmt(endDT)}`,
     recur: rrule,
   });
-
-  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  return `https://calendar.google.com/calendar/render?${params.toString()}&dates=__DATES__`;
 }
 
-function generateICSContent(cls: IKarateClass): string {
-  const dayNumberToRRule: Record<number, string> = {
-    0: "SU", 1: "MO", 2: "TU", 3: "WE", 4: "TH", 5: "FR", 6: "SA",
-  };
-
-  const { startDT, endDT } = getRelativeStartAndEndDate(cls, cancelledDates);
-
-  // Format as YYYYMMDDTHHmmss
-  const fmt = (d: Date): string =>
-    d.getFullYear().toString() +
-    String(d.getMonth() + 1).padStart(2, "0") +
-    String(d.getDate()).padStart(2, "0") +
-    "T" +
-    String(d.getHours()).padStart(2, "0") +
-    String(d.getMinutes()).padStart(2, "0") +
-    "00";
-
-  // Unique event ID
-  const uid = `${id}-${fmt(startDT)}@deans-okinawan-martial-arts`;
-
-  // Timestamp for when this ICS was generated (UTC)
-  const now = new Date();
-  const dtstamp =
-    now.getUTCFullYear().toString() +
-    String(now.getUTCMonth() + 1).padStart(2, "0") +
-    String(now.getUTCDate()).padStart(2, "0") +
-    "T" +
-    String(now.getUTCHours()).padStart(2, "0") +
-    String(now.getUTCMinutes()).padStart(2, "0") +
-    String(now.getUTCSeconds()).padStart(2, "0") +
-    "Z";
-
-  const byDay = cls.recurrence_byDay.map((d) => dayNumberToRRule[d]).join(",");
-
-  // Fold long lines at 75 chars per RFC 5545
-  const foldLine = (line: string): string => {
-    if (line.length <= 75) return line;
-    const chunks: string[] = [];
-    chunks.push(line.slice(0, 75));
-    let i = 75;
-    while (i < line.length) {
-      chunks.push(" " + line.slice(i, i + 74));
-      i += 74;
-    }
-    return chunks.join("\r\n");
-  };
-
-  const lines = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Deans Okinawan Martial Arts//EN",
-    "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
-    "BEGIN:VEVENT",
-    `UID:${uid}`,
-    `DTSTAMP:${dtstamp}`,
-    `DTSTART;TZID=${cls.timeZone}:${fmt(startDT)}`,
-    `DTEND;TZID=${cls.timeZone}:${fmt(endDT)}`,
-    `RRULE:FREQ=${cls.recurrence.toUpperCase()};BYDAY=${byDay}`,
-    `SUMMARY:${cls.name} - Dean's Okinawan Martial Arts`,
-    `DESCRIPTION:${cls.description.replace(/,/g, "\\,")}`,
-    `LOCATION:${cls.location.replace(/,/g, "\\,")}`,
-    "END:VEVENT",
-    "END:VCALENDAR",
-  ];
-
-  return lines.map(foldLine).join("\r\n");
+function formatMilitaryToStandard(militaryTime: string) {
+  const [hours, minutes, seconds] = militaryTime.split(':');
+  const dateObj = new Date();
+  dateObj.setHours(Number(hours), Number(minutes), Number(seconds) || 0);
+  return dateObj.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
 }
-
 ---
 
-<div 
-  class="calendar" 
+<div
+  class="calendar"
   data-component="CalendarAddKarateClass"
-  data-ics-content={generateICSContent(karateClass)}
   data-ics-name={karateClass.name}
+  data-class={JSON.stringify(karateClass)}
+  data-cancelled-dates={JSON.stringify(cancelledDates)}
+  data-id={id}
+  data-google-link-template={buildGoogleCalendarLinkTemplate(karateClass)}
 >
   <div>
-    <div class="calendar--date">
+    <div class="calendar--date" style="visibility: hidden;" data-slot="date-panel">
       <span class="calendar--date-next">Next class:</span>
-      <span class="calendar--date-day">{getRelativeStartAndEndDate(karateClass, cancelledDates).startDT.getDate()}</span>
-      <span class="calendar--date-month">{getRelativeStartAndEndDate(karateClass, cancelledDates).startDT.toLocaleString('default', { month: 'short' })}</span>
+      <span class="calendar--date-day" data-slot="day"></span>
+      <span class="calendar--date-month" data-slot="month"></span>
     </div>
     <div class="calendar--event-details">
       {headingLevel === 1 ? (
@@ -250,10 +74,10 @@ function generateICSContent(cls: IKarateClass): string {
       </div>
     </div>
     <div class="calendar--controls">
-      <button 
-        type="button" 
-        aria-label={`Add ${karateClass.name} to calendar`} 
-        title={`Add ${karateClass.name} to calendar`} 
+      <button
+        type="button"
+        aria-label={`Add ${karateClass.name} to calendar`}
+        title={`Add ${karateClass.name} to calendar`}
         class="calendar--add"
         data-toggle="calendar-dropdown"
         aria-expanded="false"
@@ -263,11 +87,12 @@ function generateICSContent(cls: IKarateClass): string {
         <Icon name="calendar-plus" color="var(--paper)" size={22} />
       </button>
       <div class="calendar--dropdown" role="menu" id={`calendarDropdownMenu-${id}`} data-component="dropdown">
-        <a 
-          href={generateGoogleCalendarLink({ ...karateClass })} 
-          target="_blank" 
-          class="calendar--dropdown-item" 
+        <a
+          href="#"
+          target="_blank"
+          class="calendar--dropdown-item"
           role="menuitem"
+          data-slot="google-calendar-link"
         >
           <Icon name="google-calendar" size={18} /> Add to Google Calendar
         </a>
@@ -310,7 +135,6 @@ function generateICSContent(cls: IKarateClass): string {
   .calendar--date {
     display: grid;
     place-content: center;
-    text-align: center;
     text-align: center;
     background-color: var(--deep-red);
     font-family: var(--ff-heading);
@@ -437,55 +261,221 @@ function generateICSContent(cls: IKarateClass): string {
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const downloadButtons = document.querySelectorAll('[data-action="download-ics"]');
-    const toggleButtons = document.querySelectorAll(`button[data-toggle="calendar-dropdown"]`) as NodeListOf<HTMLButtonElement>;
-    const dropdownMenus = document.querySelectorAll(`div[data-component="dropdown"]`) as NodeListOf<HTMLDivElement>;
+  interface ESTDate {
+    year: number;
+    month: number; // 0-indexed
+    day: number;
+    dayOfWeek: number; // 0 = Sunday
+  }
 
-    toggleButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const targetDropdown = button.getAttribute('aria-controls');
-        const dropdown = document.getElementById(targetDropdown || '') as HTMLDivElement;
-        
-        if (dropdown) {
-          const isExpanded = button.getAttribute('aria-expanded') === 'true';
+  function getTodayEST(): ESTDate {
+    const now = new Date();
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      weekday: 'short',
+    });
+    const parts = formatter.formatToParts(now);
+    const year    = Number(parts.find(p => p.type === 'year')?.value);
+    const month   = Number(parts.find(p => p.type === 'month')?.value) - 1;
+    const day     = Number(parts.find(p => p.type === 'day')?.value);
+    const weekday = parts.find(p => p.type === 'weekday')?.value ?? 'Sun';
+    const dayOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(weekday);
+    return { year, month, day, dayOfWeek };
+  }
 
-          button.setAttribute('aria-expanded', String(!isExpanded));
-          dropdown.classList.toggle('is-expanded', !isExpanded);
+  // Build a plain Date from EST y/m/d + hour/minute, in local time.
+  // Only used for display and ICS formatting — never for day-of-week math.
+  function makeLocalDate(estDate: ESTDate, hours: number, minutes: number): Date {
+    const d = new Date(estDate.year, estDate.month, estDate.day, hours, minutes, 0, 0);
+    return d;
+  }
+
+  function addDays(base: ESTDate, n: number): ESTDate {
+    // Use a UTC-noon anchor to safely add days without DST shifting the date
+    const anchor = new Date(Date.UTC(base.year, base.month, base.day, 12, 0, 0));
+    anchor.setUTCDate(anchor.getUTCDate() + n);
+    return {
+      year: anchor.getUTCFullYear(),
+      month: anchor.getUTCMonth(),
+      day: anchor.getUTCDate(),
+      dayOfWeek: (base.dayOfWeek + n) % 7,
+    };
+  }
+
+  function toDateString(d: ESTDate): string {
+    return d.year + '-' +
+      String(d.month + 1).padStart(2, '0') + '-' +
+      String(d.day).padStart(2, '0');
+  }
+
+  function fmt(d: Date): string {
+    return d.getFullYear().toString() +
+      String(d.getMonth() + 1).padStart(2, '0') +
+      String(d.getDate()).padStart(2, '0') + 'T' +
+      String(d.getHours()).padStart(2, '0') +
+      String(d.getMinutes()).padStart(2, '0') + '00';
+  }
+
+  interface Occurrence {
+    startDT: Date;
+    endDT: Date;
+    estDate: ESTDate;
+  }
+
+  function getNextOccurrence(
+    recurrenceByDay: number[],
+    startTime: string,
+    endTime: string,
+    cancelledDates: string[],
+  ): Occurrence {
+    const cancelledSet = new Set(cancelledDates);
+    const today = getTodayEST();
+    const [sh, sm] = startTime.split(':').map(Number);
+    const [eh, em] = endTime.split(':').map(Number);
+
+    // Offsets from today (0 = today) for each recurring day
+    const dayOffsets = recurrenceByDay
+      .map(d => (d - today.dayOfWeek + 7) % 7)
+      .sort((a, b) => a - b);
+
+    for (let week = 0; week < 52; week++) {
+      for (const offset of dayOffsets) {
+        const candidate = addDays(today, offset + week * 7);
+        if (!cancelledSet.has(toDateString(candidate))) {
+          return {
+            startDT: makeLocalDate(candidate, sh, sm),
+            endDT:   makeLocalDate(candidate, eh, em),
+            estDate: candidate,
+          };
         }
+      }
+    }
+
+    // Fallback: nearest day regardless of cancellation
+    const fallback = addDays(today, dayOffsets[0]);
+    return {
+      startDT: makeLocalDate(fallback, sh, sm),
+      endDT:   makeLocalDate(fallback, eh, em),
+      estDate: fallback,
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function generateICSContent(cls: any, id: string, cancelledDates: string[]): string {
+    const dayNumberToRRule: Record<number, string> = {
+      0: "SU", 1: "MO", 2: "TU", 3: "WE", 4: "TH", 5: "FR", 6: "SA",
+    };
+    const { startDT, endDT } = getNextOccurrence(
+      cls.recurrence_byDay, cls.startTime, cls.endTime, cancelledDates
+    );
+
+    const uid = `${id}-${fmt(startDT)}@deans-okinawan-martial-arts`;
+    const now = new Date();
+    const dtstamp =
+      now.getUTCFullYear().toString() +
+      String(now.getUTCMonth() + 1).padStart(2, '0') +
+      String(now.getUTCDate()).padStart(2, '0') + 'T' +
+      String(now.getUTCHours()).padStart(2, '0') +
+      String(now.getUTCMinutes()).padStart(2, '0') +
+      String(now.getUTCSeconds()).padStart(2, '0') + 'Z';
+
+    const byDay = cls.recurrence_byDay.map((d: number) => dayNumberToRRule[d]).join(',');
+
+    const foldLine = (line: string): string => {
+      if (line.length <= 75) return line;
+      const chunks = [line.slice(0, 75)];
+      let i = 75;
+      while (i < line.length) { chunks.push(' ' + line.slice(i, i + 74)); i += 74; }
+      return chunks.join('\r\n');
+    };
+
+    return [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Deans Okinawan Martial Arts//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      `UID:${uid}`,
+      `DTSTAMP:${dtstamp}`,
+      `DTSTART;TZID=${cls.timeZone}:${fmt(startDT)}`,
+      `DTEND;TZID=${cls.timeZone}:${fmt(endDT)}`,
+      `RRULE:FREQ=${cls.recurrence.toUpperCase()};BYDAY=${byDay}`,
+      `SUMMARY:${cls.name} - Dean's Okinawan Martial Arts`,
+      `DESCRIPTION:${cls.description.replace(/,/g, '\\,')}`,
+      `LOCATION:${cls.location.replace(/,/g, '\\,')}`,
+      'END:VEVENT',
+      'END:VCALENDAR',
+    ].map(foldLine).join('\r\n');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Hydrate each card
+    document.querySelectorAll<HTMLElement>('[data-component="CalendarAddKarateClass"]').forEach(card => {
+      const cls          = JSON.parse(card.dataset.class ?? '{}');
+      const cancelled    = JSON.parse(card.dataset.cancelledDates ?? '[]');
+      const id           = card.dataset.id ?? '';
+      const linkTemplate = card.dataset.googleLinkTemplate ?? '';
+
+      const { startDT, endDT } = getNextOccurrence(
+        cls.recurrence_byDay, cls.startTime, cls.endTime, cancelled
+      );
+
+      // Reveal date panel and populate slots
+      const datePanel = card.querySelector<HTMLElement>('[data-slot="date-panel"]');
+      if (datePanel) datePanel.style.visibility = '';
+
+      card.querySelector<HTMLElement>('[data-slot="day"]')!.textContent =
+        String(startDT.getDate());
+      card.querySelector<HTMLElement>('[data-slot="month"]')!.textContent =
+        startDT.toLocaleString('default', { month: 'short' }).toUpperCase();
+
+      // Patch Google Calendar link — __DATES__ sits outside URLSearchParams so no double-encoding
+      const googleLink = card.querySelector<HTMLAnchorElement>('[data-slot="google-calendar-link"]');
+      if (googleLink) {
+        googleLink.href = linkTemplate.replace('__DATES__', `${fmt(startDT)}/${fmt(endDT)}`);
+      }
+
+      // Pre-generate ICS so download is instant
+      card.dataset.icsContent = generateICSContent(cls, id, cancelled);
+    });
+
+    // Dropdown toggles
+    document.querySelectorAll<HTMLButtonElement>('button[data-toggle="calendar-dropdown"]').forEach(button => {
+      button.addEventListener('click', () => {
+        const dropdown = document.getElementById(button.getAttribute('aria-controls') ?? '');
+        if (!dropdown) return;
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', String(!expanded));
+        dropdown.classList.toggle('is-expanded', !expanded);
       });
     });
 
-    dropdownMenus.forEach(dropdown => {
-      dropdown.addEventListener('click', (e) => {
+    document.querySelectorAll<HTMLDivElement>('div[data-component="dropdown"]').forEach(dropdown => {
+      dropdown.addEventListener('click', e => {
         if (e.target instanceof HTMLAnchorElement) {
-          const toggleButton = document.querySelector(`[aria-controls="${dropdown.id}"]`) as HTMLButtonElement;
-          
-          if (toggleButton) {
-            toggleButton.setAttribute('aria-expanded', 'false');
-          }
+          const toggle = document.querySelector<HTMLButtonElement>(`[aria-controls="${dropdown.id}"]`);
+          toggle?.setAttribute('aria-expanded', 'false');
           dropdown.classList.remove('is-expanded');
         }
       });
     });
 
-    downloadButtons.forEach(button => {
+    // ICS download
+    document.querySelectorAll<HTMLButtonElement>('[data-action="download-ics"]').forEach(button => {
       button.addEventListener('click', () => {
-        const card = button.closest('[data-component="CalendarAddKarateClass"]') as HTMLElement;
-        const icsContent = card.dataset.icsContent ?? '';
-        const icsName = card.dataset.icsName ?? 'event';
-
+        const card       = button.closest<HTMLElement>('[data-component="CalendarAddKarateClass"]');
+        const icsContent = card?.dataset.icsContent ?? '';
+        const icsName    = card?.dataset.icsName ?? 'event';
         const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${icsName}.ics`;
-        a.click();
-
-        URL.revokeObjectURL(url); // clean up
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href = url; a.download = `${icsName}.ics`; a.click();
+        URL.revokeObjectURL(url);
       });
     });
-
   });
 </script>
