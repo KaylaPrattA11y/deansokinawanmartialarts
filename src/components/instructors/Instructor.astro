@@ -29,7 +29,7 @@ const hasRank = rank || Astro.slots.has('rank');
   </div>
   )}
   <div>
-    {(hasTitle || hasRank) && <p><span><slot name="title">{title}</slot></span><span><slot name="rank">{rank}</slot></span></p>}
+    {(hasTitle || hasRank) && <p><span><slot name="title">{title}</slot></span>{hasTitle && hasRank && <span class="bullet">•</span>}<span><slot name="rank">{rank}</slot></span></p>}
     <h2>{name}</h2>
     <div class="content">
       <slot></slot>
@@ -48,12 +48,11 @@ const hasRank = rank || Astro.slots.has('rank');
       color: var(--silver);
       margin-bottom: 1rem;
     }
-    p > span:last-of-type:not(:empty)::before {
-      content: "•";
+    .bullet {
       display: inline-block;
-      margin: 0 0.5rem;
+      margin: 0 0.25rem;
       color: var(--bright-red);
-      }
+    }
     h2 {
       font-family: var(--ff-heading);
       font-size: clamp(1rem, 3.5vw, 1.25rem);
