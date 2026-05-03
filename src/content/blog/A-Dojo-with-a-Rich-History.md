@@ -14,8 +14,6 @@ imageGallery:
     - mediaType: photo
       image: /uploads/evan-gent-yore.jpg
     - mediaType: photo
-      image: /uploads/makayala-wayne-yore.jpg
-    - mediaType: photo
       image: /uploads/youth-class-yore.jpg
     - mediaType: photo
       image: /uploads/evan-lady-yore.jpg
