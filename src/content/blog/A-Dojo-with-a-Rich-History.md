@@ -24,6 +24,9 @@ imageGallery:
       image: /uploads/evan-robby-yore.jpg
     - mediaType: photo
       image: /uploads/outdoors-bo-kobudo-yore.jpg
+    - mediaType: photo
+      image: /uploads/wayne-chuck.jpg
+      title: Chuck Chandler (left) and Kyoshi Wayne Dean (right)
 ---
 
 ${BRIEF\_ARTICLE\_CONTENT}
