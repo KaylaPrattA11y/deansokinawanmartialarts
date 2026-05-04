@@ -27,6 +27,8 @@ imageGallery:
     - mediaType: photo
       image: /uploads/wayne-chuck.jpg
       title: Chuck Chandler (left) and Kyoshi Wayne Dean (right)
+    - mediaType: photo
+      image: /uploads/evan-lady-yore.jpg
 ---
 
 ${BRIEF\_ARTICLE\_CONTENT}
