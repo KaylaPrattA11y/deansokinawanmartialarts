@@ -11,8 +11,10 @@ imageGallery:
   gallery:
     - mediaType: photo
       image: /uploads/class-of-yore-2.jpg
+      caption: ''
     - mediaType: photo
       image: /uploads/evan-gent-yore.jpg
+      caption: Kevin Pinkerton (left) and Evan Pratt (right) practice bunkai application
     - mediaType: photo
       image: /uploads/youth-class-yore.jpg
     - mediaType: photo
