@@ -8,6 +8,7 @@ tags:
   - Tradition
   - Preservation
 imageGallery:
+  title: Photos from the past
   gallery:
     - mediaType: photo
       image: /uploads/class-of-yore-2.jpg
@@ -31,4 +32,3 @@ imageGallery:
       image: /uploads/evan-lady-yore.jpg
 ---
 
-${BRIEF\_ARTICLE\_CONTENT}
