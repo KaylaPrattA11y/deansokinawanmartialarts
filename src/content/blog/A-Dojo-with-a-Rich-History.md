@@ -14,6 +14,7 @@ imageGallery:
       caption: ''
     - mediaType: photo
       image: /uploads/evan-gent-yore.jpg
+      title: Kevin Pinkerton (left) and Evan Pratt (right) practice bunkai application
       caption: Kevin Pinkerton (left) and Evan Pratt (right) practice bunkai application
     - mediaType: photo
       image: /uploads/youth-class-yore.jpg
