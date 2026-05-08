@@ -1,4 +1,5 @@
 import { defineConfig } from "tinacms";
+import { ClassesSelect } from './components/ClassesSelect';
 
 export default defineConfig({
   branch: process.env.HEAD || process.env.BRANCH || "main",
@@ -19,6 +20,12 @@ export default defineConfig({
       mediaRoot: "uploads",
       publicFolder: "public",
     },
+  },
+  cmsCallback: (cms) => {
+    cms.fields.add({
+      name: "classes-select",
+      Component: ClassesSelect,
+    });
   },
   schema: {
     collections: [
@@ -327,6 +334,142 @@ export default defineConfig({
         }
       },
       {
+        label: "Classes",
+        name: "classes",
+        path: "src/content/classes",
+        format: "md",
+        ui: {
+          allowedActions: {
+            createNestedFolder: false,
+          },
+        },
+        fields: [
+          {
+            type: "string",
+            label: "Class Name",
+            name: "name",
+            isTitle: true,
+            required: true,
+            description: "The display name for this class (e.g., 'Youth Karate').",
+          },
+          {
+            type: "string",
+            label: "Ages",
+            name: "ages",
+            required: true,
+            description: "Age range for this class (e.g., '4 – 15' or '16 & Up').",
+          },
+          {
+            type: "string",
+            label: "Description",
+            name: "description",
+            required: true,
+            ui: {
+              component: "textarea",
+              validate: (value: string | undefined) => {
+                if (value && value.length > 200) {
+                  return `Description must be 200 characters or fewer (currently ${value.length})`;
+                }
+              }
+            },
+            description: "A short description of the class shown on the Classes page.",
+          },
+          {
+            type: "string",
+            label: "Start Time",
+            name: "startTime",
+            required: true,
+            description: "Class start time in 24-hour HH:MM format (e.g. 18:00 for 6:00 PM).",
+            ui: {
+              validate: (value: string | undefined) => {
+                if (value && !/^\d{2}:\d{2}$/.test(value)) {
+                  return 'Time must be in 24-hour HH:MM format (e.g. 18:00)';
+                }
+              },
+            },
+          },
+          {
+            type: "string",
+            label: "End Time",
+            name: "endTime",
+            required: true,
+            description: "Class end time in 24-hour HH:MM format (e.g. 20:00 for 8:00 PM).",
+            ui: {
+              validate: (value: string | undefined) => {
+                if (value && !/^\d{2}:\d{2}$/.test(value)) {
+                  return 'Time must be in 24-hour HH:MM format (e.g. 20:00)';
+                }
+              },
+            },
+          },
+          {
+            type: "string",
+            label: "Location",
+            name: "location",
+            required: true,
+            description: "Full address of the class location. Used in calendar invites.",
+          },
+          {
+            type: "string",
+            label: "Recurrence",
+            name: "recurrence",
+            required: true,
+            options: ["Weekly", "Biweekly", "Monthly"],
+            description: "How often this class repeats.",
+          },
+          {
+            type: "string",
+            label: "Recurring Days",
+            name: "recurrence_byDay",
+            required: true,
+            list: true,
+            options: [
+              { value: "Sunday", label: "Sunday" },
+              { value: "Monday", label: "Monday" },
+              { value: "Tuesday", label: "Tuesday" },
+              { value: "Wednesday", label: "Wednesday" },
+              { value: "Thursday", label: "Thursday" },
+              { value: "Friday", label: "Friday" },
+              { value: "Saturday", label: "Saturday" },
+            ],
+            description: "The days of the week this class meets.",
+          },
+          {
+            type: "number",
+            label: "Tuition (once a week)",
+            name: "tuitionOnce",
+            required: true,
+            description: "Monthly tuition in dollars for attending one day per week.",
+          },
+          {
+            type: "number",
+            label: "Tuition (twice a week)",
+            name: "tuitionTwice",
+            description: "Monthly tuition in dollars for attending two days per week.",
+          },
+          {
+            type: "string",
+            label: "Tuition Billing Recurrence",
+            name: "tuition_billing_recurrence",
+            required: true,
+            options: ["Monthly", "Weekly", "Yearly"],
+            description: "How often tuition is billed.",
+          },
+          {
+            type: "number",
+            label: "Sort Order",
+            name: "sortOrder",
+            description: "Controls the order classes appear on the page. Lower numbers appear first.",
+          },
+          {
+            type: "string",
+            label: "Kanji Character",
+            name: "kanji",
+            description: "A decorative kanji character displayed on the class card (e.g., 子 for Youth, 武 for Adult).",
+          },
+        ],
+      },
+      {
         label: "Class Announcements",
         name: "announcements",
         path: "src/content/announcements",
@@ -335,23 +478,34 @@ export default defineConfig({
           date: new Date().toISOString(),
           cancelled: false,
         }),
-        fields: [
-          {
-            type: "string",
-            label: "Title",
-            name: "title",
-            isTitle: true,
-            required: true,
-            description:
-              "A short label for this announcement (e.g., 'Youth Karate - Apr 6'). This is used for organizational purposes in the CMS and does not appear on the public site.",
+        ui: {
+          filename: {
+            readonly: true,
+            slugify: (values) => {
+              return `${values?.className || 'class'}-${values?.date
+                ?.toLowerCase()
+                .replace(/ /g, '-')}`
+            },
           },
+          allowedActions: {
+            createNestedFolder: false,
+          },
+        },
+        fields: [
           {
             type: "string",
             label: "Class",
             name: "className",
             required: true,
-            options: ["Youth Karate", "Adult Karate"],
-            description: "Which class this announcement is for",
+            description: "Select the class this announcement applies to.",
+            ui: {
+              component: "classes-select",
+              validate: (value: string | undefined) => {
+                if (!value) {
+                  return 'Please select a class for this announcement';
+                }
+              }
+            },
           },
           {
             type: "datetime",
@@ -359,14 +513,14 @@ export default defineConfig({
             name: "date",
             required: true,
             description:
-              "The class date this announcement applies to",
+              "Select the class date this announcement applies to.",
           },
           {
             type: "boolean",
             label: "Class Cancelled",
             name: "cancelled",
             description:
-              "Check this box if the class is cancelled on this date. This will update the 'Next Class' display to skip this date.",
+              "Check this box if the class is cancelled on this date. This will update the 'Next Class' calendar display to skip this date.",
           },
           {
             type: "string",
@@ -374,21 +528,19 @@ export default defineConfig({
             name: "message",
             ui: {
               component: "textarea",
-              validate: (value: string | undefined) => {
+              validate: (value: string | undefined, allValues: Record<string, unknown>) => {
+                if (!allValues.cancelled && !value) {
+                  return 'Please provide a message for this announcement.';
+                }
                 if (value && value.length > 100) {
                   return `Message must be 100 characters or fewer (currently ${value.length})`;
                 }
               },
             },
             description:
-              "Announcement details, 100 characters max (e.g., 'Holiday — no class', 'Class moved to 7 PM')",
+              'Write the announcement message (e.g., "Class moved to 7 PM" or "Blackbelt ceremony — no regular class")',
           },
         ],
-        ui: {
-          allowedActions: {
-            createNestedFolder: false,
-          },
-        }
       },
       {
         label: "Instructors",

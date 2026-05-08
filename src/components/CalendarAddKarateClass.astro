@@ -11,6 +11,15 @@ interface IKarateClassProps {
 
 const { karateClass, id, cancelledDates = [], headingLevel = 0 } = Astro.props as IKarateClassProps;
 
+const DAY_ABBREV: Record<number, string> = {
+  0: 'Sun', 1: 'Mon', 2: 'Tue', 3: 'Wed', 4: 'Thu', 5: 'Fri', 6: 'Sat',
+};
+// Sort days into weekday order so schedule always reads e.g. "Tue & Thu" regardless of CMS selection order
+const schedule = [...karateClass.recurrence_byDay]
+  .sort((a, b) => a - b)
+  .map(d => DAY_ABBREV[d] ?? String(d))
+  .join(' & ');
+
 function buildGoogleCalendarLinkTemplate(cls: IKarateClass): string {
   const dayNumberToRRule: Record<number, string> = {
     0: "SU", 1: "MO", 2: "TU", 3: "WE", 4: "TH", 5: "FR", 6: "SA",
@@ -67,7 +76,7 @@ function formatMilitaryToStandard(militaryTime: string) {
       ) : null}
       <div class="calendar--event-location"><Icon name="location" size={16} /> <span>{karateClass.location}</span></div>
       <div class="calendar--recurrence">
-        <Icon name="calendar-week" size={14} /> <span>{karateClass.recurrence}: {karateClass.schedule}</span>
+        <Icon name="calendar-week" size={14} /> <span>{karateClass.recurrence}: {schedule}</span>
       </div>
       <div class="calendar--event-time">
         <Icon name="clock" size={14} /> <span>{formatMilitaryToStandard(karateClass.startTime)} - {formatMilitaryToStandard(karateClass.endTime)}</span>
@@ -333,8 +342,17 @@ function formatMilitaryToStandard(militaryTime: string) {
   ): Occurrence {
     const cancelledSet = new Set(cancelledDates);
     const today = getTodayEST();
-    const [sh, sm] = startTime.split(':').map(Number);
-    const [eh, em] = endTime.split(':').map(Number);
+    const [sh, sm] = (startTime || '00:00').split(':').map(Number);
+    const [eh, em] = (endTime   || '00:00').split(':').map(Number);
+
+    // Current EST time in minutes since midnight — used to skip today if class already started
+    const nowParts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hour12: false,
+    }).formatToParts(new Date());
+    const nowMinutes =
+      Number(nowParts.find(p => p.type === 'hour')?.value ?? 0) * 60 +
+      Number(nowParts.find(p => p.type === 'minute')?.value ?? 0);
+    const startMinutes = sh * 60 + sm;
 
     // Offsets from today (0 = today) for each recurring day
     const dayOffsets = recurrenceByDay
@@ -343,7 +361,10 @@ function formatMilitaryToStandard(militaryTime: string) {
 
     for (let week = 0; week < 52; week++) {
       for (const offset of dayOffsets) {
-        const candidate = addDays(today, offset + week * 7);
+        const daysAhead = offset + week * 7;
+        // Skip today's occurrence if the class has already started
+        if (daysAhead === 0 && nowMinutes >= startMinutes) continue;
+        const candidate = addDays(today, daysAhead);
         if (!cancelledSet.has(toDateString(candidate))) {
           return {
             startDT: makeLocalDate(candidate, sh, sm),
@@ -401,8 +422,8 @@ function formatMilitaryToStandard(militaryTime: string) {
       'BEGIN:VEVENT',
       `UID:${uid}`,
       `DTSTAMP:${dtstamp}`,
-      `DTSTART;TZID=${cls.timeZone}:${fmt(startDT)}`,
-      `DTEND;TZID=${cls.timeZone}:${fmt(endDT)}`,
+      `DTSTART;TZID=America/New_York:${fmt(startDT)}`,
+      `DTEND;TZID=America/New_York:${fmt(endDT)}`,
       `RRULE:FREQ=${cls.recurrence.toUpperCase()};BYDAY=${byDay}`,
       `SUMMARY:${cls.name} - Dean's Okinawan Martial Arts`,
       `DESCRIPTION:${cls.description.replace(/,/g, '\\,')}`,

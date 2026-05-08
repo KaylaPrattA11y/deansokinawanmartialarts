@@ -1,27 +1,46 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { YOUTH_CLASS, ADULT_CLASS, FREE_TRIAL_NAME } from '../constants';
+import { type IKarateClass, FREE_TRIAL_NAME } from '../constants';
 import CalendarAddKarateClass from './CalendarAddKarateClass.astro';
 import { getCollection } from 'astro:content';
 
+const dayNameToNumber: Record<string, number> = {
+  Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6,
+};
+
 const allAnnouncements = await getCollection('announcements');
+const allClasses = await getCollection('classes');
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
-const youthCancelled = allAnnouncements
-  .filter((a) => a.data.className === YOUTH_CLASS.name && a.data.cancelled && new Date(a.data.date) >= today)
-  .map((a) => {
-    const d = new Date(a.data.date);
-    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-  });
+const sortedClasses = allClasses.sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99));
 
-const adultCancelled = allAnnouncements
-  .filter((a) => a.data.className === ADULT_CLASS.name && a.data.cancelled && new Date(a.data.date) >= today)
-  .map((a) => {
-    const d = new Date(a.data.date);
-    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-  });
+const classEntries = sortedClasses.map(cls => {
+  const karateClass: IKarateClass = {
+    name: cls.data.name,
+    ages: cls.data.ages,
+    description: cls.data.description,
+    startTime: cls.data.startTime,
+    endTime: cls.data.endTime,
+    location: cls.data.location,
+    recurrence: cls.data.recurrence,
+    recurrence_byDay: cls.data.recurrence_byDay.map(d => dayNameToNumber[d] ?? 0),
+    tuitionOnce: cls.data.tuitionOnce,
+    tuitionTwice: cls.data.tuitionTwice,
+    tuition_billing_recurrence: cls.data.tuition_billing_recurrence,
+  };
 
+  const cancelledDates = allAnnouncements
+    .filter((a) => a.data.className === cls.data.name && a.data.cancelled && new Date(a.data.date) >= today)
+    .map((a) => {
+      const d = new Date(a.data.date);
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    });
+
+  return { karateClass, cancelledDates, clsId: cls.id };
+});
+
+const classNames = classEntries.map(e => e.karateClass.name);
 const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
 ---
 
@@ -90,18 +109,18 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
           name="interest"
         >
           <option value="">Select an option...</option>
-          <option value={YOUTH_CLASS.name}>{YOUTH_CLASS.name}</option>
-          <option value={ADULT_CLASS.name}>{ADULT_CLASS.name}</option>
+          {classEntries.map(({ karateClass }) => (
+            <option value={karateClass.name}>{karateClass.name}</option>
+          ))}
           <option value="Other">Other</option>
         </select>
       </div>
       <div class="d-none" data-calendar="class-schedule">
-        <div class="d-none" data-calendar="add-youth">
-          <CalendarAddKarateClass id={`${id}-yc-contact`} karateClass={YOUTH_CLASS} cancelledDates={youthCancelled} />
-        </div>
-        <div class="d-none" data-calendar="add-adult">
-          <CalendarAddKarateClass id={`${id}-ac-contact`} karateClass={ADULT_CLASS} cancelledDates={adultCancelled} />
-        </div>
+        {classEntries.map(({ karateClass, cancelledDates, clsId }) => (
+          <div class="d-none" data-calendar={`add-${clsId}`} data-class-name={karateClass.name}>
+            <CalendarAddKarateClass id={`${id}-${clsId}-contact`} karateClass={karateClass} cancelledDates={cancelledDates} />
+          </div>
+        ))}
       </div>
       <fieldset class="field d-none" name="frequency" disabled>
         <legend>Frequency (optional)</legend>
@@ -144,12 +163,11 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
   <p class="privacy"><small>We respect your privacy. Your information will never be shared.</small></p>
 </form>
 
-<script is:inline define:vars={{ id, FREE_TRIAL_NAME }}>
+<script is:inline define:vars={{ id, FREE_TRIAL_NAME, classNames }}>
   const form = document.forms.namedItem(id);
   const interestSelect = form.elements.namedItem('interest');
   const classSchedule = form.querySelector('[data-calendar="class-schedule"]');
-  const calendarAddYouth = form.querySelector('[data-calendar="add-youth"]');
-  const calendarAddAdult = form.querySelector('[data-calendar="add-adult"]');
+  const calendarDivs = form.querySelectorAll('[data-calendar^="add-"]');
   const fieldset = form?.elements.namedItem('contact-details');
   const frequencyFieldset = form.elements.namedItem('frequency');
   const successMessage = form?.querySelector('.success-message');
@@ -166,15 +184,16 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
 
   const handleInterestChange = () => {
     const value = interestSelect?.value;
-    const karateInterest = value && ['Youth Karate', 'Adult Karate'].includes(value);
+    const karateInterest = value && classNames.includes(value);
     const messageTextarea = form.elements.namedItem('message');
     
     if (karateInterest) {
       frequencyFieldset.disabled = false;
       frequencyFieldset.classList.remove('d-none');
       classSchedule.classList.remove('d-none');
-      calendarAddYouth.classList.toggle('d-none', value !== 'Youth Karate');
-      calendarAddAdult.classList.toggle('d-none', value !== 'Adult Karate');
+      calendarDivs.forEach(div => {
+        div.classList.toggle('d-none', div.dataset.className !== value);
+      });
       if (messageTextarea && (messageTextarea.value === '' || messageTextarea.value.startsWith('I am interested in starting my'))) {
         messageTextarea.value = `I am interested in starting my ${FREE_TRIAL_NAME} for ${value}.`;
         form.dispatchEvent(new Event('change', { bubbles: true }));
