@@ -46,7 +46,7 @@ const faqs = defineCollection({
   loader: glob({ base: './src/content/faqs', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
     question: z.string(),
-    sortPriority: z.number().optional(),
+    sortOrder: z.number().optional(),
   }),
 });
 
@@ -69,4 +69,17 @@ const announcements = defineCollection({
   }),
 });
 
-export const collections = { blog, gallery, faqs, dictionary, announcements };
+const instructors = defineCollection({
+  loader: glob({ base: './src/content/instructors', pattern: '**/*.{md,mdx}' }),
+  schema: z.object({
+    name: z.string(),
+    title: z.string().optional(),
+    rank: z.string().optional(),
+    photo: z.string().optional(),
+    photoOrientation: z.enum(['Portrait', 'Landscape']).default('Portrait'),
+    sortOrder: z.number().optional(),
+    featured: z.boolean().default(false),
+  }),
+});
+
+export const collections = { blog, gallery, faqs, dictionary, announcements, instructors };

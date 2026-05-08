@@ -1,15 +1,12 @@
 <div>
-  <ul>
+  <section aria-label="Instructor Profiles">
     <slot></slot>
-  </ul>
+  </section>
 <div>
 
 <style>
   @layer components {
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
+    section {
       display: grid;
       gap: 2rem;
       @container (width >=900px) {

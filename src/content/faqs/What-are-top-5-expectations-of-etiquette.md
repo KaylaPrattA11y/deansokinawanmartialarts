@@ -1,6 +1,6 @@
 ---
 question: What are top 5 expectations of etiquette?
-sortPriority: 4
+sortOrder: 4
 ---
 
 1. **Bowing**: A sign of respect that is not just reserved for instructors. When training alongside other students, it is expected that you show respect regardless of rank relative to yours.

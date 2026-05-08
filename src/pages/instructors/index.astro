@@ -1,26 +1,38 @@
 ---
+import { getCollection, render } from 'astro:content';
+import type { ImageMetadata } from 'astro';
 import Layout from '../../layouts/Layout.astro';
 import InteriorPage from "../../components/InteriorPage.astro";
 import Instructors from '../../components/instructors/Instructors.astro';
 import Instructor from '../../components/instructors/Instructor.astro';
-import type { ImageMetadata } from 'astro';
-import DictionaryTerm from '../../components/DictionaryTerm.astro';
+
+const allInstructors = await getCollection('instructors');
+const sorted = allInstructors.sort(
+  (a, b) => (a.data.sortOrder ?? 999) - (b.data.sortOrder ?? 999)
+);
 
 const instructorImageModules = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/images/instructors/*.{avif,webp,png,jpg,jpeg}',
   { eager: true }
 );
 
-const instructorImages = Object.fromEntries(
-  Object.entries(instructorImageModules).map(([path, module]) => [
-    path.split('/').pop()!,
-    module.default,
-  ])
+function resolvePhoto(photo?: string): ImageMetadata | string | undefined {
+  if (!photo) return undefined;
+  const filename = photo.split('/').pop();
+  const key = `/src/assets/images/instructors/${filename}`;
+  if (instructorImageModules[key]) return instructorImageModules[key].default;
+  return photo;
+}
+
+const rendered = await Promise.all(
+  sorted.map(async (instructor) => {
+    const { Content } = await render(instructor);
+    return { instructor, Content };
+  })
 );
 
 const pageTitle = "Meet our Instructors";
 const pageDesc = "Expert Shorin-Ryu Matsumura Seito instructors with decades of Okinawan karate experience. Direct lineage to Master Hohan Soken. Youth and adult classes.";
-
 ---
 
 <Layout title={pageTitle} description={pageDesc}>
@@ -30,99 +42,19 @@ const pageDesc = "Expert Shorin-Ryu Matsumura Seito instructors with decades of 
   >
     <hr />
     <Instructors>
-      <Instructor 
-        id="kyoshi-wayne-dean"
-        name="Wayne Dean"
-        img={instructorImages['wayne.jpg']}
-        imgAspectRatio="3 / 4"
-      >
-        <span slot="title">
-          <DictionaryTerm term="kyoshi" />
-        </span>
-        <span slot="rank">
-          <DictionaryTerm term="hachi" /><DictionaryTerm term="dan" />
-        </span>
-        <p>Wayne Dean, owner and instructor of Dean's Okinawan Martial Arts and Self Defense School in Hollywood, Maryland, holds an 8th degree black belt in <DictionaryTerm term="shorin-ryu-matsumura-seito" /> karate.</p>
-        <p>With over five decades of experience, Sensei Dean has established a reputation for excellence in martial arts instruction, drawing from his extensive training under the late Fred Sypher, a direct student of <DictionaryTerm term="fusei-kise" /> and Master <DictionaryTerm term="hohan-soken" /> in <DictionaryTerm term="okinawa" />. Since founding the <DictionaryTerm term="dojo" /> in September 2002, Sensei Dean has provided professional karate, <DictionaryTerm term="kobudo" />, and self-defense programs for both youth and adults, fostering a disciplined and supportive environment for personal growth and achievement.</p>
-      </Instructor>
-      <Instructor 
-        id="senpai-kirk-dean"
-        name="Kirk Dean"
-        img={instructorImages['kirk.jpg']}
-        imgAspectRatio="3 / 4"
-      >
-        <span slot="title">
-          <DictionaryTerm term="renshi" />
-        </span>
-        <span slot="rank">
-          <DictionaryTerm term="roku" />dan
-        </span>
-        <p>Kirk Dean is the dojo's most senior student and instructor, having begun his training in 1993 with Sensei Wayne Dean and Mark Gillingham at the Park and Recreation Center. Over the years, Kirk has deepened his expertise in Shorin-Ryu Matsumura Seito through dedicated study with the late Sensei's Dan Buckner and Fred Sypher.</p>
-        <p>As the lead instructor under Sensei Dean, Kirk plays a vital role in guiding and mentoring students, embodying the tradition and excellence of the dojo.</p>
-      </Instructor>
-      <Instructor 
-        id="senpai-robby"
-        name="Robby"
-        img={instructorImages['robby.jpg']}
-        imgAspectRatio="3 / 4"
-      >
-        <span slot="title">
-          Renshi
-        </span>
-        <span slot="rank">
-          Rokudan
-        </span>
-        <p>Robby Oliver began training Shorin-Ryu in 1988 under Sensei Mark Gillingham through the Recreation and Parks service of St. Mary's County Maryland.</p>
-        <p>In 1995, Robby continued his training in Matsumura Shorin-Ryu Seito alongside (now) Sensei Wayne Dean and Renshi Kirk Dean. Shortly thereafter, Robby continued his training with the late Sensei Sypher and Sensei Buckner.</p>
-        <p>To this day, Robby continues his training at Dean's Okinawan Martial Arts and Self Defense as one of the most senior students and instructors.</p>
-      </Instructor>
-      <Instructor 
-        id="senpai-philip-dean"
-        name="Philip Dean"
-        title="Renshi"
-        img={instructorImages['philip.jpg']}
-        imgAspectRatio="3 / 4"
-      >
-        <span slot="rank">
-          <DictionaryTerm term="go" />dan
-        </span>
-        <p>Philip Dean has been studying Shorin-Ryu Matsumura Seito karate with Sensei Wayne Dean since 2002. Philip also studied under the late Sensei Fred Sypher who was a guest instructor at Sensei Wayne Dean's Dojo in Hollywood Maryland. Philip serves as Sensei Dean's primary instructor for the dojo's <a href="/classes/">youth classes</a>.</p>
-      </Instructor>
-      <Instructor 
-        id="senpai-chris-schumacher"
-        name="Chris Schumacher"
-        img={instructorImages['chris.jpg']}
-        imgAspectRatio="3 / 4"
-      >
-        <span slot="rank">
-          <DictionaryTerm term="yon" />dan
-        </span>
-        <p>Chris Schumacher started studying Shorin Ryu Karate with Sensei Wayne Dean in 2004 after a deployment to Okinawa. Mr. Schumacher is also a 21 year veteran of the US Navy, serving with the US Marine Corps as a Hospital Corpsman. Chris assists Sensei Dean with instructing <a href="/classes/">youth and adult classes</a>. </p>
-      </Instructor>
-      <Instructor 
-        id="senpai-evan-pratt"
-        name="Evan Pratt"
-        img={instructorImages['evan.jpg']}
-        imgAspectRatio="3 / 4"
-      >
-        <span slot="rank">
-          <DictionaryTerm term="ni" />dan
-        </span>
-        <p>Evan began training Shorin-Ryu Matsumura Seito in 2004 and assists Sensei Dean with instructing youth and adult classes.</p>
-      </Instructor>
-      <Instructor 
-        id="kyoshi-fred-sypher"
-        featured={true}
-        name="Fred Sypher†"
-        title="Kyoshi"
-        rank="Rest in Peace"
-        img={instructorImages['kyoshi-fred-sypher.avif']}
-        imgAspectRatio="4 / 3"
-      >
-        <p>Fred Sypher was drafted in 1965 and joined the US Air Force. While stationed at Fort Myer, Virginia in 1966, he discovered Okinawan Kenpo under Gary Saluter, a fourth-degree black belt who had trained under Nakamura Sensei on Okinawa. After a flood destroyed Saluter's dojo, Fred was stationed on Okinawa in October 1967, where he trained in Shorinjiryu under Kise Fusei on Kadena Air Base. Sensei Kise was then a student of tenth-degree grand master Hohan Soken.</p>
-        <p>In spring 1968, Sensei Kise announced he would now teach Shorin-Ryu Matsumura Seito, which he had been studying under Master Soken. Fred devoted every available hour to this system until his discharge in March 1970, returning to Maryland as a third-degree black belt. He became lead instructor of the Patuxent River karate Club, then in 1974 opened the Isshokan Karate dojo in Lexington Park—the first commercial karate school in St. Mary's County. He also taught Maryland's first accredited high school karate class at Ryken High School in Leonardtown. After receiving his fifth-degree black belt in 1977, Fred closed the dojo to marry and attend college.</p>
-        <p>For over 50 years, Fred studied and taught exclusively Shorin-Ryu Matsumura Seito. He lived in Westminster, Maryland and conducted monthly seminars at Dean's Okinawan Martial Arts and Self Defense School in Hollywood, Maryland. He greatly enjoyed sharing what he learned over five decades of devoted practice.</p>
-      </Instructor>
+      {rendered.map(({ instructor, Content }) => (
+        <Instructor
+          id={instructor.id}
+          name={instructor.data.name}
+          title={instructor.data.title}
+          rank={instructor.data.rank}
+          img={resolvePhoto(instructor.data.photo)}
+          imgAspectRatio={instructor.data.photoOrientation === 'Landscape' ? '4 / 3' : '3 / 4'}
+          featured={instructor.data.featured}
+        >
+          <Content />
+        </Instructor>
+      ))}
     </Instructors>
   </InteriorPage>
 </Layout>

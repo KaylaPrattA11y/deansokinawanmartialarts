@@ -1,6 +1,6 @@
 ---
 question: How should I prepare for my class?
-sortPriority: 0
+sortOrder: 0
 ---
 
 **All Students:**

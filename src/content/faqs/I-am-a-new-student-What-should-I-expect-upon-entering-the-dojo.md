@@ -1,6 +1,6 @@
 ---
 question: I am a new student. What should I expect upon entering the dojo?
-sortPriority: 0
+sortOrder: 0
 ---
 
 First, welcome to the dojo!

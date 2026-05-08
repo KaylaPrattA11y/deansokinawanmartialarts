@@ -206,7 +206,7 @@ Content lives in `src/content/` and is defined by both Astro's content config (`
 
 - **Path:** `src/content/faqs/`
 - **Format:** Markdown with YAML frontmatter
-- **Fields:** `question` (required), `sortPriority` (optional number for ordering), `body` (rich text)
+- **Fields:** `question` (required), `sortOrder` (optional number for ordering), `body` (rich text)
 
 ### Dictionary (`dictionary`)
 

@@ -1,6 +1,6 @@
 ---
 question: 'Do you train in weapons? If so, what kinds?'
-sortPriority: 4
+sortOrder: 4
 ---
 
 Yes, we have comprehensive training for traditional weapons including:

@@ -269,10 +269,10 @@ export default defineConfig({
           },
           {
             type: "number",
-            label: "Sort Priority",
-            name: "sortPriority",
+            label: "Sort Order",
+            name: "sortOrder",
             description:
-              "Determines the order of the FAQs. Lower numbers (like 0 or 1) appear first.",
+              "Controls the display order. Lower numbers appear first.",
           },
           {
             type: "rich-text",
@@ -389,6 +389,75 @@ export default defineConfig({
             createNestedFolder: false,
           },
         }
+      },
+      {
+        label: "Instructors",
+        name: "instructors",
+        path: "src/content/instructors",
+        format: "md",
+        defaultItem: () => ({
+          photoOrientation: "Portrait",
+          featured: false,
+        }),
+        ui: {
+          allowedActions: {
+            createNestedFolder: false,
+          },
+        },
+        fields: [
+          {
+            type: "string",
+            label: "Name",
+            name: "name",
+            isTitle: true,
+            required: true,
+            description: "The instructor's full name.",
+          },
+          {
+            type: "string",
+            label: "Title",
+            name: "title",
+            description: "Honorific title (e.g., Kyoshi, Renshi).",
+          },
+          {
+            type: "string",
+            label: "Rank",
+            name: "rank",
+            description: "Belt rank (e.g., Hachidan, Rokudan).",
+          },
+          {
+            type: "image",
+            label: "Photo",
+            name: "photo",
+            description: "Instructor photo. Recommended dimensions: 600x800px for portrait, 800x600px for landscape.",
+          },
+          {
+            type: "string",
+            label: "Photo Orientation",
+            name: "photoOrientation",
+            options: ["Portrait", "Landscape"],
+            description: "Select Portrait for tall photos, Landscape for wide photos.",
+          },
+          {
+            type: "number",
+            label: "Sort Order",
+            name: "sortOrder",
+            description: "Controls the display order. Lower numbers appear first.",
+          },
+          {
+            type: "boolean",
+            label: "Featured",
+            name: "featured",
+            description: "Featured instructors are displayed with a larger, prominent layout.",
+          },
+          {
+            type: "rich-text",
+            label: "Biography",
+            name: "body",
+            isBody: true,
+            description: "Instructor biography, max 1500 characters.",
+          },
+        ],
       }
     ],
   },
