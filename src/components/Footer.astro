@@ -16,6 +16,8 @@ import SocialLink from './SocialLink.astro';
       </div>
       <div class="footer-copy">
         © {new Date().getFullYear()} · Hollywood, Maryland · Shorin-Ryu Matsumura Seito
+        <br/>
+        <small>Website hand-crafted in the USA by <a href="https://kaylapratta11y.github.io/resume/" target="_blank">Kayla Pratt</a></small>
       </div>
       <div class="footer-social">
         <SocialLink name="Facebook" url="https://www.facebook.com/DeansOkinawanMartialArts" icon="facebook" />
@@ -28,6 +30,16 @@ import SocialLink from './SocialLink.astro';
   @layer components {
     footer {
       container: footer / inline-size;
+    }
+    .footer a:is(:link, :visited) {
+      color: var(--paper);
+    }
+    .footer a:link {
+      text-decoration: none;
+    }
+    .footer a:is(:link, :visited):hover {
+      text-decoration: underline;
+      text-decoration-color: var(--bright-red);
     }
     .footer > div {
       display: grid;
