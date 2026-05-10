@@ -1,7 +1,7 @@
 ---
 name: Evan Pratt
 rank: Nidan
-photo: /uploads/evan.jpg
+photo: /uploads/Evan2.jpg
 photoOrientation: Portrait
 sortOrder: 6
 featured: false
