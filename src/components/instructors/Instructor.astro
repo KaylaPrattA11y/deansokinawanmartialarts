@@ -1,12 +1,14 @@
 ---
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import type { ImageMetadata } from 'astro';
+import DictionaryTerm from '../DictionaryTerm.astro';
 
 interface InstructorProps {
   name: string;
   title?: string;
   rank?: string;
-  img?: ImageMetadata;
+  img?: ImageMetadata | string;
   imgAspectRatio?: string;
   featured?: boolean;
   id?: string;
@@ -15,28 +17,40 @@ interface InstructorProps {
 const { name, title, rank, img, imgAspectRatio, featured = false, id } = Astro.props as InstructorProps;
 const hasTitle = title || Astro.slots.has('title');
 const hasRank = rank || Astro.slots.has('rank');
+const isStringImg = typeof img === 'string';
+const terms = await getCollection('dictionary');
 ---
 
-<li id={id} class={featured ? 'featured' : ''}>
+<div id={id} class={featured ? 'featured' : ''}>
   {img && (
   <div class="img-wrapper" style={`--aspect-ratio: ${imgAspectRatio || 4 / 3}`}>
-    <Image 
-      src={img}
-      alt={name} 
-      widths={[600, 900, 1200]}
-      sizes="(max-width: 600px) 100vw, 600px"
-    />
+    {isStringImg ? (
+      <img src={img} alt={name} loading="lazy" />
+    ) : (
+      <Image
+        src={img as ImageMetadata}
+        alt={name}
+        widths={[600, 900, 1200]}
+        sizes="(max-width: 600px) 100vw, 600px"
+      />
+    )}
   </div>
   )}
   <div>
-    {(hasTitle || hasRank) && <p><span><slot name="title">{title}</slot></span>{hasTitle && hasRank && <span class="bullet">•</span>}<span><slot name="rank">{rank}</slot></span></p>}
+    {(hasTitle || hasRank) && (
+      <p>
+        {terms.find(t => t.data.term === title) ? (<DictionaryTerm term={title} />) : (<span><slot name="title">{title}</slot></span>)}
+        <span>{hasTitle && hasRank && <span class="bullet">•</span>}</span>
+        {terms.find(t => t.data.term === rank) ? (<DictionaryTerm term={rank} />) : (<span><slot name="rank">{rank}</slot></span>)}
+      </p>
+    )}
     <h2>{name}</h2>
     <div class="content">
       <slot></slot>
     </div>
   </div>
   {featured && <div class="short-divider" aria-hidden="true"></div>}
-</li>
+</div>
 
 <style>
   @layer components {

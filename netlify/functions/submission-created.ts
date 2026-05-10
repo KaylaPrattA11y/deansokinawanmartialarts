@@ -8,6 +8,11 @@ interface NetlifySubmissionPayload {
 }
 
 const handler: Handler = async (event) => {
+  if (process.env.CONTEXT !== "production" || process.env.BRANCH !== "main") {
+    console.log(`Skipping submission handler — context: ${process.env.CONTEXT}, branch: ${process.env.BRANCH}`);
+    return { statusCode: 200, body: "Skipped: not production main branch" };
+  }
+
   if (event.body === null) {
     return { statusCode: 400, body: "Payload required" };
   }

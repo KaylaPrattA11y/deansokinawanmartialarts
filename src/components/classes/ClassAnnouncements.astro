@@ -52,7 +52,7 @@ const { headingLevel = 0 } = Astro.props;
   @layer components {
     .class-announcements--heading {
       font-family: var(--ff-heading);
-      font-size: 1.25rem;
+      font-size: clamp(1.5rem,3.5vw,1rem);
       font-weight: 700;
       line-height: 1.2;
       margin-block: 0 0.25em;
