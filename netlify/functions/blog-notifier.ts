@@ -11,9 +11,9 @@ const SITE_URL = process.env.URL;
  * checks for new blog posts and announcements, notifies GroupMe, and updates the KNOWN_POSTS env variable in Netlify.
  */
 export const handler: Handler = async (event) => {
-  if (process.env.CONTEXT !== "production" || process.env.BRANCH !== "main") {
-    console.log(`Skipping blog notifier — context: ${process.env.CONTEXT}, branch: ${process.env.BRANCH}`);
-    return { statusCode: 200, body: "Skipped: not production main branch" };
+  if (!GROUPME_BOT_ID) {
+    console.log("Skipping blog notifier — not production");
+    return { statusCode: 200, body: "Skipped: not production" };
   }
 
   if (event.httpMethod !== "POST") {
