@@ -51,15 +51,20 @@ export const handler: Handler = async (event) => {
     }
 
     // 4. Notify GroupMe for each new blog post
+    let notifiedBlog = 0;
     for (const post of newBlogPosts) {
+      if (!post.postToGroupMe) continue;
       const url = `${SITE_URL}/news/${post.id}`;
       // Example message format:
       // [📝 New Post] "My New Blog Post" 🔗 https://deansokinawanmartialarts.com/news/123
       await postToGroupMe(`[📝 New Post] "${post.title}" 🔗 ${url}`);
+      notifiedBlog++;
     }
 
     // 5. Notify GroupMe for each new announcement
+    let notifiedAnnouncements = 0;
     for (const post of newAnnouncements) {
+      if (!post.postToGroupMe) continue;
       const url = `${SITE_URL}/classes/`;
       const status = post.cancelled ? " (CANCELLED)" : "";
       const message = post.message ? `${post.message}\n\n` : "";
@@ -76,6 +81,7 @@ export const handler: Handler = async (event) => {
       await postToGroupMe(
         `[📣 Class Announcement] ${post.className} on ${date}${status}\n${message}🔗 ${url}`
       );
+      notifiedAnnouncements++;
     }
 
     // 6. Save updated known post IDs only (not full objects)
@@ -86,7 +92,7 @@ export const handler: Handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: `Notified: ${newBlogPosts.length} blog post(s), ${newAnnouncements.length} announcement(s)`,
+      body: `Notified: ${notifiedBlog} blog post(s), ${notifiedAnnouncements} announcement(s)`,
     };
   } catch (err) {
     console.error("Error in blog-notifier:", err);

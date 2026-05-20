@@ -26,6 +26,7 @@ const blog = defineCollection({
         credit: z.string().optional()
       })).optional()
     }).optional(),
+    postToGroupMe: z.boolean().default(true),
   }),
 });
 
@@ -84,6 +85,7 @@ const announcements = defineCollection({
     date: z.coerce.date(),
     cancelled: z.boolean().default(false),
     message: z.string().max(100).optional(),
+    postToGroupMe: z.boolean().default(true),
   }),
 });
 

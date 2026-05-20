@@ -21,6 +21,7 @@ export interface Post {
 export interface BlogPost {
   id: string;
   title: string;
+  postToGroupMe: boolean;
 }
 
 export interface AnnouncementPost {
@@ -28,5 +29,6 @@ export interface AnnouncementPost {
   className: string;
   date: string;
   cancelled: boolean;
+  postToGroupMe: boolean;
   message?: string;
 }
