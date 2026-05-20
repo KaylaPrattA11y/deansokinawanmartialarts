@@ -1,8 +1,8 @@
+import { getStore } from "@netlify/blobs";
 import type { Handler } from "@netlify/functions";
 import type { AnnouncementPost, BlogPost } from "../../src/types";
 
 const GROUPME_BOT_ID = process.env.GROUPME_BOT_ID;
-const NETLIFY_TOKEN = process.env.NETLIFY_API_TOKEN;
 const SITE_URL = process.env.URL;
 
 /**
@@ -26,13 +26,17 @@ export const handler: Handler = async (event) => {
       await fetchCurrentPosts();
 
     // 2. Load previously known IDs (stored as { blog: [], announcements: [] })
-    let known: { blog: string[]; announcements: string[] } = { blog: [], announcements: [] };
+    const known: { blog: string[]; announcements: string[] } = { blog: [], announcements: [] };
     try {
-      known = JSON.parse(process.env.KNOWN_POSTS || "{}");
-      known.blog = known.blog || [];
-      known.announcements = known.announcements || [];
+      const store = getStore("blog-notifier");
+      const raw = await store.get("known-posts", { type: "text" });
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        known.blog = parsed.blog || [];
+        known.announcements = parsed.announcements || [];
+      }
     } catch {
-      console.warn("Could not parse KNOWN_POSTS, starting fresh.");
+      console.warn("Could not load known posts from Blobs, starting fresh.");
     }
 
     // 3. Diff each collection
@@ -125,33 +129,12 @@ async function postToGroupMe(text: string) {
 }
 
 /**
- * Updates the KNOWN_POSTS environment variable on Netlify via the API.
- * Stores the latest known blog and announcement IDs to prevent duplicate notifications.
+ * Persists the latest known post IDs to Netlify Blobs.
  * @param {object} data - The new known posts data to store.
- * @throws If the Netlify API returns an error status.
  */
 async function updateKnownPosts(data: object) {
-  const ACCOUNT_ID = process.env.NETLIFY_ACCOUNT_ID;
+  const store = getStore("blog-notifier");
   const value = JSON.stringify(data);
-
-  const res = await fetch(
-    `https://api.netlify.com/api/v1/accounts/${ACCOUNT_ID}/env/KNOWN_POSTS`,
-    {
-      method: "PUT",  // PUT replaces all values, safer than PATCH here
-      headers: {
-        Authorization: `Bearer ${NETLIFY_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        key: "KNOWN_POSTS",
-        values: [{ value, context: "all" }],
-      }),
-    }
-  );
-
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`Failed to update KNOWN_POSTS: ${res.status} ${body}`);
-  }
-  console.log("Updated KNOWN_POSTS:", value);
+  await store.set("known-posts", value);
+  console.log("Updated known posts in Blobs:", value);
 }
