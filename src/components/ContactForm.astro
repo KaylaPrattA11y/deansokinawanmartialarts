@@ -52,6 +52,7 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
   id={id}
 >
   <input type="hidden" name="form-name" value="Contact" />
+  <input type="hidden" name="subject" value="New message from our website" />
   <h2>{formHeading}</h2>
   <div class="success-message d-none">
     <p><Icon name="check" size="20px" /> Your message has been sent successfully. We will get back to you at our earliest convenience.</p>
@@ -237,6 +238,8 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
       const formData = new FormData(form);
       const formName = form.getAttribute('name') || 'Contact';
       formData.set('form-name', formName);
+      const submitterName = (formData.get('name') || 'a visitor').toString().trim();
+      formData.set('subject', `New message from ${submitterName}`);
       
       // Disable input after data is captured
       submitButton.disabled = true;
