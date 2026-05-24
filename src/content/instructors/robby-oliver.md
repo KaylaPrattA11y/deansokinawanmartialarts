@@ -2,7 +2,7 @@
 name: Robby Oliver
 title: Renshi
 rank: Rokudan
-photo: /uploads/robby.jpg
+photo: /uploads/Robby2.jpg
 photoOrientation: Portrait
 sortOrder: 3
 featured: false
