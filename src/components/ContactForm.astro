@@ -1,8 +1,9 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { getCollection } from 'astro:content';
+import logo from "../assets/logo.svg";
 import { type IKarateClass, FREE_TRIAL_NAME } from '../constants';
 import CalendarAddKarateClass from './CalendarAddKarateClass.astro';
-import { getCollection } from 'astro:content';
 
 const dayNameToNumber: Record<string, number> = {
   Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6,
@@ -53,6 +54,14 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
 >
   <input type="hidden" name="form-name" value="Contact" />
   <input type="hidden" name="subject" value="New message from our website" />
+  {formHeading === "Start Your Free Trial" && (
+    <div class="site-logo">
+      <img src={logo.src} alt="Dojo seal" width={50} height={50} fetchpriority="high" />
+      <div>
+        Dean's Okinawan <br aria-hidden="true" /> Martial Arts
+      </div>
+    </div>
+  )}
   <h2>{formHeading}</h2>
   <div class="success-message d-none">
     <p><Icon name="check" size="20px" /> Your message has been sent successfully. We will get back to you at our earliest convenience.</p>
@@ -102,6 +111,23 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
           maxlength="20" 
         />
         <p class="validation">Please enter a valid phone number.</p>
+      </div>
+      <div class="field">
+        <label for={`${id}-how-did-you-hear`}>How did you hear about us? (optional)</label>
+        <select
+          id={`${id}-how-did-you-hear`}
+          name="howDidYouHear"
+        >
+          <option value="">Select an option...</option>
+          <option value="Social media">Social media</option>
+          <option value="Flyer">Flyer</option>
+          <option value="Word of mouth">Word of mouth</option>
+          <option value="Google Search">Google Search</option>
+          <option value="Website">Website</option>
+          <option value="Event">Event</option>
+          <option value="Returning student">Returning student</option>
+          <option value="Other">Other</option>
+        </select>
       </div>
       <div class="field">
         <label for={`${id}-interest`}>Interest (optional)</label>
@@ -298,6 +324,30 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
       color: var(--paper);
       margin-block: 0 1em;
     }
+    .site-logo {
+			position: relative;
+			display: grid;
+			gap: 0.5rem;
+			align-items: center;
+			grid-template-columns: 50px auto;
+      margin-block-end: 1rem;
+			@container header (width >= 600px) {
+				gap: 1rem;
+			}
+		}
+		.site-logo div {
+			line-height: 1;
+      font-weight: 700;
+			font-family: var(--ff-heading);
+			display: block;
+			text-decoration: none;
+			font-size: 0.85rem;
+			color: var(--silver);
+			text-transform: uppercase;
+			@container header (width >= 600px) {
+				font-size: 0.95rem;
+			}
+		}
     .success-message {
       background-color: rgba(75, 181, 67, 0.15);
       border: 1px solid rgba(75, 181, 67, 0.3);

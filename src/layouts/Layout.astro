@@ -244,6 +244,62 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
       closeDropdownMenus();
     }
   });
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const modalParam = queryParams.get('contactFormModal');
+  const howDidYouHearParam = queryParams.get('howDidYouHear');
+
+  const normalizeHowDidYouHear = (value) => {
+    if (!value) return '';
+
+    const normalized = value.trim().toLowerCase();
+    const aliases = {
+      'social media': 'Social media',
+      'social-media': 'Social media',
+      flyer: 'Flyer',
+      'word of mouth': 'Word of mouth',
+      'word-of-mouth': 'Word of mouth',
+      'google search': 'Google Search',
+      'google-search': 'Google Search',
+      website: 'Website',
+      event: 'Event',
+      'returning student': 'Returning student',
+      'returning-student': 'Returning student',
+      other: 'Other'
+    };
+
+    return aliases[normalized] || value.trim();
+  };
+
+  const setHowDidYouHearOnForm = (form) => {
+    if (!form || !howDidYouHearParam) return;
+
+    const howDidYouHearSelect = form.elements.namedItem('howDidYouHear');
+    if (!(howDidYouHearSelect instanceof HTMLSelectElement)) return;
+
+    const normalizedValue = normalizeHowDidYouHear(howDidYouHearParam);
+    const matchingOption = Array.from(howDidYouHearSelect.options).find(
+      option => option.value.toLowerCase() === normalizedValue.toLowerCase()
+    );
+
+    if (matchingOption) {
+      howDidYouHearSelect.value = matchingOption.value;
+    }
+  };
+
+  setHowDidYouHearOnForm(document.forms.namedItem('contact-form'));
+
+  if ((modalParam || '').toLowerCase() === 'open') {
+    const dialog = document.getElementById('free-trial-dialog');
+    const form = document.forms.namedItem('free-trial-form');
+
+    if (dialog instanceof HTMLDialogElement && form) {
+      form.reset();
+      setHowDidYouHearOnForm(form);
+      dialog.showModal();
+      form.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
 </script>
 
 <style>
