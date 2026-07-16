@@ -63,7 +63,7 @@ const classes = defineCollection({
   loader: glob({ base: './src/content/classes', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
     name: z.string(),
-    ages: z.string(),
+    prerequisites: z.string().optional(),
     description: z.string().max(200),
     startTime: z.string(),
     endTime: z.string(),

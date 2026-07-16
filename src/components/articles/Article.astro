@@ -125,6 +125,31 @@ const featuredImage = post.data.image;
       height: auto;
       border-radius: 4px;
     }
+    .content :global(table) {
+      border-collapse: collapse;
+      width: 100%;
+      margin-block: 1em;
+    }
+    .content :global(th, td) {
+      border: 1px solid var(--stone);
+      padding: 0.5em;
+      text-align: left;
+    }
+    @container (width < 600px) {
+      .content :global(tr) {
+        display: grid;
+      }
+      .content :global(thead) {
+        visibility: collapse;
+      }
+      .content :global(th, td) {
+        border: none;
+      }
+      .content :global(tr) {
+        border: none;
+        border: 1px solid var(--stone);
+      }
+    }
     a:link,
     a:visited,
     .content :global(a:link, a:visited) {

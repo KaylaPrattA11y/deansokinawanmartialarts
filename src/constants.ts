@@ -14,7 +14,7 @@ export interface IBaseClass {
 }
 
 export interface IKarateClass extends IBaseClass {
-  ages: string;
+  prerequisites?: string;
   startTime: string; // (HH:mm)
   endTime: string;   // (HH:mm)
   location: string;

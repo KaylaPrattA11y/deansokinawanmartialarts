@@ -21,7 +21,7 @@ const sortedClasses = allClasses.sort((a, b) => (a.data.sortOrder ?? 99) - (b.da
 const classEntries = sortedClasses.map(cls => {
   const karateClass: IKarateClass = {
     name: cls.data.name,
-    ages: cls.data.ages,
+    prerequisites: cls.data.prerequisites,
     description: cls.data.description,
     startTime: cls.data.startTime,
     endTime: cls.data.endTime,
@@ -50,7 +50,9 @@ const { headingLevel = 0 } = Astro.props;
   {classEntries.map(({ karateClass, cancelledDates, kanji, id }) => (
     <Card kanji={kanji}>
       <div class="class-entry">
-        <div class="class-age">Ages {karateClass.ages}</div>
+        {karateClass.prerequisites !== undefined && (
+          <div class="class-prerequisites">{karateClass.prerequisites}</div>
+        )}
         <div class="class-entry-grid">
           <div>
             <CalendarAddKarateClass id={`${id}-classes`} karateClass={karateClass} cancelledDates={cancelledDates} headingLevel={headingLevel} />
@@ -128,10 +130,10 @@ const { headingLevel = 0 } = Astro.props;
       display: grid;
       justify-content: center;
     }
-    .class-age {
+    .class-prerequisites {
       font-family: var(--ff-heading);
       font-size: 0.9rem;
-      letter-spacing: 0.4em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--silver);
       margin-bottom: 1rem;
