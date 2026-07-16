@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { wrapFieldsWithMeta } from 'tinacms'
-import { client } from '../__generated__/client'
+import { wrapFieldsWithMeta, useCMS } from 'tinacms'
 
 export const ClassesSelect = wrapFieldsWithMeta(({ input }) => {
   const [options, setOptions] = useState<string[]>([])
+  const cms = useCMS()
 
   useEffect(() => {
-    client.queries.classesConnection().then((result) => {
-      const names = (result.data.classesConnection.edges ?? [])
+    cms.api.tina.request<{ classesConnection: { edges: Array<{ node: { name: string } } | null> } }>(
+      `query { classesConnection { edges { node { name } } } }`,
+      { variables: {} }
+    ).then((data) => {
+      const names = (data?.classesConnection?.edges ?? [])
         .map((edge) => edge?.node?.name)
         .filter((name): name is string => Boolean(name))
       setOptions(names)
+    }).catch(() => {
+      // Leave options empty if the query fails
     })
   }, [])
 

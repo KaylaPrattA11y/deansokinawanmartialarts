@@ -1,6 +1,6 @@
 ---
 term: Kyudan
-pronunciation: key-you-dawn
+pronunciation: key-yew-dawn
 ---
 
 Ninth degree black belt.

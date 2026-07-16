@@ -244,6 +244,115 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
       closeDropdownMenus();
     }
   });
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const modalParam = queryParams.get('contactFormModal');
+  const howDidYouHearParam = queryParams.get('howDidYouHear');
+
+  const cleanupHandledQueryParams = () => {
+    const url = new URL(window.location.href);
+    let hasChanges = false;
+
+    ['contactFormModal', 'howDidYouHear'].forEach(param => {
+      if (url.searchParams.has(param)) {
+        url.searchParams.delete(param);
+        hasChanges = true;
+      }
+    });
+
+    if (hasChanges) {
+      const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+      window.history.replaceState(window.history.state, '', nextUrl || url.pathname);
+    }
+  };
+
+  const normalizeHowDidYouHear = (value) => {
+    if (!value) return '';
+
+    const normalized = value.trim().toLowerCase();
+    const aliases = {
+      'social media': 'Social media',
+      'social-media': 'Social media',
+      flyer: 'Flyer',
+      'word of mouth': 'Word of mouth',
+      'word-of-mouth': 'Word of mouth',
+      'google search': 'Google Search',
+      'google-search': 'Google Search',
+      website: 'Website',
+      event: 'Event',
+      'returning student': 'Returning student',
+      'returning-student': 'Returning student',
+      other: 'Other'
+    };
+
+    return aliases[normalized] || value.trim();
+  };
+
+  const setHowDidYouHearOnForm = (form) => {
+    if (!form || !howDidYouHearParam) return;
+
+    const howDidYouHearSelect = form.elements.namedItem('howDidYouHear');
+    if (!(howDidYouHearSelect instanceof HTMLSelectElement)) return;
+
+    const normalizedValue = normalizeHowDidYouHear(howDidYouHearParam);
+    const matchingOption = Array.from(howDidYouHearSelect.options).find(
+      option => option.value.toLowerCase() === normalizedValue.toLowerCase()
+    );
+
+    if (matchingOption) {
+      howDidYouHearSelect.value = matchingOption.value;
+    }
+  };
+
+  setHowDidYouHearOnForm(document.forms.namedItem('contact-form'));
+
+  const openContactFormModal = () => {
+    const dialog = document.getElementById('free-trial-dialog');
+    const form = document.forms.namedItem('free-trial-form');
+
+    if (!(dialog instanceof HTMLDialogElement) || !form) {
+      return false;
+    }
+
+    form.reset();
+    setHowDidYouHearOnForm(form);
+
+    try {
+      if (!dialog.open) {
+        if (typeof dialog.showModal === 'function') {
+          dialog.showModal();
+        } else if (typeof dialog.show === 'function') {
+          dialog.show();
+        } else {
+          return false;
+        }
+      }
+    } catch (error) {
+      console.warn('Unable to open contact form dialog from URL parameter:', error);
+      return false;
+    }
+
+    form.dispatchEvent(new Event('change', { bubbles: true }));
+    return true;
+  };
+
+  if ((modalParam || '').toLowerCase() === 'open') {
+    const wasModalOpened = openContactFormModal();
+
+    if (!wasModalOpened) {
+      const inlineForm = document.forms.namedItem('contact-form');
+      setHowDidYouHearOnForm(inlineForm);
+
+      const contactTarget = document.getElementById('contact');
+      if (contactTarget instanceof HTMLElement) {
+        contactTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }
+
+  if (modalParam !== null || howDidYouHearParam !== null) {
+    cleanupHandledQueryParams();
+  }
 </script>
 
 <style>

@@ -14,6 +14,7 @@
     "@fontsource-variable/cinzel": "^5.2.8",
     "@fontsource-variable/eb-garamond": "^5.2.7",
     "@fontsource-variable/noto-serif-jp": "^5.2.9",
+    "@netlify/blobs": "^10.7.8",
     "@netlify/emails": "^1.1.0",
     "@netlify/functions": "^5.2.0",
     "@tinacms/cli": "^2.2.2",

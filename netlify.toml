@@ -36,9 +36,21 @@
   to = "/gallery/1/"
   status = 301
 
+# Redirect from old Photo Gallery page to Gallery page
+[[redirects]]
+  from = "/photo-gallery"
+  to = "/gallery/1/"
+  status = 301
+
 # Redirect from old Blog page to News & Updates page
 [[redirects]]
   from = "/blog"
+  to = "/news/1/"
+  status = 301
+
+# Redirects from any old blog posts to News & Updates page
+[[redirects]]
+  from = "/post/*"
   to = "/news/1/"
   status = 301
 

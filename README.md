@@ -140,7 +140,7 @@ Clear cache: `rm -rf .astro node_modules/.vite node_modules/.cache dist && npm r
 │   │   ├── ...
 │   ├── config/
 │   │   └── site.ts           # Site-wide constants (SEO, schema, routes, classes, breakpoints)
-│   ├── content/              # Markdown content (blog, gallery, faqs, dictionary)
+│   ├── content/              # Markdown content (blog, gallery, faqs, dictionary, classes, instructors, announcements)
 │   ├── icons/                # Local SVG icons
 │   ├── layouts/
 │   │   └── Layout.astro      # Base HTML layout
@@ -186,7 +186,7 @@ The TinaCMS admin UI is served from `/admin/`. Build output goes to `public/admi
 
 ## Content Collections
 
-Content lives in `src/content/` and is defined by both Astro's content config (`src/content/config.ts`) and TinaCMS schema (`tina/config.ts`).
+Content lives in `src/content/` and is defined by both Astro's content config (`src/content.config.ts`) and TinaCMS schema (`tina/config.ts`).
 
 ### News & Updates (`blog`)
 
@@ -212,7 +212,28 @@ Content lives in `src/content/` and is defined by both Astro's content config (`
 
 - **Path:** `src/content/dictionary/`
 - **Format:** Markdown with YAML frontmatter
-- **Fields:** Karate terminology entries with Japanese terms and definitions
+- **Fields:** `term` (required), `pronunciation`, `body` (rich text)
+
+### Classes (`classes`)
+
+- **Path:** `src/content/classes/`
+- **Format:** Markdown with YAML frontmatter
+- **Fields:** `name` (required), `ages` (required), `description` (required, max 200 chars), `startTime` (required), `endTime` (required), `location` (required), `recurrence` (required), `recurrence_byDay` (required, array of day strings), `tuitionOnce` (required, number), `tuitionTwice` (optional number), `tuition_billing_recurrence` (required), `sortOrder` (optional), `kanji` (optional)
+- **Notes:** Each entry represents a class offering. `recurrence_byDay` drives calendar and structured data. Tuition fields support one-day and two-day-per-week pricing tiers.
+
+### Instructors (`instructors`)
+
+- **Path:** `src/content/instructors/`
+- **Format:** Markdown with YAML frontmatter
+- **Fields:** `name` (required), `title`, `rank`, `photo`, `photoOrientation` (`Portrait` | `Landscape`, defaults to `Portrait`), `sortOrder`, `featured` (boolean, defaults to `false`), `body` (rich text bio)
+- **Notes:** `featured` controls whether an instructor appears on the homepage. `sortOrder` controls display order. `photoOrientation` adjusts layout for portrait vs. landscape photos.
+
+### Class Announcements (`announcements`)
+
+- **Path:** `src/content/announcements/`
+- **Format:** Markdown with YAML frontmatter
+- **Fields:** `className` (required), `date` (required), `cancelled` (boolean, defaults to `false`), `message` (optional, max 100 chars)
+- **Notes:** Used to post cancellations or special notices for a class on a specific date. The GroupMe bot notifier reads this collection to send alerts.
 
 ---
 

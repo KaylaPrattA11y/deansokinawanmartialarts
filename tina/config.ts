@@ -36,6 +36,7 @@ export default defineConfig({
         format: "md",
         defaultItem: () => ({
           pubDate: new Date().toISOString(),
+          postToGroupMe: true,
         }),
         fields: [
           {
@@ -192,6 +193,13 @@ export default defineConfig({
               },
             ],
           },
+          {
+            type: "boolean",
+            label: "Post to GroupMe",
+            name: "postToGroupMe",
+            description:
+              "Check this box to post this article to the GroupMe DOMA chat group when published.",
+          }
         ],
       },
       {
@@ -477,6 +485,7 @@ export default defineConfig({
         defaultItem: () => ({
           date: new Date().toISOString(),
           cancelled: false,
+          postToGroupMe: true,
         }),
         ui: {
           filename: {
@@ -540,6 +549,13 @@ export default defineConfig({
             description:
               'Write the announcement message (e.g., "Class moved to 7 PM" or "Blackbelt ceremony — no regular class")',
           },
+          {
+            type: "boolean",
+            label: "Post to GroupMe",
+            name: "postToGroupMe",
+            description:
+              "Check this box to post this announcement to the GroupMe DOMA chat group.",
+          }
         ],
       },
       {

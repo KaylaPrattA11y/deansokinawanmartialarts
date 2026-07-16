@@ -8,6 +8,11 @@ interface NetlifySubmissionPayload {
 }
 
 const handler: Handler = async (event) => {
+  if (!process.env.NETLIFY_EMAILS_SECRET) {
+    console.log("Skipping submission handler — not production");
+    return { statusCode: 200, body: "Skipped: not production" };
+  }
+
   if (event.body === null) {
     return { statusCode: 400, body: "Payload required" };
   }
@@ -56,11 +61,6 @@ const handler: Handler = async (event) => {
       statusCode: 200,
       body: "Skipping email send: invalid email format"
     };
-  }
-
-  if (!process.env.NETLIFY_EMAILS_SECRET) {
-    console.error("NETLIFY_EMAILS_SECRET not configured");
-    return { statusCode: 500, body: "Email service not configured" };
   }
 
   if (!process.env.URL) {
