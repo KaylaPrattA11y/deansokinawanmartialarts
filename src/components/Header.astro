@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import logo from "../assets/logo.svg";
 import MenuItems from "./MenuItems.astro";
+import { SOCIAL_LINKS } from '../config/site';
 ---
 
 <header aria-label="Site header" id="site-header" data-pagefind-ignore="true">
@@ -14,6 +15,14 @@ import MenuItems from "./MenuItems.astro";
 		</div>
 		<div class="nav-wrapper">
 			<MenuItems currentView="default" />
+			<div class="social-quick" aria-label="Social media">
+				<a href={SOCIAL_LINKS.instagram} title="Instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+					<Icon name="instagram" size="20px" />
+				</a>
+				<a href={SOCIAL_LINKS.facebook} title="Facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+					<Icon name="facebook" size="20px" />
+				</a>
+			</div>
 			<a aria-label="Contact" href="#contact-phone"><Icon name="phone" size="24px" /></a>
 			<button 
 				type="button" 
@@ -96,6 +105,24 @@ import MenuItems from "./MenuItems.astro";
 			@container header (width >= 900px) {
 				gap: 1rem;
 			}
+		}
+		.social-quick {
+			display: none;
+			align-items: center;
+			gap: 0.5rem;
+			@container header (width >= 1200px) {
+				display: flex;
+			}
+		}
+		.social-quick a {
+			display: grid;
+			place-items: center;
+			inline-size: 32px;
+			block-size: 32px;
+			color: var(--silver);
+		}
+		.social-quick a:hover {
+			color: var(--paper);
 		}
 		.site-logo {
 			position: relative;

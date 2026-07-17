@@ -2,6 +2,7 @@
 import Info from './Info.astro';
 import logo from "../assets/logo.svg";
 import SocialLink from './SocialLink.astro';
+import { SOCIAL_LINKS } from '../config/site';
 ---
 
 <footer data-pagefind-ignore="true">
@@ -20,7 +21,8 @@ import SocialLink from './SocialLink.astro';
         <small>Website hand-crafted in the USA by <a href="https://kaylapratta11y.github.io/resume/" target="_blank">Kayla Pratt</a></small>
       </div>
       <div class="footer-social">
-        <SocialLink name="Facebook" url="https://www.facebook.com/DeansOkinawanMartialArts" icon="facebook" />
+        <SocialLink name="Instagram" url={SOCIAL_LINKS.instagram} icon="instagram" />
+        <SocialLink name="Facebook" url={SOCIAL_LINKS.facebook} icon="facebook" />
       </div>
     </div>
   </div>
@@ -84,6 +86,7 @@ import SocialLink from './SocialLink.astro';
     .footer-social {
       text-align: center;
       display: grid;
+      gap: 0.4rem;
       @container (width >= 1200px)  {
         justify-items: end;
       }

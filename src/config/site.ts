@@ -43,3 +43,8 @@ export const ROUTES = {
 export const FLAGS = {
   useLightboxControls: true,
 }
+
+export const SOCIAL_LINKS = {
+  instagram: "https://www.instagram.com/deansokinawanmartialarts/",
+  facebook: "https://www.facebook.com/DeansOkinawanMartialArts/",
+};
