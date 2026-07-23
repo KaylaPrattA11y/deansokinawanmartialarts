@@ -246,19 +246,21 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
   });
 
   const queryParams = new URLSearchParams(window.location.search);
-  const modalParam = queryParams.get('contactFormModal');
-  const howDidYouHearParam = queryParams.get('howDidYouHear');
+  const utmCampaignParam = queryParams.get('utm_campaign');
+  const utmSourceParam = queryParams.get('utm_source');
 
   const cleanupHandledQueryParams = () => {
     const url = new URL(window.location.href);
     let hasChanges = false;
 
-    ['contactFormModal', 'howDidYouHear'].forEach(param => {
-      if (url.searchParams.has(param)) {
+    Array.from(url.searchParams.keys())
+      .filter(param => param.toLowerCase().startsWith('utm_'))
+      .forEach(param => {
+        if (!url.searchParams.has(param)) return;
+
         url.searchParams.delete(param);
         hasChanges = true;
-      }
-    });
+      });
 
     if (hasChanges) {
       const nextUrl = `${url.pathname}${url.search}${url.hash}`;
@@ -266,35 +268,27 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
     }
   };
 
-  const normalizeHowDidYouHear = (value) => {
+  const normalizeHowDidYouHearFromUtmSource = (value) => {
     if (!value) return '';
 
     const normalized = value.trim().toLowerCase();
     const aliases = {
-      'social media': 'Social media',
-      'social-media': 'Social media',
       flyer: 'Flyer',
-      'word of mouth': 'Word of mouth',
-      'word-of-mouth': 'Word of mouth',
-      'google search': 'Google Search',
-      'google-search': 'Google Search',
-      website: 'Website',
-      event: 'Event',
-      'returning student': 'Returning student',
-      'returning-student': 'Returning student',
-      other: 'Other'
+      facebook: 'Facebook',
+      instagram: 'Instagram'
     };
 
-    return aliases[normalized] || value.trim();
+    return aliases[normalized] || "Other";
   };
 
   const setHowDidYouHearOnForm = (form) => {
-    if (!form || !howDidYouHearParam) return;
+    if (!form || !utmSourceParam) return;
 
     const howDidYouHearSelect = form.elements.namedItem('howDidYouHear');
-    if (!(howDidYouHearSelect instanceof HTMLSelectElement)) return;
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (!(howDidYouHearSelect instanceof HTMLSelectElement) || !(submitButton instanceof HTMLButtonElement)) return;
 
-    const normalizedValue = normalizeHowDidYouHear(howDidYouHearParam);
+    const normalizedValue = normalizeHowDidYouHearFromUtmSource(utmSourceParam);
     const matchingOption = Array.from(howDidYouHearSelect.options).find(
       option => option.value.toLowerCase() === normalizedValue.toLowerCase()
     );
@@ -302,6 +296,8 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
     if (matchingOption) {
       howDidYouHearSelect.value = matchingOption.value;
     }
+    submitButton.setAttribute('data-umami-event-referrer', normalizedValue || 'Other');
+    submitButton.setAttribute('data-umami-event-campaign', utmCampaignParam === 'increase-registration' ? 'Increase Registration' : utmCampaignParam || '');
   };
 
   setHowDidYouHearOnForm(document.forms.namedItem('contact-form'));
@@ -336,7 +332,7 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
     return true;
   };
 
-  if ((modalParam || '').toLowerCase() === 'open') {
+  if ((utmCampaignParam || '').toLowerCase() === 'increase-registration') {
     const wasModalOpened = openContactFormModal();
 
     if (!wasModalOpened) {
@@ -348,9 +344,7 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
         contactTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
-  }
 
-  if (modalParam !== null || howDidYouHearParam !== null) {
     cleanupHandledQueryParams();
   }
 </script>

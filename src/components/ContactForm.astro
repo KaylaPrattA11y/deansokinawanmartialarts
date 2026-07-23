@@ -19,7 +19,7 @@ const sortedClasses = allClasses.sort((a, b) => (a.data.sortOrder ?? 99) - (b.da
 const classEntries = sortedClasses.map(cls => {
   const karateClass: IKarateClass = {
     name: cls.data.name,
-    ages: cls.data.ages,
+    prerequisites: cls.data.prerequisites,
     description: cls.data.description,
     startTime: cls.data.startTime,
     endTime: cls.data.endTime,
@@ -119,13 +119,11 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
           name="howDidYouHear"
         >
           <option value="">Select an option...</option>
-          <option value="Social media">Social media</option>
+          <option value="Facebook">Facebook</option>
+          <option value="Instagram">Instagram</option>
           <option value="Flyer">Flyer</option>
           <option value="Word of mouth">Word of mouth</option>
-          <option value="Google Search">Google Search</option>
-          <option value="Website">Website</option>
-          <option value="Event">Event</option>
-          <option value="Returning student">Returning student</option>
+          <option value="Web search">Web search</option>
           <option value="Other">Other</option>
         </select>
       </div>
@@ -186,12 +184,16 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
     </div>
   </fieldset>
   <div class="short-divider"></div>
-  <button type="submit">Send Message</button>
+  <button 
+    data-umami-event={`${formHeading} - Form Submission`}
+    type="submit"
+  >Send Message</button>
   <p class="privacy"><small>We respect your privacy. Your information will never be shared.</small></p>
 </form>
 
 <script is:inline define:vars={{ id, FREE_TRIAL_NAME, classNames }}>
   const form = document.forms.namedItem(id);
+  const howDidYouHearSelect = form.elements.namedItem('howDidYouHear');
   const interestSelect = form.elements.namedItem('interest');
   const classSchedule = form.querySelector('[data-calendar="class-schedule"]');
   const calendarDivs = form.querySelectorAll('[data-calendar^="add-"]');
@@ -234,6 +236,12 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
 
   // Listen on the interest select directly
   interestSelect?.addEventListener('change', handleInterestChange);
+
+  howDidYouHearSelect?.addEventListener('change', event => {
+    if (event.target instanceof HTMLSelectElement && submitButton instanceof HTMLButtonElement) {
+      submitButton.setAttribute('data-umami-event-referrer', event.target.value || 'Other');
+    }
+  });
 
   form?.addEventListener("change", event => {
     if (event.target instanceof HTMLSelectElement) {
