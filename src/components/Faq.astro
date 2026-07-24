@@ -7,7 +7,10 @@ const { Content } = await render(post);
 ---
 
 <details>
-  <summary>
+  <summary
+    data-umami-event="FAQ Question Clicked"
+    data-umami-event-question={post.data.question}  
+  >
     <Icon name="arrow-right" size="24px" color="var(--bright-red)" />
     {post.data.question}
   </summary>

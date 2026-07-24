@@ -26,8 +26,10 @@ const featuredImage = post.data.image;
         width="full" 
         variant="secondary" 
         href={`${BASE_URL}${ROUTES.news}${post.id}/`}
+        data-umami-event="Read Article"
+        data-umami-event-article-title={post.data.title}
       >
-        Read More
+        Read More <div class="visually-hidden">about ${post.data.title}</div>
       </Button>
     </div>
   </div>

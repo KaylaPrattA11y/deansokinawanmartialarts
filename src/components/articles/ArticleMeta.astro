@@ -35,6 +35,8 @@ const { post, isStub = false, useShareButton = false, isHomepage = false } = Ast
       )}
       {useShareButton && (
       <button 
+        data-umami-event="Share Article"
+        data-umami-article-title={post.data.title}
         class="d-none"
         type="button" 
         data-share="true"
@@ -64,6 +66,8 @@ const { post, isStub = false, useShareButton = false, isHomepage = false } = Ast
           )}
           {useShareButton && (
           <button 
+            data-umami-event="Share Article"
+            data-umami-article-title={post.data.title}
             class="d-none"
             type="button" 
             data-share="true"

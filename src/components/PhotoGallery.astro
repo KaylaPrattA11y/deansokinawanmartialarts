@@ -45,6 +45,9 @@ const validImages = images.filter(img =>
             </figcaption>
             )}
             <button 
+              data-umami-event="Open Image in Lightbox"
+              data-umami-event-gallery-title={title || 'Gallery'}
+              data-umami-event-image-title={img.title || 'image'}
               class="lightbox-trigger"
               data-photo-gallery="trigger"
               data-media-type="photo"
@@ -87,6 +90,9 @@ const validImages = images.filter(img =>
             )}
           </div>
           <button 
+            data-umami-event="Open Video in Lightbox"
+            data-umami-event-gallery-title={title || 'Gallery'}
+            data-umami-event-video-title={img.title || 'video'}
             class="lightbox-trigger"
             data-photo-gallery="trigger"
             data-media-type="video"
@@ -125,6 +131,8 @@ const validImages = images.filter(img =>
       </div>
       <div role="group" class="image-controls">
         <button 
+          data-umami-event="Save Image"
+          data-umami-event-gallery-title={title || 'Gallery'}
           class="image-save d-none"
           data-photo-gallery="save"
           aria-label="Save image"
@@ -133,6 +141,8 @@ const validImages = images.filter(img =>
           <Icon name="save" size="28px" />
         </button>
         <button 
+          data-umami-event="Share Image"
+          data-umami-event-gallery-title={title || 'Gallery'}
           class="image-share d-none"
           data-share="true"
           aria-label="Share media"
@@ -219,10 +229,12 @@ const validImages = images.filter(img =>
     shareButton.dataset.title = '';
     shareButton.dataset.description = '';
     shareButton.dataset.id = '';
+    shareButton.dataset.umamiEventImageTitle = '';
 
     photoWrapper.classList.toggle('d-none', mediaType !== 'photo');
     videoWrapper.classList.toggle('d-none', mediaType !== 'video');
     saveButton.classList.toggle('d-none', mediaType !== 'photo');
+    saveButton.dataset.umamiEventImageTitle = '';
 
     if (mediaType === 'photo') {
       dialogImg.onload = () => {
@@ -252,6 +264,8 @@ const validImages = images.filter(img =>
     shareButton.dataset.title = title || '';
     shareButton.dataset.description = caption || '';
     shareButton.dataset.id = id || '';
+    shareButton.dataset.umamiEventImageTitle = title || '';
+    saveButton.dataset.umamiEventImageTitle = title || '';
 
     dialogMediaWrapper.classList.remove('v-hidden');
   }

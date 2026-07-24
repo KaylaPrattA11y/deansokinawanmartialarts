@@ -97,6 +97,9 @@ function formatMilitaryToStandard(militaryTime: string) {
       </button>
       <div class="calendar--dropdown" role="menu" id={`calendarDropdownMenu-${id}`} data-component="dropdown">
         <a
+          data-umami-event="Add Class to Calendar"
+          data-umami-event-class={karateClass.name}
+          data-umami-event-calendar-platform="Google Calendar"
           href="#"
           target="_blank"
           class="calendar--dropdown-item"
@@ -106,6 +109,9 @@ function formatMilitaryToStandard(militaryTime: string) {
           <Icon name="google-calendar" size={18} /> Add to Google Calendar
         </a>
         <button
+          data-umami-event="Add Class to Calendar"
+          data-umami-event-class={karateClass.name}
+          data-umami-event-calendar-platform="Apple Calendar"
           type="button"
           class="calendar--dropdown-item"
           role="menuitem"
@@ -115,6 +121,9 @@ function formatMilitaryToStandard(militaryTime: string) {
           <Icon name="apple" size={18} /> Add to Apple Calendar
         </button>
         <button
+          data-umami-event="Add Class to Calendar"
+          data-umami-event-class={karateClass.name}
+          data-umami-event-calendar-platform="None (Download .ICS)"
           type="button"
           class="calendar--dropdown-item"
           role="menuitem"

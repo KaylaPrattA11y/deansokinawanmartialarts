@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import logo from "../assets/logo.svg";
 import { type IKarateClass, FREE_TRIAL_NAME } from '../constants';
 import CalendarAddKarateClass from './CalendarAddKarateClass.astro';
+import Button from './Button.astro';
 
 const dayNameToNumber: Record<string, number> = {
   Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6,
@@ -184,10 +185,7 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
     </div>
   </fieldset>
   <div class="short-divider"></div>
-  <button 
-    data-umami-event={`${formHeading} - Form Submission`}
-    type="submit"
-  >Send Message</button>
+  <Button data-umami-event="Submit Contact Form" variant="primary" type="submit">Send Message</Button>
   <p class="privacy"><small>We respect your privacy. Your information will never be shared.</small></p>
 </form>
 
