@@ -1,16 +1,22 @@
 ---
-interface ButtonProps {
-  href?: string;
+import type { HTMLAttributes } from 'astro/types';
+
+interface ButtonProps extends Omit<HTMLAttributes<'a'>, 'type'>, Omit<HTMLAttributes<'button'>, 'type'> {
   variant?: 'primary' | 'secondary';
   size?: 'sm' | 'md';
   width?: 'auto' | 'full';
+  href?: string;
 }
 const { href, variant = 'primary', size = 'md', width = 'auto', ...rest } = Astro.props as ButtonProps;
 ---
 {href ? (
-  <a href={href} class={`btn-${variant} is-${size} is-${width}`} {...rest}><slot /></a>
+  <a class={`btn-${variant} is-${size} is-${width} ${rest.class ?? ''}`} href={href} {...rest}><slot /></a>
 ) :(
-  <button class={`btn-${variant} is-${size} is-${width}`} {...rest}><slot /></button>
+  <button 
+    class={`btn-${variant} is-${size} is-${width} ${rest.class ?? ''}`} {...rest}
+  >
+    <slot />
+  </button>
 )}
 
 <style>
