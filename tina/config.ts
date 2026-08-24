@@ -95,27 +95,60 @@ export default defineConfig({
             isBody: true,
             description:
               "The full content of the article. Use the toolbar to format text, add headings, links, and images.",
-            templates: [
-              {
-                name: "BlockQuote",
-                label: "Block Quote",
-                ui: {
-                  defaultItem: {
-                    children: [{ type: "p", children: [{ text: "" }] }],
-                  },
-                },
-                fields: [
-                  {
-                    name: "children",
-                    label: "Quote Content",
-                    ui: {
-                      component: "rich-text",
-                    },
-                    type: "rich-text",
-                  },
-                ],
-              },
-            ],
+            // templates: [
+            //   {
+            //     name: "BlockQuote",
+            //     label: "Quote",
+            //     fields: [
+            //       {
+            //         name: 'quoteBody',
+            //         label: 'Quote Body',
+            //         type: 'string',
+            //         required: true,
+            //       },
+            //       {
+            //         name: "attribution",
+            //         label: "Attribution",
+            //         type: "string",
+            //         description: "The person or source being quoted.",
+            //       },
+            //     ],
+            //   },
+            //   {
+            //     name: 'BlogFigure',
+            //     label: 'Image with Caption',
+            //     fields: [
+            //       {
+            //         name: 'image',
+            //         label: 'Image',
+            //         type: 'image',
+            //         required: true,
+            //       },
+            //       {
+            //         name: 'caption',
+            //         label: 'Caption',
+            //         type: 'string',
+            //       },
+            //       {
+            //         name: 'float',
+            //         label: 'Float',
+            //         type: 'string',
+            //         required: true,
+            //         options: [
+            //           { label: 'Left', value: 'left' },
+            //           { label: 'Center', value: 'center' },
+            //           { label: 'Right', value: 'right' },
+            //         ],
+            //       },
+            //       {
+            //         name: 'alt',
+            //         label: 'Alt Text',
+            //         type: 'string',
+            //         description: 'Describe the image for screen readers. Leave blank only for decorative images.',
+            //       },
+            //     ],
+            //   },
+            // ],
           },
           {
             type: "object",
