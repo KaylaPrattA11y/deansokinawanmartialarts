@@ -1,7 +1,7 @@
 ---
 title: Looking for a Powerful Outlet for Your Teen's Energy and Emotions? Try Shorin-Ryu!
 pubDate: 2026-08-24T17:36:35.842Z
-description: 'For adolescents navigating academic pressures, social challenges, and emotional fluctuations, our structured training provides meaningful psychological advantages.'
+description: 'For adolescents navigating academic pressures, screen addictions, and emotional fluctuations, our structured training provides meaningful psychological advantages.'
 image: /uploads/pexels-timur-weber-8560717.jpg
 postToGroupMe: false
 ---
