@@ -26,4 +26,3 @@ export interface IKarateClass extends IBaseClass {
 }
 
 export const FREE_TRIAL_NAME = "7-Day Free Trial";
-export const FREE_TRIAL_MESSAGE = `I am interested in starting my ${FREE_TRIAL_NAME}.`;

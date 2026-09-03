@@ -2,7 +2,6 @@
 import { Image } from "astro:assets";
 import logo from "../assets/logo.svg";
 import Button from "./Button.astro";
-import { FREE_TRIAL_MESSAGE } from "../constants";
 ---
 
 <section aria-labelledby="main-content-anchor" class="hero fade-in" id="hero">
@@ -44,21 +43,19 @@ import { FREE_TRIAL_MESSAGE } from "../constants";
   </div>
 </section>
 
-<script is:inline define:vars={{FREE_TRIAL_MESSAGE}}>
+<script>
   const heroSection = document.getElementById('hero');
 
   heroSection?.addEventListener('click', event => {
     if (event.target instanceof HTMLButtonElement && event.target.getAttribute('aria-controls') === 'free-trial-dialog') {
-      const dialog = document.getElementById('free-trial-dialog');
-      const form = document.forms.namedItem('free-trial-form');
-      const messageTextarea = form.elements.namedItem('message');
+      const dialog = document.getElementById('free-trial-dialog') as HTMLDialogElement | null;
+      const form = document.forms.namedItem('free-trial-form') as HTMLFormElement | null;
 
-      form.reset();
-      dialog?.showModal();
-      if (messageTextarea) {
-        messageTextarea.value = FREE_TRIAL_MESSAGE;
+      if (dialog && form) {
+        form.reset();
+        dialog.showModal();
+        form.dispatchEvent(new Event('change', { bubbles: true }));
       }
-      form.dispatchEvent(new Event('change', { bubbles: true }));
     }
   });
 </script>

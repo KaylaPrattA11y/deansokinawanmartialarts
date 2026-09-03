@@ -1,6 +1,5 @@
 ---
 import { getCollection } from "astro:content";
-import { FREE_TRIAL_MESSAGE } from "../constants";
 
 const newsCollection = await getCollection("blog");
 const galleryCollection = await getCollection("gallery");
@@ -85,7 +84,7 @@ const { currentView = 'default' } = Astro.props as MenuItemsProps;
 )}
 </nav>
 
-<script is:inline define:vars={{FREE_TRIAL_MESSAGE}}>
+<script>
 
   document.querySelectorAll('#nav-default, #nav-dialog').forEach(nav => {
     nav.addEventListener('click', event => {
@@ -94,20 +93,13 @@ const { currentView = 'default' } = Astro.props as MenuItemsProps;
         && event.target.getAttribute('aria-controls') === 'free-trial-dialog';
       
       if (isDialogTrigger) {
-        const freeTrialDialog = document.getElementById('free-trial-dialog');
-        const form = document.forms.namedItem('free-trial-form');
+        const dialog = document.getElementById('free-trial-dialog') as HTMLDialogElement | null;
+        const form = document.forms.namedItem('free-trial-form') as HTMLFormElement | null;
         
-        console.log('freeTrialDialog', freeTrialDialog);
-        console.log('!freeTrialDialog.open', !freeTrialDialog.open)
-        if (freeTrialDialog) {
-          form?.reset();
-          freeTrialDialog.showModal();
-          const messageTextarea = document.getElementById('free-trial-form-message');
-
-          if (messageTextarea) {
-            messageTextarea.value = FREE_TRIAL_MESSAGE;
-          }
-          form?.dispatchEvent(new Event('change', { bubbles: true }));
+        if (dialog && form) {
+          form.reset();
+          dialog.showModal();
+          form.dispatchEvent(new Event('change', { bubbles: true }));
         }
       }
     });
