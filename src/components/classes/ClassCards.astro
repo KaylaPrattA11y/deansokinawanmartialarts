@@ -2,7 +2,7 @@
 import Cards from "../cards/Cards.astro";
 import Card from "../cards/Card.astro";
 import Button from "../Button.astro";
-import { type IKarateClass, FREE_TRIAL_NAME } from '../../constants';
+import { type IKarateClass } from '../../constants';
 import CalendarAddKarateClass from "../CalendarAddKarateClass.astro";
 import { getCollection } from 'astro:content';
 
@@ -79,8 +79,8 @@ const { headingLevel = 0 } = Astro.props;
   ))}
 </Cards>
 
-<script is:inline define:vars={{FREE_TRIAL_NAME}}>
-  const classesSection = document.getElementById('class-cards');
+<script>
+  const classesSection = document.getElementById('class-cards') as HTMLElement | null;
 
   classesSection?.addEventListener('click', event => {
     const isDialogTrigger = 
@@ -88,22 +88,21 @@ const { headingLevel = 0 } = Astro.props;
       && event.target.hasAttribute('aria-haspopup') 
       && event.target.getAttribute('aria-haspopup') === 'dialog';
     if (isDialogTrigger) {
-      const dialog = document.getElementById('free-trial-dialog');
-      const dataInterest = (event.target).getAttribute('data-interest');
-      const contactForm = document.forms.namedItem('free-trial-form');
-      const interest = contactForm.elements.namedItem('interest');
-      const messageTextarea = contactForm.elements.namedItem('message');
-
-      contactForm.reset();
-      dialog.showModal();
-      if (interest && dataInterest) {
-        interest.value = dataInterest;
-        interest.dispatchEvent(new Event('change', { bubbles: true }));
+      const dialog = document.getElementById('free-trial-dialog') as HTMLDialogElement | null;
+      const form = document.forms.namedItem('free-trial-form') as HTMLFormElement | null;
+      
+      if (dialog && form) {
+        const interest = form.elements.namedItem('interest') as HTMLSelectElement | null;
+        const dataInterest = (event.target).getAttribute('data-interest') as string | null;
+  
+        form.reset();
+        dialog.showModal();
+        if (interest && dataInterest) {
+          interest.value = dataInterest;
+          interest.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        form.dispatchEvent(new Event('change', { bubbles: true }));
       }
-      if (messageTextarea) {
-        messageTextarea.value = `I am interested in starting my ${FREE_TRIAL_NAME} for ${dataInterest}.`;
-      }
-      contactForm.dispatchEvent(new Event('change', { bubbles: true }));
     }
   });
 </script>

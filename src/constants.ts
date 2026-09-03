@@ -24,5 +24,3 @@ export interface IKarateClass extends IBaseClass {
   tuitionTwice?: number;  // e.g. 200 for $200 two days per ${recurrence}
   tuition_billing_recurrence: string;
 }
-
-export const FREE_TRIAL_NAME = "7-Day Free Trial";

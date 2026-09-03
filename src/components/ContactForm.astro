@@ -2,7 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import { getCollection } from 'astro:content';
 import logo from "../assets/logo.svg";
-import { type IKarateClass, FREE_TRIAL_NAME } from '../constants';
+import { type IKarateClass } from '../constants';
 import CalendarAddKarateClass from './CalendarAddKarateClass.astro';
 import Button from './Button.astro';
 
@@ -189,7 +189,7 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
   <p class="privacy"><small>We respect your privacy. Your information will never be shared.</small></p>
 </form>
 
-<script is:inline define:vars={{ id, FREE_TRIAL_NAME, classNames }}>
+<script is:inline define:vars={{ id, classNames }}>
   const form = document.forms.namedItem(id);
   const howDidYouHearSelect = form.elements.namedItem('howDidYouHear');
   const interestSelect = form.elements.namedItem('interest');
@@ -212,7 +212,6 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
   const handleInterestChange = () => {
     const value = interestSelect?.value;
     const karateInterest = value && classNames.includes(value);
-    const messageTextarea = form.elements.namedItem('message');
     
     if (karateInterest) {
       frequencyFieldset.disabled = false;
@@ -221,10 +220,6 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
       calendarDivs.forEach(div => {
         div.classList.toggle('d-none', div.dataset.className !== value);
       });
-      if (messageTextarea && (messageTextarea.value === '' || messageTextarea.value.startsWith('I am interested in starting my'))) {
-        messageTextarea.value = `I am interested in starting my ${FREE_TRIAL_NAME} for ${value}.`;
-        form.dispatchEvent(new Event('change', { bubbles: true }));
-      }
     } else {  
       frequencyFieldset.disabled = true;
       frequencyFieldset.classList.add('d-none');
