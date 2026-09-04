@@ -14,7 +14,7 @@ import Button from "./Button.astro"
     data-umami-location="Homepage: 7-day free trial section"
     type="button" 
     aria-haspopup="dialog" 
-    aria-controls="free-trial-dialog" 
+    aria-controls="contact-dialog" 
   >
     Claim Your Trial
   </Button>
@@ -26,8 +26,8 @@ import Button from "./Button.astro"
 
   trialSection?.addEventListener('click', event => {
     if (event.target instanceof HTMLButtonElement) {
-      const dialog = document.getElementById('free-trial-dialog') as HTMLDialogElement | null;
-      const form = document.forms.namedItem('free-trial-form') as HTMLFormElement | null;
+      const dialog = document.getElementById('contact-dialog') as HTMLDialogElement | null;
+      const form = document.forms.namedItem('contact-dialog-form') as HTMLFormElement | null;
 
       if (dialog && form) {
         form.reset();

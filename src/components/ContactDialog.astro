@@ -3,12 +3,12 @@ import { Icon } from 'astro-icon/components';
 import ContactForm from "./ContactForm.astro";
 ---
 
-<dialog id="free-trial-dialog">
-  <div class="free-trial-form-wrapper">
-    <button type="button" aria-label="Close menu" aria-controls="free-trial-dialog">
+<dialog id="contact-dialog">
+  <div class="contact-dialog-form-wrapper">
+    <button type="button" aria-label="Close menu" aria-controls="contact-dialog">
       <Icon name="close" size="28px" />
     </button>
-    <ContactForm formHeading="Start Your Free Trial" id="free-trial-form" />
+    <ContactForm formHeading="Contact Our Dojo" id="contact-dialog-form" />
   </div>
 </dialog>
 
@@ -17,7 +17,7 @@ import ContactForm from "./ContactForm.astro";
     dialog {
       overflow-x: hidden;
     }
-    .free-trial-form-wrapper {
+    .contact-dialog-form-wrapper {
       position: relative;
       max-inline-size: 600px;
       @container (width < 600px) {
@@ -43,7 +43,7 @@ import ContactForm from "./ContactForm.astro";
 </style>
 
 <script>
-  const dialog = document.getElementById('free-trial-dialog');
+  const dialog = document.getElementById('contact-dialog');
   const form = dialog?.querySelector('form');
   
   if (form) {
@@ -51,7 +51,6 @@ import ContactForm from "./ContactForm.astro";
     const calendarAddYouth = form.querySelector('[data-calendar="add-youth"]');
     const calendarAddAdult = form.querySelector('[data-calendar="add-adult"]');
     const contactDetailsFieldset = form.elements.namedItem('contact-details') as HTMLFieldSetElement | null;
-    const frequencyFieldset = form.elements.namedItem('frequency') as HTMLFieldSetElement | null;
     const successMessage = form?.querySelector('.success-message');
     const submitButton = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
   
@@ -62,10 +61,6 @@ import ContactForm from "./ContactForm.astro";
       calendarAddAdult?.classList.add('d-none');
       if (contactDetailsFieldset) {
         contactDetailsFieldset.disabled = false;
-      }
-      if (frequencyFieldset) {
-        frequencyFieldset.classList.add('d-none');
-        frequencyFieldset.disabled = false;
       }
       if (submitButton) {
         submitButton.disabled = false;

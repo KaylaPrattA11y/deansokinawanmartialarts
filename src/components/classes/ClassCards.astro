@@ -69,7 +69,7 @@ const { headingLevel = 0 } = Astro.props;
             type="button"
             data-interest={karateClass.name}
             aria-haspopup="dialog"
-            aria-controls="free-trial-dialog"
+            aria-controls="contact-dialog"
           >
             Join {karateClass.name}
           </Button>
@@ -88,8 +88,8 @@ const { headingLevel = 0 } = Astro.props;
       && event.target.hasAttribute('aria-haspopup') 
       && event.target.getAttribute('aria-haspopup') === 'dialog';
     if (isDialogTrigger) {
-      const dialog = document.getElementById('free-trial-dialog') as HTMLDialogElement | null;
-      const form = document.forms.namedItem('free-trial-form') as HTMLFormElement | null;
+      const dialog = document.getElementById('contact-dialog') as HTMLDialogElement | null;
+      const form = document.forms.namedItem('contact-dialog-form') as HTMLFormElement | null;
       
       if (dialog && form) {
         const interest = form.elements.namedItem('interest') as HTMLSelectElement | null;

@@ -37,13 +37,13 @@ const { currentView = 'default' } = Astro.props as MenuItemsProps;
     )}
     <button 
       type="button" 
-      aria-controls="free-trial-dialog" 
+      aria-controls="contact-dialog" 
       aria-haspopup="dialog" 
       class="site-nav-cta d-none d-sm-block"
-      data-umami-event="Free Trial"
+      data-umami-event="Contact"
       data-umami-event-location="Site > header > nav"
     >
-      Free Trial
+      Contact
     </button>
   </>
 )}
@@ -53,13 +53,13 @@ const { currentView = 'default' } = Astro.props as MenuItemsProps;
     <a href="/" aria-current={currentPath === '/' ? 'page' : undefined}>Home</a>
     <button 
       type="button" 
-      aria-controls="free-trial-dialog" 
+      aria-controls="contact-dialog" 
       aria-haspopup="dialog" 
       class="site-nav-cta"
-      data-umami-event="Free Trial"
+      data-umami-event="Contact"
       data-umami-event-location="Site header > nav > dialog"
     >
-      Free Trial
+      Contact
     </button>
     <a href="/about/" aria-current={currentPath === '/about/' ? 'page' : undefined}>About</a>
     <a href="/classes/" aria-current={currentPath === '/classes/' ? 'page' : undefined}>Classes</a>
@@ -79,7 +79,6 @@ const { currentView = 'default' } = Astro.props as MenuItemsProps;
     {newsCollection && newsCollection.length > 0 && (
       <a href="/news/the-lineage-of-matsumura-seito-a-direct-line-to-the-source/" aria-current={currentPath === '/news/the-lineage-of-matsumura-seito-a-direct-line-to-the-source/' ? 'page' : undefined}>Our Lineage</a>
     )}
-    <a href="#contact-phone">Contact</a>
   </>
 )}
 </nav>
@@ -90,11 +89,11 @@ const { currentView = 'default' } = Astro.props as MenuItemsProps;
     nav.addEventListener('click', event => {
       const isDialogTrigger = 
         event.target instanceof HTMLButtonElement 
-        && event.target.getAttribute('aria-controls') === 'free-trial-dialog';
+        && event.target.getAttribute('aria-controls') === 'contact-dialog';
       
       if (isDialogTrigger) {
-        const dialog = document.getElementById('free-trial-dialog') as HTMLDialogElement | null;
-        const form = document.forms.namedItem('free-trial-form') as HTMLFormElement | null;
+        const dialog = document.getElementById('contact-dialog') as HTMLDialogElement | null;
+        const form = document.forms.namedItem('contact-dialog-form') as HTMLFormElement | null;
         
         if (dialog && form) {
           form.reset();

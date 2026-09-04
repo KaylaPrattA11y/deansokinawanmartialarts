@@ -5,7 +5,7 @@ import '@fontsource-variable/eb-garamond';
 import { SEO } from 'astro-seo';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import FreeTrialDialog from '../components/FreeTrialDialog.astro';
+import ContactDialog from '../components/ContactDialog.astro';
 import PagefindDialog from '../components/PagefindDialog.astro';
 import '../scss/site.scss';
 import { BASE_URL, ROUTES, SITE_SEO } from '../config/site';
@@ -141,7 +141,7 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
 			<slot />
 		</main>
 		<Footer />
-    <FreeTrialDialog />
+    <ContactDialog />
     <PagefindDialog />
 	</body>
 </html>
@@ -304,8 +304,8 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
   setHowDidYouHearOnForm(document.forms.namedItem('contact-form'));
 
   const openContactFormModal = () => {
-    const dialog = document.getElementById('free-trial-dialog');
-    const form = document.forms.namedItem('free-trial-form');
+    const dialog = document.getElementById('contact-dialog');
+    const form = document.forms.namedItem('contact-dialog-form');
 
     if (!(dialog instanceof HTMLDialogElement) || !form) {
       return false;

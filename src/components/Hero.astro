@@ -26,11 +26,11 @@ import Button from "./Button.astro";
           type="button" 
           variant="primary" 
           aria-haspopup="dialog" 
-          aria-controls="free-trial-dialog"
-          data-umami-event="Free Trial"
+          aria-controls="contact-dialog"
+          data-umami-event="Contact"
           data-umami-event-location="Homepage: Hero section"
         >
-          Start Free Trial
+          Contact
         </Button>
         <Button 
           variant="secondary" 
@@ -47,9 +47,9 @@ import Button from "./Button.astro";
   const heroSection = document.getElementById('hero');
 
   heroSection?.addEventListener('click', event => {
-    if (event.target instanceof HTMLButtonElement && event.target.getAttribute('aria-controls') === 'free-trial-dialog') {
-      const dialog = document.getElementById('free-trial-dialog') as HTMLDialogElement | null;
-      const form = document.forms.namedItem('free-trial-form') as HTMLFormElement | null;
+    if (event.target instanceof HTMLButtonElement && event.target.getAttribute('aria-controls') === 'contact-dialog') {
+      const dialog = document.getElementById('contact-dialog') as HTMLDialogElement | null;
+      const form = document.forms.namedItem('contact-dialog-form') as HTMLFormElement | null;
 
       if (dialog && form) {
         form.reset();

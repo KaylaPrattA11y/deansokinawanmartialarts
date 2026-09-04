@@ -43,7 +43,7 @@ const classEntries = sortedClasses.map(cls => {
 });
 
 const classNames = classEntries.map(e => e.karateClass.name);
-const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
+const { formHeading = "Contact Our Dojo", id = "contact-form" } = Astro.props;
 ---
 
 <form 
@@ -55,7 +55,7 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
 >
   <input type="hidden" name="form-name" value="Contact" />
   <input type="hidden" name="subject" value="New message from our website" />
-  {formHeading === "Start Your Free Trial" && (
+  {formHeading === "Contact Our Dojo" && (
     <div class="site-logo">
       <img src={logo.src} alt="Dojo seal" width={50} height={50} fetchpriority="high" />
       <div>
@@ -148,29 +148,6 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
           </div>
         ))}
       </div>
-      <fieldset class="field d-none" name="frequency" disabled>
-        <legend>Frequency (optional)</legend>
-        <div>
-          <div class="radio">
-            <input 
-              type="radio" 
-              name="schedule" 
-              value="One day per week" 
-              id={`${id}-schedule-1`} 
-            />
-            <label for={`${id}-schedule-1`}>One day per week</label>
-          </div>
-          <div class="radio">
-            <input 
-              type="radio" 
-              name="schedule" 
-              value="Two days per week" 
-              id={`${id}-schedule-2`} 
-            />
-            <label for={`${id}-schedule-2`}>Two days per week</label>
-          </div>
-        </div>
-      </fieldset>
     </div>
     <div class="field">
       <label for={`${id}-message`}>Message</label>
@@ -196,7 +173,6 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
   const classSchedule = form.querySelector('[data-calendar="class-schedule"]');
   const calendarDivs = form.querySelectorAll('[data-calendar^="add-"]');
   const fieldset = form?.elements.namedItem('contact-details');
-  const frequencyFieldset = form.elements.namedItem('frequency');
   const successMessage = form?.querySelector('.success-message');
   const submitButton = form?.querySelector('button[type="submit"]');
   const SCROLL_OFFSET = 110;
@@ -214,15 +190,11 @@ const { formHeading = "Send a Message", id = "contact-form" } = Astro.props;
     const karateInterest = value && classNames.includes(value);
     
     if (karateInterest) {
-      frequencyFieldset.disabled = false;
-      frequencyFieldset.classList.remove('d-none');
       classSchedule.classList.remove('d-none');
       calendarDivs.forEach(div => {
         div.classList.toggle('d-none', div.dataset.className !== value);
       });
     } else {  
-      frequencyFieldset.disabled = true;
-      frequencyFieldset.classList.add('d-none');
       classSchedule.classList.add('d-none');
     }
   };
