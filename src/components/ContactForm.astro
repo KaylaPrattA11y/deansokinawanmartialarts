@@ -123,8 +123,11 @@ const { formHeading = "Contact Our Dojo", id = "contact-form" } = Astro.props;
           <option value="Facebook">Facebook</option>
           <option value="Instagram">Instagram</option>
           <option value="Flyer">Flyer</option>
+          <option value="Web Search">Web search</option>
+          <option value="Website">Website</option>
+          <option value="Event">Event</option>
+          <option value="Current student">Current student</option>
           <option value="Word of mouth">Word of mouth</option>
-          <option value="Web search">Web search</option>
           <option value="Other">Other</option>
         </select>
       </div>
@@ -141,13 +144,13 @@ const { formHeading = "Contact Our Dojo", id = "contact-form" } = Astro.props;
           <option value="Other">Other</option>
         </select>
       </div>
-      <div class="d-none" data-calendar="class-schedule">
-        {classEntries.map(({ karateClass, cancelledDates, clsId }) => (
-          <div class="d-none" data-calendar={`add-${clsId}`} data-class-name={karateClass.name}>
-            <CalendarAddKarateClass id={`${id}-${clsId}-contact`} karateClass={karateClass} cancelledDates={cancelledDates} />
-          </div>
-        ))}
-      </div>
+    </div>
+    <div class="d-none" data-calendar="class-schedule">
+      {classEntries.map(({ karateClass, cancelledDates, clsId }) => (
+        <div class="d-none" data-calendar={`add-${clsId}`} data-class-name={karateClass.name}>
+          <CalendarAddKarateClass id={`${id}-${clsId}-contact`} karateClass={karateClass} cancelledDates={cancelledDates} />
+        </div>
+      ))}
     </div>
     <div class="field">
       <label for={`${id}-message`}>Message</label>
@@ -345,7 +348,10 @@ const { formHeading = "Contact Our Dojo", id = "contact-form" } = Astro.props;
       align-content: start;
       gap: 0.15rem;
     }
-    form#free-trial-form {
+    [data-calendar="class-schedule"] {
+      margin-block-end: 1em;
+    }
+    form#contact-dialog-form {
       background-color: #2e26228a;
       @container (width >= 600px) {
         border-radius: 10px;
