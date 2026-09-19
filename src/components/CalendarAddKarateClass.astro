@@ -7,9 +7,10 @@ interface IKarateClassProps {
   id: string; // unique ID for this instance (e.g. "youth-class-1")
   cancelledDates?: string[]; // array of YYYY-MM-DD strings for cancelled class dates
   headingLevel?: number; // optional heading level for the class name (1-6). If not provided, defaults to no heading. Should be used to maintain proper document structure when this component is used within a page.
+  hideNextOccurrence?: boolean; // hides the "Next class" date badge, e.g. for classes listed under an upcoming year that hasn't started yet
 }
 
-const { karateClass, id, cancelledDates = [], headingLevel = 0 } = Astro.props as IKarateClassProps;
+const { karateClass, id, cancelledDates = [], headingLevel = 0, hideNextOccurrence = false } = Astro.props as IKarateClassProps;
 
 const DAY_ABBREV: Record<number, string> = {
   0: 'Sun', 1: 'Mon', 2: 'Tue', 3: 'Wed', 4: 'Thu', 5: 'Fri', 6: 'Sat',
@@ -41,12 +42,16 @@ function formatMilitaryToStandard(militaryTime: string) {
   const [hours, minutes, seconds] = militaryTime.split(':');
   const dateObj = new Date();
   dateObj.setHours(Number(hours), Number(minutes), Number(seconds) || 0);
-  return dateObj.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
+  const options: Intl.DateTimeFormatOptions = { hour: 'numeric', hour12: true };
+  if (Number(minutes)) {
+    options.minute = '2-digit';
+  }
+  return dateObj.toLocaleTimeString('en-US', options);
 }
 ---
 
 <div
-  class="calendar"
+  class={`calendar${hideNextOccurrence ? ' hide-next-class' : ''}`}
   data-component="CalendarAddKarateClass"
   data-ics-name={karateClass.name}
   data-class={JSON.stringify(karateClass)}
@@ -149,6 +154,12 @@ function formatMilitaryToStandard(militaryTime: string) {
     @container (width >= 250px) {
       grid-template-columns: minmax(100px, 0.25fr) 1fr;
     }
+  }
+  .calendar.hide-next-class > div {
+    grid-template-columns: 1fr;
+  }
+  .calendar.hide-next-class .calendar--date {
+    display: none;
   }
   .calendar--date {
     display: grid;

@@ -10,6 +10,7 @@
     "clean:content": "rm -rf node_modules/.astro && astro sync"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.10",
     "@astrojs/sitemap": "^3.7.2",
     "@fontsource-variable/cinzel": "^5.2.8",
     "@fontsource-variable/eb-garamond": "^5.2.7",
@@ -31,7 +32,7 @@
     "eslint-plugin-astro": "^1.7.0",
     "jiti": "^2.6.1",
     "sass-embedded": "^1.99.0",
-    "typescript": "^6.0.2",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.58.1"
   }
 }

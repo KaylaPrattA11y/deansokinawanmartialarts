@@ -5,6 +5,7 @@ import logo from "../assets/logo.svg";
 import { type IKarateClass } from '../constants';
 import CalendarAddKarateClass from './CalendarAddKarateClass.astro';
 import Button from './Button.astro';
+import { getVisibleClassYears } from '../utils/classYears';
 
 const dayNameToNumber: Record<string, number> = {
   Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6,
@@ -14,33 +15,48 @@ const allAnnouncements = await getCollection('announcements');
 const allClasses = await getCollection('classes');
 const today = new Date();
 today.setHours(0, 0, 0, 0);
+const buildYear = today.getFullYear();
 
-const sortedClasses = allClasses.sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99));
-
-const classEntries = sortedClasses.map(cls => {
-  const karateClass: IKarateClass = {
-    name: cls.data.name,
-    ages: cls.data.ages,
-    description: cls.data.description,
-    startTime: cls.data.startTime,
-    endTime: cls.data.endTime,
-    location: cls.data.location,
-    recurrence: cls.data.recurrence,
-    recurrence_byDay: cls.data.recurrence_byDay.map(d => dayNameToNumber[d] ?? 0),
-    tuitionOnce: cls.data.tuitionOnce,
-    tuitionTwice: cls.data.tuitionTwice,
-    tuition_billing_recurrence: cls.data.tuition_billing_recurrence,
-  };
-
-  const cancelledDates = allAnnouncements
-    .filter((a) => a.data.className === cls.data.name && a.data.cancelled && new Date(a.data.date) >= today)
-    .map((a) => {
-      const d = new Date(a.data.date);
-      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-    });
-
-  return { karateClass, cancelledDates, clsId: cls.id };
+// Use each class's soonest currently-visible year (current year if offered,
+// otherwise the nearest upcoming preview) so visitors can express interest
+// even before an upcoming year's schedule has technically started.
+const visibleEntries = getVisibleClassYears(allClasses, buildYear)
+  .sort((a, b) => a.year - b.year);
+const seenNames = new Set<string>();
+const activeEntries = visibleEntries.filter(entry => {
+  if (seenNames.has(entry.name)) return false;
+  seenNames.add(entry.name);
+  return true;
 });
+
+const classEntries = activeEntries
+  .sort((a, b) => a.sortOrder - b.sortOrder)
+  //filter by only CURRENT YEAR
+  .filter(entry => entry.year === buildYear)
+  .map(entry => {
+    const karateClass: IKarateClass = {
+      name: entry.name,
+      ages: entry.ages,
+      description: entry.description,
+      startTime: entry.startTime,
+      endTime: entry.endTime,
+      location: entry.location,
+      recurrence: entry.recurrence,
+      recurrence_byDay: entry.recurrence_byDay.map(d => dayNameToNumber[d] ?? 0),
+      tuitionOnce: entry.tuitionOnce,
+      tuitionTwice: entry.tuitionTwice,
+      tuition_billing_recurrence: entry.tuition_billing_recurrence,
+    };
+
+    const cancelledDates = allAnnouncements
+      .filter((a) => a.data.className === entry.name && a.data.cancelled && new Date(a.data.date) >= today)
+      .map((a) => {
+        const d = new Date(a.data.date);
+        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      });
+
+    return { karateClass, cancelledDates, clsId: `${entry.clsId}-${entry.year}` };
+  });
 
 const classNames = classEntries.map(e => e.karateClass.name);
 const { formHeading = "Contact Our Dojo", id = "contact-form" } = Astro.props;

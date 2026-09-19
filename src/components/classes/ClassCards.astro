@@ -5,6 +5,7 @@ import Button from "../Button.astro";
 import { type IKarateClass } from '../../constants';
 import CalendarAddKarateClass from "../CalendarAddKarateClass.astro";
 import { getCollection } from 'astro:content';
+import { getVisibleClassYears, groupClassYearsByYear, type ClassYearEntry } from '../../utils/classYears';
 
 const dayNameToNumber: Record<string, number> = {
   Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6,
@@ -15,72 +16,145 @@ const allClasses = await getCollection('classes');
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
+// Best-effort year for the initial static render. Any display rules that must
+// stay correct after publish (hiding past years, gating upcoming years) are
+// re-checked client-side below against the visitor's real clock.
+const buildYear = today.getFullYear();
 
-const sortedClasses = allClasses.sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99));
-
-const classEntries = sortedClasses.map(cls => {
-  const karateClass: IKarateClass = {
-    name: cls.data.name,
-    ages: cls.data.ages,
-    description: cls.data.description,
-    startTime: cls.data.startTime,
-    endTime: cls.data.endTime,
-    location: cls.data.location,
-    recurrence: cls.data.recurrence,
-    recurrence_byDay: cls.data.recurrence_byDay.map(d => dayNameToNumber[d] ?? 0),
-    tuitionOnce: cls.data.tuitionOnce,
-    tuitionTwice: cls.data.tuitionTwice,
-    tuition_billing_recurrence: cls.data.tuition_billing_recurrence,
-  };
-
-  const cancelledDates = allAnnouncements
-    .filter((a) => a.data.className === cls.data.name && a.data.cancelled && new Date(a.data.date) >= today)
+function cancelledDatesFor(name: string): string[] {
+  return allAnnouncements
+    .filter((a) => a.data.className === name && a.data.cancelled && new Date(a.data.date) >= today)
     .map((a) => {
       const d = new Date(a.data.date);
       return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
     });
+}
 
-  return { karateClass, cancelledDates, kanji: cls.data.kanji ?? '', id: cls.id };
-});
+function toKarateClass(entry: ClassYearEntry): IKarateClass {
+  return {
+    name: entry.name,
+    ages: entry.ages,
+    description: entry.description,
+    startTime: entry.startTime,
+    endTime: entry.endTime,
+    location: entry.location,
+    recurrence: entry.recurrence,
+    recurrence_byDay: entry.recurrence_byDay.map(d => dayNameToNumber[d] ?? 0),
+    tuitionOnce: entry.tuitionOnce,
+    tuitionTwice: entry.tuitionTwice,
+    tuition_billing_recurrence: entry.tuition_billing_recurrence,
+  };
+}
 
-const { headingLevel = 0 } = Astro.props;
+const visibleEntries = getVisibleClassYears(allClasses, buildYear);
+const yearGroups = [...groupClassYearsByYear(visibleEntries).entries()];
+
+const { headingLevel = 0, groupByYear = false } = Astro.props as {
+  headingLevel?: number;
+  groupByYear?: boolean;
+};
+const cardHeadingLevel = groupByYear ? Math.min(headingLevel + 1, 6) : headingLevel;
+// In preview mode (e.g. homepage teaser) only the soonest year's classes are shown.
+// Every group still renders (hidden) so a self-heal script can recover if the
+// build-time year assumption goes stale before the site is republished.
+const previewActiveYear = yearGroups[0]?.[0];
 ---
 
-<Cards cols={classEntries.length > 2 ? 3 : classEntries.length} id="class-cards">
-  {classEntries.map(({ karateClass, cancelledDates, kanji, id }) => (
-    <Card kanji={kanji}>
-      <div class="class-entry">
-        <div class="class-age">Ages {karateClass.ages}</div>
-        <div class="class-entry-grid">
-          <div>
-            <CalendarAddKarateClass id={`${id}-classes`} karateClass={karateClass} cancelledDates={cancelledDates} headingLevel={headingLevel} />
-            <p class="class-desc">{karateClass.description}</p>
-          </div>
-          <div>
-            <div class="class-tuition">{karateClass.tuition_billing_recurrence} Tuition:</div>
-            <ul>
-              <li>1 day per week: <strong>${karateClass.tuitionOnce}</strong></li>
-              {karateClass.tuitionTwice !== undefined && (<li>2 days per week: <strong>${karateClass.tuitionTwice}</strong></li>)}
-            </ul>
-          </div>
-        </div>
-        <div class="class-cta">
-          <Button
-            type="button"
-            data-interest={karateClass.name}
-            aria-haspopup="dialog"
-            aria-controls="contact-dialog"
-          >
-            Join {karateClass.name}
-          </Button>
-        </div>
+<div id="class-cards">
+  {yearGroups.map(([year, entries]) => {
+    const isActiveInPreview = year === previewActiveYear;
+    return (
+      <div
+        class={`class-year-group${!groupByYear && !isActiveInPreview ? ' d-none' : ''}`}
+        data-year-group={year}
+        data-mode={groupByYear ? 'grouped' : 'preview'}
+      >
+        {groupByYear && (
+          headingLevel === 1 ? <h1 class="class-year-heading">{year} Schedule:</h1> :
+          headingLevel === 2 ? <h2 class="class-year-heading">{year} Schedule:</h2> :
+          headingLevel === 3 ? <h3 class="class-year-heading">{year} Schedule:</h3> :
+          headingLevel === 4 ? <h4 class="class-year-heading">{year} Schedule:</h4> :
+          headingLevel === 5 ? <h5 class="class-year-heading">{year} Schedule:</h5> :
+          headingLevel === 6 ? <h6 class="class-year-heading">{year} Schedule:</h6> :
+          null
+        )}
+        <Cards cols={entries.length > 2 ? 3 : entries.length}>
+          {entries.map((entry) => {
+            const karateClass = toKarateClass(entry);
+            const cancelledDates = cancelledDatesFor(entry.name);
+            const isUpcoming = entry.year > buildYear;
+            return (
+              <Card kanji={entry.kanji}>
+                <div class="class-entry" data-class-year={entry.year}>
+                  <div class="class-age">Ages {karateClass.ages}</div>
+                  <div class="class-entry-grid">
+                    <div>
+                      <CalendarAddKarateClass
+                        id={`${entry.clsId}-${entry.year}-classes`}
+                        karateClass={karateClass}
+                        cancelledDates={cancelledDates}
+                        headingLevel={cardHeadingLevel}
+                        hideNextOccurrence={isUpcoming}
+                      />
+                      <p class="class-desc">{karateClass.description}</p>
+                    </div>
+                    <div>
+                      <div class="class-tuition">{karateClass.tuition_billing_recurrence} Tuition:</div>
+                      <ul>
+                        <li>1 day per week: <strong>${karateClass.tuitionOnce}</strong></li>
+                        {karateClass.tuitionTwice !== undefined && (<li>2 days per week: <strong>${karateClass.tuitionTwice}</strong></li>)}
+                      </ul>
+                    </div>
+                  </div>
+                  <div class={`class-cta${isUpcoming ? ' d-none' : ''}`} data-hide-if-upcoming>
+                    <Button
+                      type="button"
+                      data-interest={karateClass.name}
+                      aria-haspopup="dialog"
+                      aria-controls="contact-dialog"
+                    >
+                      Join {karateClass.name}
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            );
+          })}
+        </Cards>
       </div>
-    </Card>
-  ))}
-</Cards>
+    );
+  })}
+</div>
 
 <script>
   const classesSection = document.getElementById('class-cards') as HTMLElement | null;
+
+  // Self-heal against a stale build: re-derive year-based display rules from
+  // the visitor's real clock instead of trusting the build-time year forever.
+  const trueYear = new Date().getFullYear();
+
+  classesSection?.querySelectorAll<HTMLElement>('[data-year-group]').forEach(group => {
+    const year = Number(group.dataset.yearGroup);
+    if (year < trueYear) {
+      group.remove();
+    }
+  });
+
+  const previewGroups = classesSection
+    ? [...classesSection.querySelectorAll<HTMLElement>('[data-year-group][data-mode="preview"]')]
+      .sort((a, b) => Number(a.dataset.yearGroup) - Number(b.dataset.yearGroup))
+    : [];
+  previewGroups.forEach((group, index) => {
+    group.classList.toggle('d-none', index !== 0);
+  });
+
+  classesSection?.querySelectorAll<HTMLElement>('[data-class-year]').forEach(card => {
+    const isUpcoming = Number(card.dataset.classYear) > trueYear;
+    card.querySelectorAll<HTMLElement>('[data-hide-if-upcoming]').forEach(el => {
+      el.classList.toggle('d-none', isUpcoming);
+    });
+    card.querySelector('[data-component="CalendarAddKarateClass"]')?.classList.toggle('hide-next-class', isUpcoming);
+  });
 
   classesSection?.addEventListener('click', event => {
     const isDialogTrigger = 
@@ -109,6 +183,17 @@ const { headingLevel = 0 } = Astro.props;
 
 <style>
   @layer components {
+    .class-year-group:not(:last-child) {
+      margin-block-end: 3rem;
+    }
+    .class-year-heading {
+      font-family: var(--ff-heading);
+      font-size: clamp(1.25rem, 3.5vw, 1.75rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--paper);
+      margin-block: 0 1.5rem;
+    }
     .class-entry {
       container: class-entry / inline-size;
       padding: 2rem 1.5rem;
@@ -130,7 +215,7 @@ const { headingLevel = 0 } = Astro.props;
     .class-age {
       font-family: var(--ff-heading);
       font-size: 0.9rem;
-      letter-spacing: 0.4em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--silver);
       margin-bottom: 1rem;

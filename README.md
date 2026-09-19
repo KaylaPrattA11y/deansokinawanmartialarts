@@ -218,8 +218,9 @@ Content lives in `src/content/` and is defined by both Astro's content config (`
 
 - **Path:** `src/content/classes/`
 - **Format:** Markdown with YAML frontmatter
-- **Fields:** `name` (required), `ages` (required), `description` (required, max 200 chars), `startTime` (required), `endTime` (required), `location` (required), `recurrence` (required), `recurrence_byDay` (required, array of day strings), `tuitionOnce` (required, number), `tuitionTwice` (optional number), `tuition_billing_recurrence` (required), `sortOrder` (optional), `kanji` (optional)
-- **Notes:** Each entry represents a class offering. `recurrence_byDay` drives calendar and structured data. Tuition fields support one-day and two-day-per-week pricing tiers.
+- **Fields:** `name` (required, shared across all years), `sortOrder` (optional), `kanji` (optional), `years` (required, array of yearly detail objects, at least one)
+- **Yearly detail fields:** `year` (required, number), `display` (boolean, default true — "Display on Public Website"), `ages` (required), `description` (required, max 200 chars), `startTime` (required), `endTime` (required), `location` (required), `recurrence` (required), `recurrence_byDay` (required, array of day strings), `tuitionOnce` (required, number), `tuitionTwice` (optional number), `tuition_billing_recurrence` (required)
+- **Notes:** Each entry represents a class offering, with one `years` item per calendar year the class details apply to (schedule, tuition, description, etc. can all differ by year). Visibility rules: past years are never shown on the public site regardless of `display`; the current year is shown only if `display` is true; future years marked `display: true` render in an additional "`{year}` Classes & Schedule" block below the current schedule. `recurrence_byDay` drives calendar and structured data. Tuition fields support one-day and two-day-per-week pricing tiers.
 
 ### Instructors (`instructors`)
 

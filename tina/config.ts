@@ -1,5 +1,6 @@
 import { defineConfig } from "tinacms";
 import { ClassesSelect } from './components/ClassesSelect';
+import { TimeField } from './components/TimeField';
 
 export default defineConfig({
   branch: process.env.HEAD || process.env.BRANCH || "main",
@@ -25,6 +26,10 @@ export default defineConfig({
     cms.fields.add({
       name: "classes-select",
       Component: ClassesSelect,
+    });
+    cms.fields.add({
+      name: "time-field",
+      Component: TimeField,
     });
   },
   schema: {
@@ -379,6 +384,15 @@ export default defineConfig({
         name: "classes",
         path: "src/content/classes",
         format: "md",
+        defaultItem: () => ({
+          years: [
+            {
+              display: false,
+              recurrence: "Weekly",
+              tuition_billing_recurrence: "Monthly",
+            },
+          ],
+        }),
         ui: {
           allowedActions: {
             createNestedFolder: false,
@@ -391,57 +405,7 @@ export default defineConfig({
             name: "name",
             isTitle: true,
             required: true,
-            description: "The display name for this class (e.g., 'Youth Karate').",
-          },
-          {
-            type: "string",
-            label: "Ages",
-            name: "ages",
-            required: true,
-            description: "Age range for this class (e.g., '4 – 15' or '16 & Up').",
-          },
-          {
-            type: "string",
-            label: "Description",
-            name: "description",
-            required: true,
-            ui: {
-              component: "textarea",
-              validate: (value: string | undefined) => {
-                if (value && value.length > 200) {
-                  return `Description must be 200 characters or fewer (currently ${value.length})`;
-                }
-              }
-            },
-            description: "A short description of the class shown on the Classes page.",
-          },
-          {
-            type: "string",
-            label: "Start Time",
-            name: "startTime",
-            required: true,
-            description: "Class start time in 24-hour HH:MM format (e.g. 18:00 for 6:00 PM).",
-            ui: {
-              validate: (value: string | undefined) => {
-                if (value && !/^\d{2}:\d{2}$/.test(value)) {
-                  return 'Time must be in 24-hour HH:MM format (e.g. 18:00)';
-                }
-              },
-            },
-          },
-          {
-            type: "string",
-            label: "End Time",
-            name: "endTime",
-            required: true,
-            description: "Class end time in 24-hour HH:MM format (e.g. 20:00 for 8:00 PM).",
-            ui: {
-              validate: (value: string | undefined) => {
-                if (value && !/^\d{2}:\d{2}$/.test(value)) {
-                  return 'Time must be in 24-hour HH:MM format (e.g. 20:00)';
-                }
-              },
-            },
+            description: "The display name for this class (e.g., 'Youth Karate'). Shared across all years.",
           },
           {
             type: "string",
@@ -449,52 +413,6 @@ export default defineConfig({
             name: "location",
             required: true,
             description: "Full address of the class location. Used in calendar invites.",
-          },
-          {
-            type: "string",
-            label: "Recurrence",
-            name: "recurrence",
-            required: true,
-            options: ["Weekly", "Biweekly", "Monthly"],
-            description: "How often this class repeats.",
-          },
-          {
-            type: "string",
-            label: "Recurring Days",
-            name: "recurrence_byDay",
-            required: true,
-            list: true,
-            options: [
-              { value: "Sunday", label: "Sunday" },
-              { value: "Monday", label: "Monday" },
-              { value: "Tuesday", label: "Tuesday" },
-              { value: "Wednesday", label: "Wednesday" },
-              { value: "Thursday", label: "Thursday" },
-              { value: "Friday", label: "Friday" },
-              { value: "Saturday", label: "Saturday" },
-            ],
-            description: "The days of the week this class meets.",
-          },
-          {
-            type: "number",
-            label: "Tuition (once a week)",
-            name: "tuitionOnce",
-            required: true,
-            description: "Monthly tuition in dollars for attending one day per week.",
-          },
-          {
-            type: "number",
-            label: "Tuition (twice a week)",
-            name: "tuitionTwice",
-            description: "Monthly tuition in dollars for attending two days per week.",
-          },
-          {
-            type: "string",
-            label: "Tuition Billing Recurrence",
-            name: "tuition_billing_recurrence",
-            required: true,
-            options: ["Monthly", "Weekly", "Yearly"],
-            description: "How often tuition is billed.",
           },
           {
             type: "number",
@@ -507,6 +425,140 @@ export default defineConfig({
             label: "Kanji Character",
             name: "kanji",
             description: "A decorative kanji character displayed on the class card (e.g., 子 for Youth, 武 for Adult).",
+          },
+          {
+            type: "object",
+            label: "Yearly Details",
+            name: "years",
+            list: true,
+            required: true,
+            description: "Add one entry per year this class is offered. Details like tuition, schedule, and description can differ each year.",
+            ui: {
+              itemProps: (item) => ({
+                label: item?.year
+                  ? `${item.year}${item.display === false ? ' (hidden)' : ''}`
+                  : "New Year",
+              }),
+              defaultItem: () => ({
+                display: false,
+                recurrence: "Weekly",
+                tuition_billing_recurrence: "Monthly",
+              }),
+            },
+            fields: [
+              {
+                type: "number",
+                label: "Year",
+                name: "year",
+                required: true,
+                description: "The calendar year these details apply to (e.g., 2026).",
+              },
+              {
+                type: "boolean",
+                label: "Display on Public Website",
+                name: "display",
+                description:
+                  "Show this class for this year on the public site. Past years are always hidden automatically, regardless of this setting. Enable for an upcoming year to publish a preview schedule ahead of time.",
+              },
+              {
+                type: "string",
+                label: "Ages",
+                name: "ages",
+                required: true,
+                description: "Age range for this class (e.g., '4 – 15' or '16 & Up').",
+              },
+              {
+                type: "string",
+                label: "Description",
+                name: "description",
+                required: true,
+                ui: {
+                  component: "textarea",
+                  validate: (value: string | undefined) => {
+                    if (value && value.length > 200) {
+                      return `Description must be 200 characters or fewer (currently ${value.length})`;
+                    }
+                  }
+                },
+                description: "A short description of the class shown on the Classes page.",
+              },
+              {
+                type: "string",
+                label: "Start Time",
+                name: "startTime",
+                required: true,
+                description: "Class start time in 24-hour HH:MM format (e.g. 18:00 for 6:00 PM).",
+                ui: {
+                  component: "time-field",
+                  validate: (value: string | undefined) => {
+                    if (value && !/^\d{2}:\d{2}$/.test(value)) {
+                      return 'Time must be in 24-hour HH:MM format (e.g. 18:00)';
+                    }
+                  },
+                },
+              },
+              {
+                type: "string",
+                label: "End Time",
+                name: "endTime",
+                required: true,
+                description: "Class end time in 24-hour HH:MM format (e.g. 20:00 for 8:00 PM).",
+                ui: {
+                  component: "time-field",
+                  validate: (value: string | undefined) => {
+                    if (value && !/^\d{2}:\d{2}$/.test(value)) {
+                      return 'Time must be in 24-hour HH:MM format (e.g. 20:00)';
+                    }
+                  },
+                },
+              },
+              {
+                type: "string",
+                label: "Recurrence",
+                name: "recurrence",
+                required: true,
+                options: ["Weekly", "Biweekly", "Monthly"],
+                description: "How often this class repeats.",
+              },
+              {
+                type: "string",
+                label: "Recurring Days",
+                name: "recurrence_byDay",
+                required: true,
+                list: true,
+                options: [
+                  { value: "Sunday", label: "Sunday" },
+                  { value: "Monday", label: "Monday" },
+                  { value: "Tuesday", label: "Tuesday" },
+                  { value: "Wednesday", label: "Wednesday" },
+                  { value: "Thursday", label: "Thursday" },
+                  { value: "Friday", label: "Friday" },
+                  { value: "Saturday", label: "Saturday" },
+                ],
+                description: "The days of the week this class meets.",
+              },
+              {
+                type: "number",
+                label: "Tuition (once a week)",
+                name: "tuitionOnce",
+                required: true,
+                description: "Monthly tuition in dollars for attending one day per week.",
+              },
+              {
+                type: "number",
+                label: "Tuition (twice a week)",
+                name: "tuitionTwice",
+                description: "Monthly tuition in dollars for attending two days per week.",
+              },
+              {
+                type: "string",
+                label: "Tuition Billing Recurrence",
+                name: "tuition_billing_recurrence",
+                required: true,
+                options: ["Monthly", "Weekly", "Yearly"],
+                description: "How often tuition is billed.",
+              },
+            ],
           },
         ],
       },

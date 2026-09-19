@@ -39,7 +39,7 @@ const { headingLevel = 0 } = Astro.props;
         <li>
           <strong>
             {a.data.className}: {a.data.cancelled ? <>Class Cancelled on </> : null}
-            {new Date(a.data.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+            {new Date(a.data.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
           </strong>
           {a.data.message ? <span> - {a.data.message}</span> : null}
         </li>

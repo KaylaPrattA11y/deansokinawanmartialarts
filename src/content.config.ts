@@ -59,22 +59,28 @@ const dictionary = defineCollection({
   }),
 });
 
+const classYearDetails = z.object({
+  year: z.number(),
+  display: z.boolean().default(true),
+  ages: z.string(),
+  description: z.string().max(200),
+  startTime: z.string(),
+  endTime: z.string(),
+  recurrence: z.string(),
+  recurrence_byDay: z.array(z.string()),
+  tuitionOnce: z.number(),
+  tuitionTwice: z.number().optional(),
+  tuition_billing_recurrence: z.string(),
+});
+
 const classes = defineCollection({
   loader: glob({ base: './src/content/classes', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
     name: z.string(),
-    ages: z.string(),
-    description: z.string().max(200),
-    startTime: z.string(),
-    endTime: z.string(),
     location: z.string(),
-    recurrence: z.string(),
-    recurrence_byDay: z.array(z.string()),
-    tuitionOnce: z.number(),
-    tuitionTwice: z.number().optional(),
-    tuition_billing_recurrence: z.string(),
     sortOrder: z.number().optional(),
     kanji: z.string().optional(),
+    years: z.array(classYearDetails).min(1),
   }),
 });
 

@@ -11,6 +11,7 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
+        "npm:@astrojs/check@~0.9.10",
         "npm:@astrojs/sitemap@^3.7.2",
         "npm:@fontsource-variable/cinzel@^5.2.8",
         "npm:@fontsource-variable/eb-garamond@^5.2.7",
@@ -31,7 +32,7 @@
         "npm:sass-embedded@^1.99.0",
         "npm:tinacms@^3.7.2",
         "npm:typescript-eslint@^8.58.1",
-        "npm:typescript@^6.0.2"
+        "npm:typescript@^6.0.3"
       ]
     }
   }
