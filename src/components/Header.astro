@@ -23,23 +23,25 @@ import { SOCIAL_LINKS } from '../config/site';
 					<Icon name="facebook" size="20px" />
 				</a>
 			</div>
-			<a aria-label="Contact" href="#contact-phone"><Icon name="phone" size="24px" /></a>
-			<button 
-				type="button" 
-				aria-controls="pagefind-dialog" 
-				aria-haspopup="dialog" 
-				aria-label="Search the site"
-			>
-				<Icon name="search" size={26} />
-			</button>
-			<button 
-				type="button" 
-				aria-label="Toggle main menu" 
-				aria-haspopup="dialog"
-				aria-controls="nav-menu"
-			>
-				<Icon name="menu" size="28px" />
-			</button>
+			<div class="nav-other">
+				<button 
+					type="button" 
+					aria-controls="pagefind-dialog" 
+					aria-haspopup="dialog" 
+					aria-label="Search the site"
+				>
+					<Icon name="search" size={26} />
+				</button>
+				<a aria-label="Contact" href="#contact-phone"><Icon name="phone" size="24px" /></a>
+				<button 
+					type="button" 
+					aria-label="Toggle main menu" 
+					aria-haspopup="dialog"
+					aria-controls="nav-menu"
+				>
+					<Icon name="menu" size="28px" />
+				</button>
+			</div>
 		</div>
 	</div>
 </header>
@@ -98,20 +100,33 @@ import { SOCIAL_LINKS } from '../config/site';
 				padding: 0.9rem 3rem;
 			}
 		}
-		.nav-wrapper {
+		.nav-other {
 			display: flex;
 			align-items: center;
-			gap: 0.5rem;
-			@container header (width >= 900px) {
+		}
+		.nav-other :where(a, button) {
+			display: grid;
+			place-items: center;
+			inline-size: 32px;
+			block-size: 32px;
+		}
+		.nav-wrapper {
+			display: grid;
+			align-items: center;
+			justify-items: end;
+			@container header (width >= 600px) {
+				display: flex;
+			}
+			@container header (width >= 1200px) {
 				gap: 1rem;
 			}
 		}
 		.social-quick {
-			display: none;
+			order: 2;
+			display: flex;
 			align-items: center;
-			gap: 0.5rem;
-			@container header (width >= 1200px) {
-				display: flex;
+			@container header (width >= 600px) {
+				order: 0;
 			}
 		}
 		.social-quick a {
