@@ -20,7 +20,7 @@ const sortedClasses = allClasses.sort((a, b) => (a.data.sortOrder ?? 99) - (b.da
 const classEntries = sortedClasses.map(cls => {
   const karateClass: IKarateClass = {
     name: cls.data.name,
-    prerequisites: cls.data.prerequisites,
+    ages: cls.data.ages,
     description: cls.data.description,
     startTime: cls.data.startTime,
     endTime: cls.data.endTime,
@@ -120,8 +120,7 @@ const { formHeading = "Contact Our Dojo", id = "contact-form" } = Astro.props;
           name="howDidYouHear"
         >
           <option value="">Select an option...</option>
-          <option value="Facebook">Facebook</option>
-          <option value="Instagram">Instagram</option>
+          <option value="Social media">Social media</option>
           <option value="Flyer">Flyer</option>
           <option value="Web Search">Web search</option>
           <option value="Website">Website</option>
