@@ -362,10 +362,10 @@ export default defineConfig({
           },
           {
             type: "string",
-            label: "Prerequisites",
-            name: "prerequisites",
+            label: "Ages",
+            name: "ages",
             required: true,
-            description: "Prerequisites for this class (e.g. '16 & Up').",
+            description: "Age range for this class (e.g., '4 – 15' or '16 & Up').",
           },
           {
             type: "string",
