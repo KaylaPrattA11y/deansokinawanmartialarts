@@ -5,7 +5,7 @@ sortOrder: 4
 
 Yes, we have comprehensive training for traditional weapons including:
 
-* **Bō ** - The Bō is a traditional 6-foot wooden staff used in Kobudo and Karate for striking, blocking, and thrusting.
+* **Bō** - The Bō is a traditional 6-foot wooden staff used in Kobudo and Karate for striking, blocking, and thrusting.
 * **Nunchaku** -  Nunchaku (commonly nunchucks) are traditional martial arts weapons consisting of two wooden sticks (roughly one foot each) connected by a cord or chain, originating as farming tools or, potentially, Chinese weapons.
 * **Tonfa** - The tonfa is a traditional Okinawan Kobudo and Karate weapon, crafted from wood and derived from a farm tool used for grinding grain, it features a side handle and a shaft that aligns with the forearm.
 * **Sai** - The sai is a trident-shaped, non-edged metal weapon often used in Okinawan kobudo and karate.
