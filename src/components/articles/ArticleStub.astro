@@ -11,12 +11,14 @@ const featuredImage = post.data.image;
 <article class={`post-card${featuredImage ? ' has-image' : ''}`}>
   {featuredImage && (
   <div class="post-card-image-wrapper">
-    <img 
-      src={featuredImage} 
-      alt={post.data.title} 
-      class="post-image"
-      loading="eager"
-    />
+    <a href={`${BASE_URL}${ROUTES.news}${post.id}/`} aria-label={`Read more about ${post.data.title}`}> 
+      <img 
+        src={featuredImage} 
+        alt={post.data.title} 
+        class="post-image"
+        loading="eager"
+      />
+    </a>
   </div>
   )}
   <div class="post-content">
@@ -37,6 +39,10 @@ const featuredImage = post.data.image;
 
 <style>
   @layer components {
+    .post-card:focus-within {
+      outline: 2px solid var(--bright-red);
+      outline-offset: -2px;
+    }
     .post-card.has-image {
       display: grid;
       align-content: start;
