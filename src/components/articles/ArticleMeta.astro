@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import type { Post } from "../../types";
+import { BASE_URL, ROUTES } from '../../config/site';
 
 interface ArticleMetaProps {
   post: Post;
@@ -24,7 +25,9 @@ const { post, isStub = false, useShareButton = false, isHomepage = false } = Ast
   </time>
   {isStub ? (
     <>
-      {isHomepage ? <h3 class="post-meta-stub-heading">{post.data.title}</h3> : <h2 class="post-meta-stub-heading">{post.data.title}</h2>}
+      <a href={`${BASE_URL}${ROUTES.news}${post.id}/`}>
+        {isHomepage ? <h3 class="post-meta-stub-heading">{post.data.title}</h3> : <h2 class="post-meta-stub-heading">{post.data.title}</h2>}
+      </a>
       {post.data.description && <p class="desc">{post.data.description}</p>}
       {post.data.tags && (
       <div class="tags">
@@ -51,7 +54,9 @@ const { post, isStub = false, useShareButton = false, isHomepage = false } = Ast
   ) : (
     <div class="post-meta-full">
       <div>
-        {isHomepage ? <h3 class="post-meta-full-heading">{post.data.title}</h3> : <h1 id="main-content-anchor" class="post-meta-full-heading">{post.data.title}</h1>}
+        <a href={`${BASE_URL}${ROUTES.news}${post.id}/`}>
+          {isHomepage ? <h3 class="post-meta-full-heading">{post.data.title}</h3> : <h1 id="main-content-anchor" class="post-meta-full-heading">{post.data.title}</h1>}
+        </a>
       </div>
       <div class="post-meta-full-info">
         <div>
@@ -73,6 +78,7 @@ const { post, isStub = false, useShareButton = false, isHomepage = false } = Ast
             data-share="true"
             data-title={post.data.title}
             data-description={post.data.description}
+            data-route={ROUTES.news}
             data-id={post.id}
           >
             <Icon name="share" /> Share
@@ -107,6 +113,13 @@ const { post, isStub = false, useShareButton = false, isHomepage = false } = Ast
       color: var(--paper);
       margin-block: 0.5em;
       line-height: 1.2;
+    }
+    a:has(.post-meta-full-heading, .post-meta-stub-heading) {
+      text-decoration: none;
+    }
+    a:has(.post-meta-full-heading, .post-meta-stub-heading):hover {
+      text-decoration: underline;
+      text-decoration-color: var(--bright-red);
     }
     h1{
       font-size: clamp(2rem, 5vw, 3rem);

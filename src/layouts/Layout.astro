@@ -207,14 +207,18 @@ const schemaGraph = [organizationSchema, webPageSchema, ...customSchema];
   document.addEventListener('click', event => {
     // Handle share button clicks
     if (navigator.share) {
-      if (event.target instanceof HTMLButtonElement && event.target.matches('[data-share="true"]')) {
-        const shareButton = event.target;
+      const shareButton = event.target instanceof Element
+        ? event.target.closest('button[data-share="true"]')
+        : null;
+      if (shareButton) {
         const title = `${shareButton.dataset.title} | ${SITE_SEO.name.short}`;
         const description = shareButton.dataset.description;
+        const route = shareButton.dataset.route;
+        const id = shareButton.dataset.id;
         const shareData = {
           title: title,
           text: description ? `${title}\n\n${description}` : title,
-          url: `${BASE_URL}${ROUTES.gallery}${shareButton.dataset.id}/`
+          url: `${BASE_URL}${route}${id}/`
         };
         
         navigator.share(shareData).catch((error) => {
