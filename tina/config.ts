@@ -542,13 +542,13 @@ export default defineConfig({
                 label: "Tuition (once a week)",
                 name: "tuitionOnce",
                 required: true,
-                description: "Monthly tuition in dollars for attending one day per week.",
+                description: "Monthly tuition in dollars for attending one night per week.",
               },
               {
                 type: "number",
                 label: "Tuition (twice a week)",
                 name: "tuitionTwice",
-                description: "Monthly tuition in dollars for attending two days per week.",
+                description: "Monthly tuition in dollars for attending two nights per week.",
               },
               {
                 type: "string",

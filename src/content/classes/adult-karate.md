@@ -19,7 +19,7 @@ years:
     tuition_billing_recurrence: Monthly
   - year: 2027
     display: true
-    ages: 18 & up
+    ages: 16 & up
     description: 'Comprehensive Shorin-Ryu training including empty-hand kata (forms), bunkai (application), kobudo (weapons) training, and traditional Okinawan self-defense applications.'
     startTime: '18:00'
     endTime: '20:00'
@@ -27,8 +27,8 @@ years:
     recurrence_byDay:
       - Tuesday
       - Thursday
-    tuitionOnce: 125
-    tuitionTwice: 150
+    tuitionOnce: 65
+    tuitionTwice: 75
     tuition_billing_recurrence: Monthly
 ---
 

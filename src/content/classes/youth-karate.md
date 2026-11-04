@@ -19,7 +19,7 @@ years:
     tuition_billing_recurrence: Monthly
   - year: 2027
     display: true
-    ages: 4–9
+    ages: 4–7
     description: 'Foundational karate and self-defense enhanced with fun activities to expend excess energy. Children develop discipline, confidence, and respect alongside physical skill.'
     startTime: '18:00'
     endTime: '18:30'
@@ -27,8 +27,8 @@ years:
     recurrence_byDay:
       - Monday
       - Wednesday
-    tuitionOnce: 75
-    tuitionTwice: 95
+    tuitionOnce: 25
+    tuitionTwice: 35
     tuition_billing_recurrence: Monthly
 ---
 
