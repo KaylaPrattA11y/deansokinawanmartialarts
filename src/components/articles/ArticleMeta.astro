@@ -54,9 +54,13 @@ const { post, isStub = false, useShareButton = false, isHomepage = false } = Ast
   ) : (
     <div class="post-meta-full">
       <div>
-        <a href={`${BASE_URL}${ROUTES.news}${post.id}/`}>
-          {isHomepage ? <h3 class="post-meta-full-heading">{post.data.title}</h3> : <h1 id="main-content-anchor" class="post-meta-full-heading">{post.data.title}</h1>}
-        </a>
+          {isHomepage ? (
+            <a href={`${BASE_URL}${ROUTES.news}${post.id}/`}>
+              <h3 class="post-meta-full-heading">{post.data.title}</h3>
+            </a>
+          ) : (
+            <h1 id="main-content-anchor" class="post-meta-full-heading">{post.data.title}</h1>
+          )}
       </div>
       <div class="post-meta-full-info">
         <div>
