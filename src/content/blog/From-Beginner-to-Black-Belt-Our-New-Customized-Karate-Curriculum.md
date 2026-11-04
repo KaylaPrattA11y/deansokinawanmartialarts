@@ -17,4 +17,8 @@ Whether you're a newcomer, experienced, or advanced, we now offer karate classes
 | **Intermediate** | *Ages 8-15. Students must meet a strict standard of proficiency, diligence, and maturity to be enrolled in this class.* | Intermediate self-defense, forms, and traditional weapons training for the serious student. Students will engage in rigorous endurance activities and in partnered training. |
 | **Adult**        | *Ages 16 & up*                                                                                                          | Comprehensive Shorin-Ryu training including empty-hand kata, bunkai, kobudo (weapons) training, and traditional Okinawan self-defense applications.                          |
 
+## Family Rate
+
+There is a discount of $5 from the monthly tuition for each additional student when enrolling two or more students per class.
+
 [View the full class schedule](/classes/) or [send us a message](#contact-phone) today!
