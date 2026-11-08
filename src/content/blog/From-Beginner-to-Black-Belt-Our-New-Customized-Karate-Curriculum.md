@@ -9,13 +9,13 @@ tags:
 postToGroupMe: false
 ---
 
-Whether you're a newcomer, experienced, or advanced, we now offer karate classes tailored to the experience and maturity level of all students.
+Whether you're a newcomer, experienced, or advanced, we now offer karate classes tailored to the experience and maturity level of all students. Ask us which class is right for you or your child!
 
-| Class            | Requirements                                                                                                            | Features                                                                                                                                                                     |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Youth**        | *Ages 4-7*                                                                                                              | Basic self-defense tailored to children. Students will engage in enriching and fun activities designed to work out excess energy and foster discipline and respect.          |
-| **Intermediate** | *Ages 8-15. Students must meet a strict standard of proficiency, diligence, and maturity to be enrolled in this class.* | Intermediate self-defense, forms, and traditional weapons training for the serious student. Students will engage in rigorous endurance activities and in partnered training. |
-| **Adult**        | *Ages 16 & up*                                                                                                          | Comprehensive Shorin-Ryu training including empty-hand kata, bunkai, kobudo (weapons) training, and traditional Okinawan self-defense applications.                          |
+| Class            | Requirements   | Features                                                                                                                                                                                                                                                               |
+| ---------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Youth**        | *Ages 4-7*     | Shorin Ryu Matsumura Seito karate and self-defense tailored to children. Students will learn fundamental Shorin Ryu  Matsumura Seito principles in a child-friendly environment.                                                                                       |
+| **Intermediate** | *Ages 8-15.*   | Shorin Ryu Matsumura Seito karate and self-defense tailored to an intermediate group that includes ages 8-15. Students will practice kata, engage in endurance activities and train with partners while developing fundamental Shorin Ryu Matsumura Seito principles.  |
+| **Adult**        | *Ages 16 & up* | Comprehensive Shorin Ryu Matsumura Seito karate. Students will practice empty-hand kata, bunkai, kobudo (weapons) training, and traditional Okinawan self-defense applications while developing fundamental Shorin Ryu Matsumura Seito principles.                     |
 
 ## Family Rate
 
