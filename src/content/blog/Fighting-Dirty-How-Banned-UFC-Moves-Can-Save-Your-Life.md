@@ -21,4 +21,4 @@ Several techniques forbidden under UFC regulations represent preferred responses
 
 These examples illustrate that UFC rules create a “safe sport” framework by removing the very tools that make self-defense effective against determined, untrained, or multiple attackers. Sports karate competitions similarly emphasize points-based scoring, protective gear, and controlled contact, fostering athletic development and sportsmanship. 
 
-In contrast, dojo training in Shorin-Ryu Seito Karate integrates forms, weapons training, and on practical application that incorporates these unrestricted methods (vigilantly monitored by experienced senior students and instructors).
+In contrast, dojo training in Shorin-Ryu Matsumura Seito Karate integrates forms, weapons training, and on practical application that incorporates these unrestricted methods (vigilantly monitored by experienced senior students and instructors).

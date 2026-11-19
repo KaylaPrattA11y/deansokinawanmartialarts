@@ -6,13 +6,13 @@ image: /uploads/pexels-timur-weber-8560717.jpg
 postToGroupMe: false
 ---
 
-Orthodox Shorin-Ryu Karate, a traditional Okinawan martial art emphasizing precise technique, kata (forms), rigorous discipline, and character development, offers more than physical conditioning. Research on traditional karate and martial arts consistently links regular practice to improved mental wellbeing in young people.
+OShorin-Ryu Matsumura Seito Karate, a traditional Okinawan martial art emphasizing precise technique, kata (forms), rigorous discipline, and character development, offers more than physical conditioning. Research on traditional karate and martial arts consistently links regular practice to improved mental wellbeing in young people.
 
 The following outlines three principal mental health benefits.
 
 ## Improved Stress Management and Emotional Regulation
 
-Physical activity inherent in Shorin-Ryu training releases endorphins while providing a constructive outlet for tension and frustration. The emphasis on controlled breathing, focused kata practice, and precise movements cultivates present-moment awareness and self-regulation. Studies of adolescent karate practitioners demonstrate **higher levels of self-control**, **more adaptive stress-coping strategies**, and **reduced anxiety** compared with non-practitioners.
+Physical activity inherent in Shorin-Ryu Matsumura Seito training releases endorphins while providing a constructive outlet for tension and frustration. The emphasis on controlled breathing, focused kata practice, and precise movements cultivates present-moment awareness and self-regulation. Studies of adolescent karate practitioners demonstrate **higher levels of self-control**, **more adaptive stress-coping strategies**, and **reduced anxiety** compared with non-practitioners.
 
 Our traditional dojo environment further reinforces calm under pressure, helping teens manage daily stressors more effectively.
 
@@ -24,6 +24,6 @@ Empirical observations and controlled studies indicate that consistent karate pr
 
 ## Development of Resilience, Discipline, and Focus
 
-Orthodox Shorin-Ryu prioritizes perseverance, respect, and mental fortitude through repetitive, deliberate practice and adherence to [dojo etiquette](/faqs/). Teens learn to **persist through difficulty**, **maintain concentration amid distraction**, and **regulate impulses**. These qualities foster emotional resilience and executive function skills that transfer to academic performance, social interactions, and long-term goal pursuit. Traditional training thereby strengthens the psychological resources necessary for adaptive functioning during adolescence.
+Shorin-Ryu Matsumura Seito prioritizes perseverance, respect, and mental fortitude through repetitive, deliberate practice and adherence to [dojo etiquette](/faqs/). Teens learn to **persist through difficulty**, **maintain concentration amid distraction**, and **regulate impulses**. These qualities foster emotional resilience and executive function skills that transfer to academic performance, social interactions, and long-term goal pursuit. Traditional training thereby strengthens the psychological resources necessary for adaptive functioning during adolescence.
 
-In summary, enrollment in Orthodox Shorin-Ryu Karate equips teenagers with practical tools for emotional balance, self-assurance, and disciplined resilience. When guided by [our qualified instructors](/instructors/) committed to authentic Okinawan principles, the art serves as a valuable complement to conventional approaches to adolescent mental health.
+In summary, enrollment in Shorin-Ryu Matsumura Seito Karate equips teenagers with practical tools for emotional balance, self-assurance, and disciplined resilience. When guided by [our qualified instructors](/instructors/) committed to authentic Okinawan principles, the art serves as a valuable complement to conventional approaches to adolescent mental health.

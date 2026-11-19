@@ -7,7 +7,7 @@ years:
   - year: 2026
     display: true
     ages: 16 & Up
-    description: 'Comprehensive Shorin-Ryu training including empty-hand kata, bunkai, kobudo (weapons) training, and traditional Okinawan self-defense applications.'
+    description: 'Comprehensive Shorin-Ryu Matsumura Seito training including empty-hand kata, bunkai, kobudo (weapons) training, and traditional Okinawan self-defense applications.'
     startTime: '18:00'
     endTime: '20:00'
     recurrence: Weekly
@@ -20,7 +20,7 @@ years:
   - year: 2027
     display: true
     ages: 16 & up
-    description: 'Comprehensive Shorin-Ryu training including empty-hand kata (forms), bunkai (application), kobudo (weapons) training, and traditional Okinawan self-defense applications.'
+    description: 'Comprehensive Shorin-Ryu Matsumura Seito training including empty-hand kata (forms), bunkai (application), kobudo (weapons) training, and traditional Okinawan self-defense applications.'
     startTime: '18:00'
     endTime: '20:00'
     recurrence: Weekly

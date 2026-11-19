@@ -7,7 +7,7 @@ years:
   - year: 2027
     display: true
     ages: 8–15
-    description: 'This class is for dedicated students who can demonstrate focus and maturity. Class focus includes: Kata (forms) and their practical application, self-defense techniques and core Shorin-Ryu principles.'
+    description: 'This class is for dedicated students that demonstrate focus and maturity. Focus: Kata (forms) and their practical application, self-defense techniques and core Shorin-Ryu Matsumura Seito principles.'
     startTime: '18:30'
     endTime: '19:30'
     recurrence: Weekly
